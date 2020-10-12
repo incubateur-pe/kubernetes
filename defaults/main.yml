@@ -4,3 +4,5 @@ centos:
     repo: https://repository.pole-emploi.intra/artifactory/rpm-kubernetes-proxy
 
 kubernetes_version: 1.19.2
+
+master_group_name: tdc_masters
