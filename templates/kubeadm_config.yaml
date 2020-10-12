@@ -1,0 +1,9 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+clusterName: {{environnement}}
+apiServer:
+  control-plane-endpoint: {{k8s_fqdn_api}}
+# etcd:
+#   local:
+#     dataDir: /var/lib/etcd
+imageRepository: docker-k8s-gcr-proxy.repository.pole-emploi.intra

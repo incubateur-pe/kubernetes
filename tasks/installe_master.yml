@@ -1,0 +1,2 @@
+- name: Crée le noeud master
+  shell: kubeadm init --config=/etc/kubeadm/config.yaml --upload-certs

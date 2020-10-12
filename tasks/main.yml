@@ -1,0 +1,46 @@
+---
+- set_fact:
+    k8s_role: agent
+  when: master_group_name not in group_names
+
+- name: Dépose la configuration yum
+  template:
+    src: "{{item}}"
+    dest: "/etc/yum.repos.d/"
+    mode: 0644
+  with_fileglob:
+    - "../templates/*.repo"
+
+- name: Installation des paquets kubernetes
+  yum:
+    name:
+      - kubelet-{{kubernetes_version}}
+      - kubeadm-{{kubernetes_version}}
+      - kubectl-{{kubernetes_version}}
+    enablerepo: kubernetes
+    state: present
+
+- name: Applique les paramètres sysctl
+  sysctl:
+    name: "{{item}}"
+    value: '1'
+    state: present
+    sysctl_file: "/etc/sysctl.d/k8s.conf"
+  with_items:
+    - net.bridge.bridge-nf-call-ip6tables
+    - net.bridge.bridge-nf-call-iptables
+
+- name: Promets la présence du répertoire de configuration kubeadm
+  file:
+    state: directory
+    path: /etc/kubeadm
+    mode: 0755
+
+- name: Dépose la configuration kubeadm
+  template:
+    src: kubeadm_config.yaml
+    dest: /etc/kubeadm/config.yaml
+
+- name: Installe le master
+  include_tasks: installe_master.yml
+  when: k8s_role is not defined or k8s_role == "master"
