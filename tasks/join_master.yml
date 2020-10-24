@@ -1,0 +1,67 @@
+- include_tasks: get_join_command.yml
+
+- name: Récupère les certificats pour les noeuds master
+  fetch:
+    src: "{{item}}"
+    dest: "{{role_path}}/files/pki/"
+    flat: yes
+  with_items:
+    - /etc/kubernetes/pki/ca.crt
+    - /etc/kubernetes/pki/ca.key
+    - /etc/kubernetes/pki/sa.pub
+    - /etc/kubernetes/pki/sa.key
+    - /etc/kubernetes/pki/front-proxy-ca.crt
+    - /etc/kubernetes/pki/front-proxy-ca.key
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  run_once: yes
+  changed_when: false # Pas de notification de changement pour le "buffer" local de certificats, la modification éventuelle sera notifiée lors du dépot
+
+- name: Récupère l'AC etcd
+  fetch:
+    src: "{{item}}"
+    dest: "{{role_path}}/files/pki/etcd/"
+    flat: yes
+  with_items:
+    - /etc/kubernetes/pki/etcd/ca.crt
+    - /etc/kubernetes/pki/etcd/ca.key
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  run_once: yes
+  changed_when: false # Pas de notification de changement pour le "buffer" local de certificats, la modification éventuelle sera notifiée lors du dépot
+
+- name: Promets la présence des répertoires pki du master
+  file:
+    state: directory
+    path: "{{item}}"
+    mode: 0755
+  with_items:
+    - /etc/kubernetes/pki
+    - /etc/kubernetes/pki/etcd
+
+- name: Copie les certificats de la pki
+  copy:
+    src: "{{role_path}}/files/pki/{{item.src}}"
+    dest: "/etc/kubernetes/pki/{{item.src}}"
+    mode: "{{item.mode}}"
+  with_items:
+    - {src: "ca.crt", mode: "0644"}
+    - {src: "ca.key", mode: "0600"}
+    - {src: "sa.pub", mode: "0600"}
+    - {src: "sa.key", mode: "0600"}
+    - {src: "front-proxy-ca.crt", mode: "0644"}
+    - {src: "front-proxy-ca.key", mode: "0600"}
+    - {src: "etcd/ca.crt", mode: "0644"}
+    - {src: "etcd/ca.key", mode: "0600"}
+
+- name: Purge la copie locale des certificats
+  file:
+    state: absent
+    path: "{{role_path}}/files/pki"
+  delegate_to: localhost
+  run_once: yes
+  changed_when: false  # Pas de notification de changement sur la purge du "buffer" local de certificats
+
+- name: Join le noeud master
+  shell: "{{join_command}} --control-plane{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
+
+
+- include_tasks: configure_kubectl.yml

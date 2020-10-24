@@ -9,3 +9,6 @@ controlPlaneEndpoint: {{ kubernetes_control_plane_endpoint | default(ansible_fqd
 #   local:
 #     dataDir: /var/lib/etcd
 imageRepository: {{ kubernetes_image_repository | default("k8s.gcr.io")}}
+apiServer:
+  certSANs:
+  - "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn)}}"

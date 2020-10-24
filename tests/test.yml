@@ -4,9 +4,6 @@
   roles:
     - kubernetes-bare-metal
   vars:
-    kubernetes_control_plane_endpoint: master.k8s.loc
+    kubernetes_control_plane_endpoint: 172.16.10.1
     kubernetes_cluster_name: dev
     k8s_version: 1.19.2
-    centos:
-      kubernetes:
-        repo: https://packages.cloud.google.com/yum/repos/

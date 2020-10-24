@@ -19,7 +19,7 @@
 
 - name: Installe le master
   include_tasks: init_master.yml
-  when: '"kubernetes_masters" in group_names'
+  when: '"kubernetes_masters" in group_names and inventory_hostname == groups["kubernetes_masters"][0]'
 
 - name: Installe le cni
   include_tasks: cni.yml
@@ -27,6 +27,10 @@
 - name: Récupère les nodes
   include_tasks: get_nodes.yml
   run_once: yes
+
+- name: Join les masters supplémentaires
+  include_tasks: join_master.yml
+  when: '"kubernetes_masters" in group_names and inventory_hostname != groups["kubernetes_masters"][0] and node_name|default(ansible_fqdn) not in nodes'
 
 - name: Join les workers
   include_tasks: join_worker.yml

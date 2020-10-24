@@ -1,5 +1,7 @@
 [kubernetes_masters]
 172.16.10.200 node_name=master1
+172.16.10.201 node_name=master2
+172.16.10.202 node_name=master3
 
 [kubernetes_workers]
 172.16.10.210 node_name=worker1
