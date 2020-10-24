@@ -23,3 +23,11 @@
 
 - name: Installe le cni
   include_tasks: cni.yml
+
+- name: Récupère les nodes
+  include_tasks: get_nodes.yml
+  run_once: yes
+
+- name: Installe le worker
+  include_tasks: installe_worker.yml
+  when: '"kubernetes_workers" in group_names and ansible_fqdn not in nodes'
