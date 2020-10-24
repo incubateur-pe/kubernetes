@@ -4,8 +4,8 @@
   roles:
     - kubernetes-bare-metal
   vars:
-    k8s_fqdn_api: master.k8s.loc
-    environnement: dev
+    kubernetes_control_plane_endpoint: master.k8s.loc
+    kubernetes_cluster_name: dev
     k8s_version: 1.19.2
     centos:
       kubernetes:

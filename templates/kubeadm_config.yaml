@@ -1,10 +1,10 @@
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
-clusterName: {{environnement}}
+clusterName: {{kubernetes_cluster_name}}
 kubernetesVersion: {{ kubernetes_version }}
 networking:
   podSubnet: "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}"
-controlPlaneEndpoint: {{k8s_fqdn_api}}
+controlPlaneEndpoint: {{ kubernetes_control_plane_endpoint | default(ansible_fqdn)}}
 # etcd:
 #   local:
 #     dataDir: /var/lib/etcd
