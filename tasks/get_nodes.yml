@@ -11,3 +11,6 @@
   with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   run_once: yes
+
+- name: Nodes connus pour le moment
+  debug: var=nodes
