@@ -1,8 +1,4 @@
 ---
-- set_fact:
-    k8s_role: agent
-  when: master_group_name not in group_names
-
 - name: Pré-requis
   include_tasks: pre-requis.yml
 
@@ -19,4 +15,4 @@
 
 - name: Installe le master
   include_tasks: installe_master.yml
-  when: k8s_role is not defined or k8s_role == "master"
+  when: '"kubernetes_masters" in group_names'
