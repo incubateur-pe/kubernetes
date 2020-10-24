@@ -1,5 +1,12 @@
 ---
-- hosts: localhost
+- hosts: all
   remote_user: root
   roles:
     - kubernetes-bare-metal
+  vars:
+    k8s_fqdn_api: master.k8s.loc
+    environnement: dev
+    k8s_version: 1.19.2
+    centos:
+      kubernetes:
+        repo: https://packages.cloud.google.com/yum/repos/

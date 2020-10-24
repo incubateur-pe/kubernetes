@@ -1,2 +1,6 @@
-localhost
+[kubernetes_masters]
+172.16.10.200
 
+[kubernetes_workers]
+172.16.10.210
+172.16.10.211
