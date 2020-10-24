@@ -17,4 +17,4 @@
   debug: var=join_command
 
 - name: Crée le noeud worker
-  shell: "{{join_command}}"
+  shell: "{{join_command}}{%if node_name is defined %} --node-name {{node_name}}{% endif %}"

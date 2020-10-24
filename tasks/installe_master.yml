@@ -4,7 +4,8 @@
   register: admin_config
 
 - name: Crée le noeud master
-  shell: kubeadm init --config=/etc/kubeadm/config.yaml --upload-certs
+  shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
+  throttle: 1
   when: not admin_config.stat.exists
 
 - name: Répetoire de configuration kubectl

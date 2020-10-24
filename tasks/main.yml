@@ -30,4 +30,4 @@
 
 - name: Installe le worker
   include_tasks: installe_worker.yml
-  when: '"kubernetes_workers" in group_names and ansible_fqdn not in nodes'
+  when: '"kubernetes_workers" in group_names and node_name | default(ansible_fqdn) not in nodes'
