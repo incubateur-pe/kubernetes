@@ -3,6 +3,8 @@ kind: ClusterConfiguration
 clusterName: {{environnement}}
 apiServer:
   control-plane-endpoint: {{k8s_fqdn_api}}
+networking:
+  podSubnet: "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}"
 # etcd:
 #   local:
 #     dataDir: /var/lib/etcd

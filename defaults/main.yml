@@ -6,3 +6,4 @@ centos:
 kubernetes_version: 1.19.2
 
 master_group_name: tdc_masters
+kubernetes_default_pod_cidr: 10.244.0.0/16
