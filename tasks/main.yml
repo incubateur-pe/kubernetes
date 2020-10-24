@@ -20,3 +20,6 @@
 - name: Installe le master
   include_tasks: installe_master.yml
   when: '"kubernetes_masters" in group_names'
+
+- name: Installe le cni
+  include_tasks: cni.yml

@@ -1,0 +1,16 @@
+- block:
+  - name: Configure flannel
+    k8s:
+      state: present
+      src: "{{role_path}}/templates/kube-flannel.yml.j2"
+      kubeconfig: "{{role_path}}/files/admin.conf"
+
+  - name: Configure flannel
+    k8s:
+      state: present
+      definition: "{{ lookup('template', role_path + '/templates/kube-flannel-daemonset.yml.j2') }}"
+      kubeconfig: "{{role_path}}/files/admin.conf"
+      wait_timeout: 600
+      wait: yes
+  delegate_to: localhost
+  run_once: yes
