@@ -6,3 +6,23 @@
 - name: Crée le noeud master
   shell: kubeadm init --config=/etc/kubeadm/config.yaml --upload-certs
   when: not admin_config.stat.exists
+
+- name: Répetoire de configuration kubectl
+  file:
+    state: directory
+    mode: 0700
+    path: /root/.kube
+
+- name: Configure kubectl sur le serveur
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+    mode: 0600
+
+- name: Récupère la configuration kubectl sur localhost
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{role_path}}/files/"
+    flat: yes
+  run_once: yes
