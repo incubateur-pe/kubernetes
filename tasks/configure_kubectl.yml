@@ -1,0 +1,12 @@
+- name: Répetoire de configuration kubectl
+  file:
+    state: directory
+    mode: 0700
+    path: /root/.kube
+
+- name: Configure kubectl sur le serveur
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+    mode: 0600

@@ -18,7 +18,7 @@
   delegate_to: "{{groups['kubernetes_masters'][0]}}"
 
 - name: Installe le master
-  include_tasks: installe_master.yml
+  include_tasks: init_master.yml
   when: '"kubernetes_masters" in group_names'
 
 - name: Installe le cni
@@ -28,6 +28,6 @@
   include_tasks: get_nodes.yml
   run_once: yes
 
-- name: Installe le worker
-  include_tasks: installe_worker.yml
+- name: Join les workers
+  include_tasks: join_worker.yml
   when: '"kubernetes_workers" in group_names and node_name | default(ansible_fqdn) not in nodes'

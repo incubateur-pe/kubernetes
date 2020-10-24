@@ -1,0 +1,4 @@
+- include_tasks: get_join_command.yml
+
+- name: Join le noeud worker
+  shell: "{{join_command}}{%if node_name is defined %} --node-name {{node_name}}{% endif %}"

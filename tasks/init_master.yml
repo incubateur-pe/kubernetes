@@ -3,23 +3,11 @@
     path: /etc/kubernetes/admin.conf
   register: admin_config
 
-- name: Crée le noeud master
+- name: Crée le premier noeud master
   shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
-  throttle: 1
   when: not admin_config.stat.exists
 
-- name: Répetoire de configuration kubectl
-  file:
-    state: directory
-    mode: 0700
-    path: /root/.kube
-
-- name: Configure kubectl sur le serveur
-  copy:
-    src: /etc/kubernetes/admin.conf
-    dest: /root/.kube/config
-    remote_src: yes
-    mode: 0600
+- include_tasks: configure_kubectl.yml
 
 - name: Récupère la configuration kubectl sur localhost
   fetch:
