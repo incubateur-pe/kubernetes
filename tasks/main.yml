@@ -7,11 +7,15 @@
     state: directory
     path: /etc/kubeadm
     mode: 0755
+  run_once: true
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
 
 - name: Dépose la configuration kubeadm
   template:
     src: kubeadm_config.yaml
     dest: /etc/kubeadm/config.yaml
+  run_once: true
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
 
 - name: Installe le master
   include_tasks: installe_master.yml
