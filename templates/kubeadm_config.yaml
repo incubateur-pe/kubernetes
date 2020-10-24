@@ -8,4 +8,4 @@ controlPlaneEndpoint: {{k8s_fqdn_api}}
 # etcd:
 #   local:
 #     dataDir: /var/lib/etcd
-imageRepository: docker-k8s-gcr-proxy.repository.pole-emploi.intra
+imageRepository: {{ kubernetes_image_repository | default("k8s.gcr.io")}}
