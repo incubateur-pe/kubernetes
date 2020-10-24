@@ -16,6 +16,43 @@
     enablerepo: kubernetes
     state: present
 
+- name: Configure la policy FORWARD a ACCEPT
+  iptables:
+    chain: FORWARD
+    policy: ACCEPT
+  register: policyForward
+
+- name: Sauvegarde les règles iptables
+  shell: service iptables save
+  when: policyForward.changed
+
+## Hack de contournement de la policy FORWARD a DROP de docker...
+- name: Récupère les services du host
+  service_facts:
+
+- name: Configure les règles iptables pour docker
+  copy:
+    remote_src: no
+    src: "{{role_path}}/files/iptables"
+    dest: /etc/sysconfig/iptables
+    mode: 0600
+  register: iptablesRules
+  when: "'docker.service' in services"
+
+- name: Active et démarre le service iptables
+  systemd:
+    name: iptables
+    state: started
+    enabled: yes
+
+- name: Redémarre le service docker pour prise en compte des regles iptables
+  systemd:
+    name: docker
+    state: restarted
+  when: "'docker.service' in services and iptablesRules.changed"
+# fin du hack
+
+
 - name: Applique les paramètres sysctl
   sysctl:
     name: "{{item}}"
