@@ -27,6 +27,9 @@ platforms:
       - kubernetes_masters
 provisioner:
   name: ansible
+  config_options:
+    ssh_connection:
+      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q 10.0.0.40"
   connection_options:
     ansible_ssh_user: vagrant
     ansible_become: true

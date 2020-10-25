@@ -56,6 +56,7 @@ Bugs notables de molecule/libvirt :
 
   * [issue #921](https://github.com/vagrant-libvirt/vagrant-libvirt/issues/921#issuecomment-464334757) : nécessite sur certains os de modifier le plugin
   * Le port-forward créé par vagrant n'est pas utilisé par molecule, l'accès se fait directement par l'adresse de management de la VM, il faut pour cela la router et dé-filtrer via iptables le flux du network nat sur le host kvm
+    * Contournement possible en utilisant l'option ProxyCommand d'OpenSSH
 
 License
 -------
