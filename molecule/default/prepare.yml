@@ -1,0 +1,8 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: "Install docker"
+      include_role:
+        name: "geerlingguy.docker"

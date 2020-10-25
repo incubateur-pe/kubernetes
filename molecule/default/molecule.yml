@@ -1,6 +1,8 @@
 ---
 dependency:
   name: galaxy
+  options:
+    role-file: requirements-molecule.yaml
 driver:
   name: vagrant
   provider:
