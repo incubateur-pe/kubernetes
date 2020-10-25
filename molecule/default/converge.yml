@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include kubernetes-bare-metal"
+      include_role:
+        name: "kubernetes-bare-metal"

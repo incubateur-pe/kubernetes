@@ -1,0 +1,5 @@
+python-vagrant
+testinfra
+libvirt-python
+molecule
+molecule-vagrant

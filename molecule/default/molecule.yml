@@ -1,0 +1,39 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+    # type: libvirt
+platforms:
+  - name: master
+    box: fedora/32-cloud-base
+    # box: centos/7
+    memory: 512
+    cpus: 1
+    provider_options:
+      connect_via_ssh: true
+    provider_raw_config_args:
+      - 'host="10.0.0.40"'
+      - 'username="libvirt-user"'
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+provisioner:
+  name: ansible
+  connection_options:
+    ansible_ssh_user: vagrant
+    ansible_become: true
+  log: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      master:
+        node_name: master1
+verifier:
+  name: ansible
