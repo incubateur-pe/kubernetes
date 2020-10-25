@@ -10,10 +10,10 @@ driver:
     # type: libvirt
 platforms:
   - name: master
-    box: fedora/32-cloud-base
-    # box: centos/7
-    memory: 512
-    cpus: 1
+    # box: fedora/32-cloud-base
+    box: centos/7
+    memory: 2048
+    cpus: 2
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
