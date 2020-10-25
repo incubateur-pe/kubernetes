@@ -1,0 +1,76 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements-molecule.yaml
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+platforms:
+  - name: master
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: true
+    provider_raw_config_args:
+      - 'host="10.0.0.40"'
+      - 'username="libvirt-user"'
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+  - name: worker1
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: true
+    provider_raw_config_args:
+      - 'host="10.0.0.40"'
+      - 'username="libvirt-user"'
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_workers
+  - name: worker2
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: true
+    provider_raw_config_args:
+      - 'host="10.0.0.40"'
+      - 'username="libvirt-user"'
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_workers
+provisioner:
+  name: ansible
+  config_options:
+    ssh_connection:
+      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q 10.0.0.40"
+  connection_options:
+    ansible_ssh_user: vagrant
+    ansible_become: true
+  log: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      master:
+        node_name: master1
+      worker1:
+        node_name: worker1
+      worker2:
+        node_name: worker2
+verifier:
+  name: ansible
