@@ -2,3 +2,4 @@
 kubernetes_version: 1.19.2
 kubernetes_default_pod_cidr: 10.244.0.0/16
 kubernetes_cluster_name: kubernetes
+k8s_kubeconfig: "{{role_path}}/files/admin.conf"

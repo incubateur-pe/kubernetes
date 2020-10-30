@@ -68,7 +68,7 @@
     kind: Pod
     name: "{{item}}-{{node_name | default(ansible_fqdn)}}"
     namespace: kube-system
-    kubeconfig: "{{role_path}}/files/admin.conf"
+    kubeconfig: "{{k8s_kubeconfig}}"
   register: result
   until: 'result.resources|length > 0 and "containerStatuses" in result.resources[0].status and result.resources[0].status.containerStatuses|length > 0 and result.resources[0].status.containerStatuses[0].ready'
   retries: 10
