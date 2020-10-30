@@ -1,4 +1,9 @@
-- include_tasks: get_join_command.yml
+- include_tasks: get_join_params.yml
+
+- name: Dépose la configuration join kubeadm
+  template:
+    src: kubeadm_join.yaml
+    dest: /etc/kubeadm/join_config.yaml
 
 - name: Récupère les certificats pour les noeuds master
   fetch:
@@ -61,7 +66,7 @@
   changed_when: false  # Pas de notification de changement sur la purge du "buffer" local de certificats
 
 - name: Join le noeud master
-  shell: "{{join_command}} --control-plane{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
+  shell: "kubeadm join --config /etc/kubeadm/join_config.yaml"
 
 - name: Attends le status OK du control plane
   k8s_info:

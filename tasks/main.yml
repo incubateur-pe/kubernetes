@@ -2,15 +2,26 @@
 - name: Pré-requis
   include_tasks: pre-requis.yml
 
+- name: Définis l'api_endpoint
+  set_fact:
+    api_endpoint_tmp: "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn)}}"
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  run_once: yes
+
+- name: Mets a disposition l'api_endpoint'
+  set_fact:
+    api_endpoint: "{{ api_endpoint_tmp }}"
+  delegate_to: "{{ item }}"
+  with_items: "{{ play_hosts }}"
+  run_once: yes
+
 - name: Promets la présence du répertoire de configuration kubeadm
   file:
     state: directory
     path: /etc/kubeadm
     mode: 0755
-  run_once: true
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
 
-- name: Dépose la configuration kubeadm
+- name: Dépose la configuration d'initialisation kubeadm
   template:
     src: kubeadm_config.yaml
     dest: /etc/kubeadm/config.yaml
