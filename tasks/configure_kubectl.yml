@@ -1,4 +1,4 @@
-- name: Répetoire de configuration kubectl
+- name: Répertoire de configuration kubectl
   file:
     state: directory
     mode: 0700
