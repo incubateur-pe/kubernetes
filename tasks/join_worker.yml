@@ -1,9 +1,0 @@
-- include_tasks: get_join_params.yml
-
-- name: Dépose la configuration join kubeadm
-  template:
-    src: kubeadm_join.yaml
-    dest: /etc/kubeadm/join_config.yaml
-
-- name: Join le noeud worker
-  shell: "kubeadm join --config /etc/kubeadm/join_config.yaml"
