@@ -46,3 +46,18 @@
 - name: Join les workers
   include_tasks: join_worker.yml
   when: '"kubernetes_workers" in group_names and node_name | default(ansible_fqdn) not in nodes'
+
+- name: Récupère les nodes
+  include_tasks: get_nodes.yml
+  run_once: yes
+
+- name: Attends le status OK des nodes
+  shell: 'kubectl get nodes | grep "{{item}}  *Ready "'
+  register: result
+  until: 'result.stdout != ""'
+  retries: 10
+  delay: 30
+  changed_when: false
+  with_items: "{{ nodes }}"
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  run_once: yes
