@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: kubernetes
+  tasks:
+    - name: "Include kubernetes-bare-metal"
+      include_role:
+        name: "kubernetes-bare-metal"
+      vars:
+        kubernetes_control_plane_endpoint: lb
