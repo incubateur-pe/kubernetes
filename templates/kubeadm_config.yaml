@@ -1,14 +1,30 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+{% if kubernetes_cloud_provider is defined %}
+    cloud-provider: "{{kubernetes_cloud_provider}}"
+{% endif %}
+{% if node_name is defined %}
+  name: {{ node_name }}
+{% endif %}
+controlPlane:
+  localAPIEndpoint:
+    advertiseAddress: "{{ kubernetes_api_server_advertise_address | default(ansible_default_ipv4.address )}}"
+    bindPort: 6443
+---
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 clusterName: {{kubernetes_cluster_name}}
 kubernetesVersion: {{ kubernetes_version }}
 networking:
   podSubnet: "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}"
-controlPlaneEndpoint: {{ kubernetes_control_plane_endpoint | default(ansible_fqdn)}}
+controlPlaneEndpoint: {{ api_endpoint }}
 # etcd:
 #   local:
 #     dataDir: /var/lib/etcd
 imageRepository: {{ kubernetes_image_repository | default("k8s.gcr.io")}}
 apiServer:
   certSANs:
-  - "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn)}}"
+  - "{{ api_endpoint }}"
