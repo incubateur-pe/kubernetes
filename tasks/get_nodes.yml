@@ -1,7 +1,7 @@
 - name: Récupère la liste des nodes connus du master
   k8s_info:
     kind: Node
-    kubeconfig: "{{role_path}}/files/admin.conf"
+    kubeconfig: "{{k8s_kubeconfig}}"
   register: NodeList
   delegate_to: localhost
 
