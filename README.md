@@ -22,13 +22,13 @@ Variables
 | centos.kubernetes.repo | role | Adresse du repository rpm kubernetes pour centos | https://packages.cloud.google.com/yum/repos/ |
 | kubernetes_version | role | version de kubernetes a installer | 1.19.2 |
 | node_name | host | nom du noeud kubernetes, doit etre unique | voir documentation kubeadm |
+| flannel_image | role | nom du repo/image de flannel | quay.io/coreos/flannel |
 | flannel_version | role | version de flannel a installer | v0.13.0 |
 | kubernetes_cluster_name | role | Nom du cluster kubernetes | kubernetes |
 | kubernetes_pod_subnet | role | Sous réseau pour le cni | 10.244.0.0/16 |
 | kubernetes_control_plane_endpoint | role | Adresse du loadblancer servant les noeuds masters | ansible_fqdn du premier master |
 | kubernetes_image_repository | role | repository des images k8s | k8s.gcr.io |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
-
 
 Playbook Exemple
 ----------------
