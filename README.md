@@ -28,6 +28,7 @@ Variables
 | kubernetes_pod_subnet | role | Sous réseau pour le cni | 10.244.0.0/16 |
 | kubernetes_control_plane_endpoint | role | Adresse du loadblancer servant les noeuds masters (dns ou ip uniquement) | ansible_fqdn du premier master |
 | kubernetes_image_repository | role | repository des images k8s | k8s.gcr.io |
+| kubernetes_api_server_advertise_address | host | adresse d'affichage de l'apiServer (exemple: 172.16.10.10 ) | ansible_default_ipv4.address |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
 
 Playbook Exemple
