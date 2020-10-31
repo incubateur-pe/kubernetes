@@ -2,7 +2,7 @@ apiVersion: kubeadm.k8s.io/v1beta2
 kind: JoinConfiguration
 discovery:
   bootstrapToken:
-    apiServerEndpoint: {{ api_endpoint }}:6443
+    apiServerEndpoint: {{ api_endpoint }}:{{ kubernetes_control_plane_port }}
     token: {{join_token}}
     caCertHashes: ["sha256:{{ca_hash}}"]
 nodeRegistration:
