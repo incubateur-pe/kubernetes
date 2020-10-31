@@ -26,7 +26,7 @@
     src: kubeadm_config.yaml
     dest: /etc/kubeadm/config.yaml
   run_once: true
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  when: "inventory_hostname == groups['kubernetes_masters'][0]"
 
 - name: Installe le master
   include_tasks: init_master.yml
@@ -41,7 +41,7 @@
 
 - name: Join les nodes supplémentaires
   include_tasks: join_node.yml
-  when: 'inventory_hostname != groups["kubernetes_masters"][0]'
+  when: 'inventory_hostname != groups["kubernetes_masters"][0] and node_name|default(ansible_fqdn) not in nodes'
 
 - name: Récupère les nodes
   include_tasks: get_nodes.yml
