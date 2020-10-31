@@ -1,0 +1,7 @@
+Host bastion
+  Hostname 10.0.0.40
+  IdentityFile ~/.ssh/id_rsa
+  User libvirt-user
+
+Host 192.168.121.*
+  ProxyJump bastion
