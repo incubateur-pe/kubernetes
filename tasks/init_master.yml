@@ -20,7 +20,7 @@
 - name: Attends le status OK du control plane
   k8s_info:
     kind: Pod
-    name: "{{item}}-{{node_name | default(ansible_fqdn)}}"
+    name: "{{item}}-{{node_name | default(ansible_nodename)}}"
     namespace: kube-system
     kubeconfig: "{{k8s_kubeconfig}}"
   register: result
