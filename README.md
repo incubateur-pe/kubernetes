@@ -26,7 +26,8 @@ Variables
 | flannel_version | role | version de flannel a installer | v0.13.0 |
 | kubernetes_cluster_name | role | Nom du cluster kubernetes | kubernetes |
 | kubernetes_pod_subnet | role | Sous réseau pour le cni | 10.244.0.0/16 |
-| kubernetes_control_plane_endpoint | role | Adresse du loadblancer servant les noeuds masters (dns ou ip uniquement) | ansible_fqdn du premier master |
+| kubernetes_control_plane_endpoint | role | Adresse du loadbalancer (ou de l'apiServer si un seul master) servant les noeuds masters (dns ou ip uniquement) | ansible_fqdn du premier master |
+| kubernetes_control_plane_port | role | Port du loadbalancer (ou de l'apiServer si un seul master) du controlPlane | 6443 |
 | kubernetes_image_repository | role | repository des images k8s | k8s.gcr.io |
 | kubernetes_api_server_advertise_address | host | adresse d'affichage de l'apiServer (exemple: 172.16.10.10 ) | ansible_default_ipv4.address |
 | kubernetes_api_server_port | role | port d'écoute de l'apiServer | 6443 |
