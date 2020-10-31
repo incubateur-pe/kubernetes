@@ -47,6 +47,11 @@
   include_tasks: get_nodes.yml
   run_once: yes
 
+- name: Activation du service kubelet au boot
+  systemd:
+    name: kubelet
+    enabled: yes
+
 - name: Attends le status OK des nodes
   shell: 'kubectl get nodes | grep "{{item}}  *Ready "'
   register: result
