@@ -41,4 +41,10 @@ provisioner:
       master:
         node_name: master1
 verifier:
-  name: ansible
+  name: testinfra
+  directory: ../tests/
+  lint:
+    name: flake8
+  options:
+    ssh-config: ../tests/ssh_config
+    hosts: master

@@ -123,4 +123,10 @@ provisioner:
       worker2:
         node_name: worker2
 verifier:
-  name: ansible
+  name: testinfra
+  directory: ../tests/
+  lint:
+    name: flake8
+  options:
+    ssh-config: ../tests/ssh_config
+    hosts: master1,master2,master3,worker1,worker2
