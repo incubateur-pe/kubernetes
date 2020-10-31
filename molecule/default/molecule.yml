@@ -25,6 +25,7 @@ platforms:
         type: dhcp
     groups:
       - kubernetes_masters
+      - kubernetes
 provisioner:
   name: ansible
   config_options:
@@ -42,9 +43,9 @@ provisioner:
         node_name: master1
 verifier:
   name: testinfra
-  directory: ../tests/
+  directory: ../commun/tests/
   lint:
     name: flake8
   options:
-    ssh-config: ../tests/ssh_config
+    ssh-config: ../sommun/tests/ssh_config
     hosts: master

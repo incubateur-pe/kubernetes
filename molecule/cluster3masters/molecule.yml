@@ -124,9 +124,9 @@ provisioner:
         node_name: worker2
 verifier:
   name: testinfra
-  directory: ../tests/
+  directory: ../commun/tests/
   lint:
     name: flake8
   options:
-    ssh-config: ../tests/ssh_config
+    ssh-config: ../commun/tests/ssh_config
     hosts: master1,master2,master3,worker1,worker2

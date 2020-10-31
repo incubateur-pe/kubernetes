@@ -23,6 +23,7 @@ platforms:
         type: dhcp
     groups:
       - kubernetes_masters
+      - kubernetes
   - name: worker1
     box: centos/7
     memory: 2048
@@ -38,6 +39,7 @@ platforms:
         type: dhcp
     groups:
       - kubernetes_workers
+      - kubernetes
   - name: worker2
     box: centos/7
     memory: 2048
@@ -53,6 +55,7 @@ platforms:
         type: dhcp
     groups:
       - kubernetes_workers
+      - kubernetes
 provisioner:
   name: ansible
   config_options:
@@ -74,9 +77,9 @@ provisioner:
         node_name: worker2
 verifier:
   name: testinfra
-  directory: ../tests/
+  directory: ../commun/tests/
   lint:
     name: flake8
   options:
-    ssh-config: ../tests/ssh_config
+    ssh-config: ../commun/tests/ssh_config
     hosts: master,worker1,worker2

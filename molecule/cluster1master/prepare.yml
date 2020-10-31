@@ -1,17 +1,1 @@
----
-- name: Prepare
-  hosts: all
-  gather_facts: true
-  tasks:
-    - name: "Install docker"
-      include_role:
-        name: "geerlingguy.docker"
-
-    - name: "Disable swap"
-      shell: swapoff -a
-
-    - name: Disable SWAP in fstab
-      replace:
-        path: /etc/fstab
-        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
-        replace: '# \1'
+../commun/prepare.yml
