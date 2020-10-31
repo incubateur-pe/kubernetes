@@ -62,3 +62,9 @@
   with_items: "{{ nodes }}"
   delegate_to: "{{groups['kubernetes_masters'][0]}}"
   run_once: yes
+
+- block:
+  - name: Check for upgrades
+    include_tasks: upgrade/check_upgrades.yml
+    run_once: yes
+  any_errors_fatal: true
