@@ -7,7 +7,7 @@
 
 - name: Liste les versions de nodes en cours d'execution
   set_fact:
-    nodes_versions: "{{node_list_version|json_query('resources[*].status.nodeInfo.kubeletVersion')|unique}}"
+    nodes_versions: "{{node_list_version|json_query('resources[*].status.nodeInfo.kubeletVersion')|unique|sort}}"
 
 - name: Vérifie la cohérence des versions du cluster
   assert:
