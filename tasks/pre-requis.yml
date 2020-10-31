@@ -16,16 +16,6 @@
     enablerepo: kubernetes
     state: present
 
-- name: Configure la policy FORWARD a ACCEPT
-  iptables:
-    chain: FORWARD
-    policy: ACCEPT
-  register: policyForward
-
-- name: Sauvegarde les règles iptables
-  shell: service iptables save
-  when: policyForward.changed
-
 ## Hack de contournement de la policy FORWARD a DROP de docker...
 - name: Récupère les services du host
   service_facts:
@@ -52,6 +42,17 @@
   when: "'docker.service' in services and iptablesRules.changed"
 # fin du hack
 
+- block:
+  - name: Configure la policy FORWARD a ACCEPT
+    iptables:
+      chain: FORWARD
+      policy: ACCEPT
+    register: policyForward
+
+  - name: Sauvegarde les règles iptables
+    shell: service iptables save
+    when: policyForward.changed
+  when: 'not "docker.service" in services'
 
 - name: Applique les paramètres sysctl
   sysctl:
