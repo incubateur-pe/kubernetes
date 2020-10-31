@@ -17,5 +17,5 @@ nodeRegistration:
 controlPlane:
   localAPIEndpoint:
     advertiseAddress: "{{ kubernetes_api_server_advertise_address | default(ansible_default_ipv4.address )}}"
-    bindPort: 6443
+    bindPort: {{ kubernetes_api_server_port }}
 {% endif %}
