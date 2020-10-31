@@ -57,11 +57,25 @@ Installer les pré-requis : `pip install -r requirements-tests.yaml`
 Installer vagrant : https://www.vagrantup.com/downloads
 Installer le plugin vagrant-libvirt : `vagrant plugin install vagrant-libvirt`
 
-Bugs notables de molecule/libvirt :
+__Bugs notables de molecule/libvirt :__
 
   * [issue #921](https://github.com/vagrant-libvirt/vagrant-libvirt/issues/921#issuecomment-464334757) : nécessite sur certains os de modifier le plugin
   * Le port-forward créé par vagrant n'est pas utilisé par molecule, l'accès se fait directement par l'adresse de management de la VM, il faut pour cela la router et dé-filtrer via iptables le flux du network nat sur le host kvm
     * Contournement possible en utilisant l'option ProxyCommand d'OpenSSH
+
+__Execution des tests avec testInfra:__
+
+Avec libvirt en local, aucun problème particulier, cependant pour l'accès aux VMs avec un libvirt distant, si le réseau n'est pas routé, il est possible d'utiliser une config ssh :
+
+```
+Host bastion
+  Hostname 10.0.0.40
+  IdentityFile ~/.ssh/id_rsa
+  User libvirt-user
+
+Host 192.168.121.*
+  ProxyJump bastion
+```
 
 License
 -------
