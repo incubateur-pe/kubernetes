@@ -20,7 +20,7 @@ clusterName: {{kubernetes_cluster_name}}
 kubernetesVersion: {{ kubernetes_version }}
 networking:
   podSubnet: "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}"
-controlPlaneEndpoint: {{ api_endpoint }}
+controlPlaneEndpoint: {{ api_endpoint }}:{{ kubernetes_control_plane_port }}
 # etcd:
 #   local:
 #     dataDir: /var/lib/etcd
