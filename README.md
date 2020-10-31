@@ -31,6 +31,7 @@ Variables
 | kubernetes_image_repository | role | repository des images k8s | k8s.gcr.io |
 | kubernetes_api_server_advertise_address | host | adresse d'affichage de l'apiServer (exemple: 172.16.10.10 ) | ansible_default_ipv4.address |
 | kubernetes_api_server_port | role | port d'écoute de l'apiServer | 6443 |
+| kubernetes_cloud_provider | role | cloud provider a utiliser | N/A |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
 
 Playbook Exemple
