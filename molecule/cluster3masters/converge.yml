@@ -1,6 +1,15 @@
 ---
-- name: Converge
-  hosts: kubernetes
+- name: Converge masters
+  hosts: kubernetes_masters
+  tasks:
+    - name: "Include kubernetes-bare-metal"
+      include_role:
+        name: "kubernetes-bare-metal"
+      vars:
+        kubernetes_control_plane_endpoint: lb
+
+- name: Converge workers
+  hosts: kubernetes_workers
   tasks:
     - name: "Include kubernetes-bare-metal"
       include_role:
