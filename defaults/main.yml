@@ -7,3 +7,4 @@ kubernetes_control_plane_port: 6443
 k8s_kubeconfig: "{{role_path}}/files/admin.conf"
 kubernetes_upgrade_consistency_check: true
 kubernetes_upgrades_allowed: true
+kubernetes_confirm_upgrade: false
