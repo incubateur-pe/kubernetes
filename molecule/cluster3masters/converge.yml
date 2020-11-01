@@ -6,6 +6,7 @@
       include_role:
         name: "kubernetes-bare-metal"
       vars:
+        kubernetes_version: 1.19.2
         kubernetes_control_plane_endpoint: lb
 
 - name: Converge workers
@@ -15,4 +16,5 @@
       include_role:
         name: "kubernetes-bare-metal"
       vars:
+        kubernetes_version: 1.19.2
         kubernetes_control_plane_endpoint: lb
