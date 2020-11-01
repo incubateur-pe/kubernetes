@@ -6,9 +6,16 @@ Installe un cluster kubernetes avec kubeadm
 Pré-requis
 ------------
 
+__Locaux__:
+
 Python : voir requirements.yaml : `pip install -r requirements.yaml`
 
-Inventaire:
+__Serveurs__:
+
+  * CRI : le runtime sera détecté par kubeadm
+  * Swap : Aucun espace de swap ne doit exister sur les serveurs
+
+__Inventaire__:
 
   * Groupe kubernetes_masters : Contiens tous les hosts dont le role sera des masters kubernetes.
   * Groupe kubernetes_workers : Contiens tous les hosts dont le role sera des workers kubernetes
