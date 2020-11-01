@@ -32,3 +32,10 @@
   when: 'hostvars[host_item].inventory_hostname == inventory_hostname'
   loop_control:
     loop_var: host_item
+
+- name: Récupère la configuration kubectl mise a jour sur localhost
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{k8s_kubeconfig}}"
+    flat: yes
+  run_once: yes
