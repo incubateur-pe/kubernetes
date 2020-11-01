@@ -6,7 +6,7 @@
 
 - name: Configure kubectl sur le serveur
   copy:
-    src: /etc/kubernetes/admin.conf
+    src: "{{k8s_kubeconfig}}"
     dest: /root/.kube/config
-    remote_src: yes
+    remote_src: no
     mode: 0600
