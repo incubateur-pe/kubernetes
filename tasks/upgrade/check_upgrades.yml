@@ -5,6 +5,12 @@
     enablerepo: kubernetes
     state: present
 
+- name: Récupère les changements vus par kubeadm
+  shell: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
+  register: upgrade_diff_raw
+  changed_when: false
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+
 - name: Récupère les informations des nodes
   k8s_info:
     kind: Node
@@ -30,11 +36,19 @@
 
 - name: Définis le besoin d'upgrade du cluster
   set_fact:
-    need_upgrade: "{% if cluster_version != kubeadm_package.results[0].version %}{{true}}{% else %}{{false}}{% endif %}"
+    need_upgrade: "{% if cluster_version != kubernetes_version  or upgrade_diff_raw.stdout_lines|length > 0 or (nodes_versions|length > 1 and not kubernetes_upgrade_consistency_check)%}{{true}}{% else %}{{false}}{% endif %}"
+
+- name: Récupère le plan d'upgrade
+  shell: "kubeadm upgrade plan"
+  changed_when: false
+  register: kubeadm_upgrade_plan
+  delegate_to: "{{groups['kubernetes_masters'][0]}}"
 
 - name: Définis le fact sur le reste des hosts du play
   set_fact:
     need_upgrade: "{{ need_upgrade }}"
+    upgrade_plan: "{{kubeadm_upgrade_plan.stdout}}"
+    upgrade_diff: "{{upgrade_diff_raw.stdout}}"
   delegate_to: "{{ item }}"
   with_items: "{{ play_hosts }}"
   run_once: yes
