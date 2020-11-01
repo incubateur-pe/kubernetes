@@ -38,7 +38,7 @@ Variables
 Playbook Exemple
 ----------------
 
-```
+```yaml
 - hosts: all
   remote_user: root
   roles:
