@@ -1,11 +1,18 @@
 - name: Vérifie si le master existe
   stat:
     path: /etc/kubernetes/admin.conf
-  register: admin_config
+  register: first_master
+
+- name: Définis le fact already_initialized sur les hosts
+  set_fact:
+    already_initialized: "{{first_master.stat.exists}}"
+  with_items: "{{ play_hosts }}"
+  delegate_to: "{{ item }}"
+  run_once: yes
 
 - name: Crée le premier noeud master
   shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
-  when: not admin_config.stat.exists
+  when: not already_initialized
 
 - include_tasks: configure_kubectl.yml
 
