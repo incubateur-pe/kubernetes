@@ -7,3 +7,28 @@
   pause:
     prompt: "Vérifier dans le plan si des upgrades manuels sont nécessaire"
   when: kubernetes_confirm_upgrade
+
+- name: Upgrade le premier master
+  include_tasks: upgrade_node.yml
+  when: 'inventory_hostname == groups["kubernetes_masters"][0]'
+
+- name: Upgrade les autres masters
+  include_tasks: upgrade_node.yml
+  with_items: "{{ groups['kubernetes_masters'] }}"
+  when: 'hostvars[host_item].inventory_hostname == inventory_hostname and inventory_hostname != groups["kubernetes_masters"][0]'
+  loop_control:
+      loop_var: host_item
+
+- name: Mets a jour kubectl et kubelet des masters
+  include_tasks: upgrade_kubelet_kubectl.yml
+  with_items: "{{ groups['kubernetes_masters'] }}"
+  when: 'hostvars[host_item].inventory_hostname == inventory_hostname'
+  loop_control:
+      loop_var: host_item
+
+- name: Upgrade les workers
+  include_tasks: upgrade_node.yml
+  with_items: "{{ groups['kubernetes_workers'] }}"
+  when: 'hostvars[host_item].inventory_hostname == inventory_hostname'
+  loop_control:
+      loop_var: host_item
