@@ -1,0 +1,14 @@
+- name: Mets a jour kubelet et kubectl
+  yum:
+    name:
+      - kubelet-{{kubernetes_version}}
+      - kubectl-{{kubernetes_version}}
+    enablerepo: kubernetes
+    state: present
+
+- name: Re-démarre le service kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
