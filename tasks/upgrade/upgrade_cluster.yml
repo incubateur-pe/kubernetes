@@ -1,11 +1,11 @@
 - name: Affiche le plan d'upgrade
-  debug: var=upgrade_plan
+  debug: msg="{{upgrade_plan.split('\n')}}"
   delegate_to: localhost
   run_once: yes
 
 - name: Confirmation manuelle de l'upgrade
   pause:
-    prompt: "Vérifier dans le plan si des upgrades manuels sont nécessaire"
+    prompt: "Vérifier dans le plan si des upgrades manuels sont nécessaires, annuler le cas échéant et traiter les updates avant de relancer le playbook"
   when: kubernetes_confirm_upgrade
 
 - name: Upgrade le premier master
