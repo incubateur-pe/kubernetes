@@ -70,6 +70,7 @@ Il est également possible de dissocier l'installation des masters et des worker
     kubernetes_control_plane_endpoint: master.k8s.loc
     kubernetes_cluster_name: dev
     k8s_version: 1.19.2
+    kubernetes_upgrade_consistency_check: no # Désactive le test de consistence des versions puisqu'une partie du cluster a potentiellement été mise a jour
 ```
 
 Tests
