@@ -1,3 +1,10 @@
+- name: Installation de kubeadm
+  yum:
+    name:
+      - kubeadm-{{kubernetes_version}}
+    enablerepo: kubernetes
+    state: present
+
 - name: Récupère les informations des nodes
   k8s_info:
     kind: Node
@@ -20,11 +27,6 @@
 - name: Définis la version courante globale du cluster
   set_fact:
     cluster_version: "{{ nodes_versions[0] | regex_replace('^v') }}"
-
-- name: Récupère la version de kubeadm disponible
-  yum:
-    list: kubeadm
-  register: kubeadm_package
 
 - name: Définis le besoin d'upgrade du cluster
   set_fact:
