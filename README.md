@@ -49,6 +49,28 @@ Playbook Exemple
     k8s_version: 1.19.2
 ```
 
+Il est également possible de dissocier l'installation des masters et des workers, bien que les masters doivent être présents dans l'inventaire ansible :
+
+```yaml
+- hosts: kubernetes_masters
+  remote_user: root
+  roles:
+    - kubernetes-bare-metal
+  vars:
+    kubernetes_control_plane_endpoint: master.k8s.loc
+    kubernetes_cluster_name: dev
+    k8s_version: 1.19.2
+
+- hosts: kubernetes_workers
+  remote_user: root
+  roles:
+    - kubernetes-bare-metal
+  vars:
+    kubernetes_control_plane_endpoint: master.k8s.loc
+    kubernetes_cluster_name: dev
+    k8s_version: 1.19.2
+```
+
 Tests
 -----
 
