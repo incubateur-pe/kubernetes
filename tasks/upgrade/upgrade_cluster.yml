@@ -1,0 +1,9 @@
+- name: Affiche le plan d'upgrade
+  debug: var=upgrade_plan
+  delegate_to: localhost
+  run_once: yes
+
+- name: Confirmation manuelle de l'upgrade
+  pause:
+    prompt: "Vérifier dans le plan si des upgrades manuels sont nécessaire"
+  when: kubernetes_confirm_upgrade

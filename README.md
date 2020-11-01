@@ -34,6 +34,7 @@ Variables
 | kubernetes_cloud_provider | role | cloud provider a utiliser | N/A |
 | kubernetes_upgrade_consistency_check | role | Effectuer un test de consistance du cluster ( définir à false si l'upgrade se fait via 2 plays ) | true |
 | kubernetes_upgrades_allowed | role | Controle l'execution des upgrades du cluster | true |
+| kubernetes_confirm_upgrade | role | Si un upgrade est a effectuer, ajoute un confirmation de l'utilisateur avant exécution | false |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
 
 Playbook Exemple

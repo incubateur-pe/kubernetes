@@ -67,5 +67,10 @@
   - name: Check for upgrades
     include_tasks: upgrade/check_upgrades.yml
     run_once: yes
+
+  - name: Upgrade le cluster kubernetes
+    include_tasks: upgrade/upgrade_cluster.yml
+    when: need_upgrade
+
   any_errors_fatal: true
   when: kubernetes_upgrades_allowed
