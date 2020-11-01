@@ -6,6 +6,10 @@
   with_fileglob:
     - "../templates/*.repo"
 
+- name: Vérifie la présence de kubeadm
+  yum: list=kubeadm
+  register: kubeadm_package
+
 - name: Installation des paquets kubernetes
   yum:
     name:
@@ -15,6 +19,7 @@
       - iptables-services
     enablerepo: kubernetes
     state: present
+  when: 'kubeadm_package.results|length == 0 or kubeadm_package.results[0].yumstate != "installed"'
 
 ## Hack de contournement de la policy FORWARD a DROP de docker...
 - name: Récupère les services du host
