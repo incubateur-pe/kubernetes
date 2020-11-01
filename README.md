@@ -33,6 +33,7 @@ Variables
 | kubernetes_api_server_port | role | port d'écoute de l'apiServer | 6443 |
 | kubernetes_cloud_provider | role | cloud provider a utiliser | N/A |
 | kubernetes_upgrade_consistency_check | role | Effectuer un test de consistance du cluster ( définir à false si l'upgrade se fait via 2 plays ) | true |
+| kubernetes_upgrades_allowed | role | Controle l'execution des upgrades du cluster | true |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
 
 Playbook Exemple
