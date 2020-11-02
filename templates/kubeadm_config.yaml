@@ -19,6 +19,9 @@ clusterName: {{kubernetes_cluster_name}}
 kubernetesVersion: {{ kubernetes_version }}
 networking:
   podSubnet: "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}"
+{% if kubernetes_service_subnet is defined %}
+  serviceSubnet: {{ kubernetes_service_subnet }}
+{% endif %}
 controlPlaneEndpoint: {{ api_endpoint }}:{{ kubernetes_control_plane_port }}
 # etcd:
 #   local:
