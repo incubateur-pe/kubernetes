@@ -38,3 +38,14 @@ kind: KubeletConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: {{ kubernetes_proxy_mode }}
+{% if kubernetes_proxy_mode == "ipvs" %}
+ipvs:
+  syncPeriod: {{ kubernetes_proxy_mode_ipvs_sync_period | default('30s') }}
+  minSyncPeriod: {{ kubernetes_proxy_mode_ipvs_min_sync_period | default('2s') }}
+  scheduler: {{ kubernetes_proxy_mode_ipvs_scheduler | default('rr') }}
+{% endif %}
+{% if kubernetes_proxy_mode == "iptables" %}
+iptables:
+  syncPeriod: {{ kubernetes_proxy_mode_iptables_sync_period | default('30s') }}
+  minSyncPeriod: {{ kubernetes_proxy_mode_iptables_min_sync_period | default('2s') }}
+{% endif %}
