@@ -27,3 +27,11 @@ imageRepository: {{ kubernetes_image_repository | default("k8s.gcr.io")}}
 apiServer:
   certSANs:
   - "{{ api_endpoint }}"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+# kubelet specific options here
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: {{ kubernetes_proxy_mode }}
