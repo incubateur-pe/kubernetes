@@ -1,11 +1,17 @@
 - block:
-  - name: Configure flannel
+  - name: Configure flannel (rbac/psp)
     k8s:
       state: present
       src: "{{role_path}}/templates/kube-flannel.yml.j2"
       kubeconfig: "{{k8s_kubeconfig}}"
 
-  - name: Configure flannel
+  - name: Configure flannel (configMap)
+    k8s:
+      state: present
+      definition: "{{ lookup('template', role_path + '/templates/kube-flannel-config.yml.j2') }}"
+      kubeconfig: "{{k8s_kubeconfig}}"
+
+  - name: Déploie flannel
     k8s:
       state: present
       definition: "{{ lookup('template', role_path + '/templates/kube-flannel-daemonset.yml.j2') }}"
