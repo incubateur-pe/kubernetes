@@ -14,14 +14,14 @@
   shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
   when: not already_initialized
 
-- include_tasks: configure_kubectl.yml
-
 - name: Récupère la configuration kubectl sur localhost
   fetch:
     src: /etc/kubernetes/admin.conf
     dest: "{{k8s_kubeconfig}}"
     flat: yes
   run_once: yes
+
+- include_tasks: configure_kubectl.yml
 
 # Hack : le wait de k8s_info skippe si la ressource n'existe pas...
 - name: Attends le status OK du control plane
