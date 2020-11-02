@@ -43,6 +43,11 @@ Variables
 | kubernetes_upgrades_allowed | role | Controle l'execution des upgrades du cluster | true |
 | kubernetes_confirm_upgrade | role | Si un upgrade est a effectuer, ajoute un confirmation de l'utilisateur avant exécution | false |
 | kubernetes_proxy_mode | role | Mode de kube-proxy (exemple: iptables, ipvs...) | ipvs |
+| kubernetes_proxy_mode_ipvs_sync_period | role | Durée maximale entre deux synchros | 30s |
+| kubernetes_proxy_mode_ipvs_min_sync_period | role | Délai minimal entre deux synchros | 2s |
+| kubernetes_proxy_mode_ipvs_scheduler | role | scheduler ipvs a utiliser ( rr,lc,dh,sh,sed,nq ) | rr |
+| kubernetes_proxy_mode_iptables_sync_period | role | Durée maximale entre deux synchros | 30s |
+| kubernetes_proxy_mode_iptables_min_sync_period | role | Délai minimal entre deux synchros | 2s |
 | kubernetes_service_subnet | role | Sous réseau utilisé par les services | voir documentation kubeadm |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
 
