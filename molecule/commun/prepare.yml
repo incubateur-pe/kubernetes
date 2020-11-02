@@ -3,6 +3,28 @@
   hosts: kubernetes
   gather_facts: true
   tasks:
+    - name: Crée le répetoire de configuration docker
+      file:
+        state: directory
+        path: /etc/docker
+        mode: 0755
+
+    - name: Configure docker
+      copy:
+        content: |
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2",
+            "storage-opts": [
+              "overlay2.override_kernel_check=true"
+            ]
+          }
+        dest: /etc/docker/daemon.json
+
     - name: "Install docker"
       include_role:
         name: "geerlingguy.docker"
