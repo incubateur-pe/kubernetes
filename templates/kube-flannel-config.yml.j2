@@ -31,6 +31,6 @@ data:
     {
       "Network": "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}",
       "Backend": {
-        "Type": "vxlan"
+        "Type": "{{ flannel_backend_type | default('vxlan') }}"
       }
     }
