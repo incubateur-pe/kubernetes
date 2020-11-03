@@ -1,0 +1,23 @@
+- block:
+  - name: Configure calico (rbac/psp/crds)
+    k8s:
+      state: present
+      src: "{{role_path}}/templates/calico_config.yaml.j2"
+      kubeconfig: "{{k8s_kubeconfig}}"
+
+  - name: Déploie calico (deployment)
+    k8s:
+      state: present
+      definition: "{{ lookup('file', role_path + '/templates/calico_deployment.yaml.j2') }}"
+      kubeconfig: "{{k8s_kubeconfig}}"
+
+  - name: Déploie calico (daemonset)
+    k8s:
+      state: present
+      definition: "{{ lookup('file', role_path + '/templates/calico_daemonset.yaml.j2') }}"
+      kubeconfig: "{{k8s_kubeconfig}}"
+      wait_timeout: 600
+      wait: yes
+
+  delegate_to: localhost
+  run_once: yes
