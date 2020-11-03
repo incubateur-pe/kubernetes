@@ -9,3 +9,4 @@ kubernetes_upgrade_consistency_check: true
 kubernetes_upgrades_allowed: true
 kubernetes_confirm_upgrade: false
 kubernetes_proxy_mode: ipvs
+kubernetes_cni_driver: flannel

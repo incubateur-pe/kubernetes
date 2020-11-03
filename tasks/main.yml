@@ -33,7 +33,7 @@
   when: 'inventory_hostname == groups["kubernetes_masters"][0]'
 
 - name: Installe le cni
-  include_tasks: cni.yml
+  include_tasks: "cni/cni_{{ kubernetes_cni_driver }}.yml"
 
 - name: Récupère les nodes
   include_tasks: get_nodes.yml
