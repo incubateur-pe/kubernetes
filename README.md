@@ -31,6 +31,7 @@ Variables
 | node_name | host | nom du noeud kubernetes, doit etre unique | voir documentation kubeadm |
 | flannel_image | role | nom du repo/image de flannel | quay.io/coreos/flannel |
 | flannel_version | role | version de flannel a installer | v0.13.0 |
+| flannel_backend_type | role | backend a utiliser pour flannel | vxlan |
 | kubernetes_cluster_name | role | Nom du cluster kubernetes | kubernetes |
 | kubernetes_pod_subnet | role | Sous réseau pour le cni | 10.244.0.0/16 |
 | kubernetes_control_plane_endpoint | role | Adresse du loadbalancer (ou de l'apiServer si un seul master) servant les noeuds masters (dns ou ip uniquement) | ansible_fqdn du premier master |
