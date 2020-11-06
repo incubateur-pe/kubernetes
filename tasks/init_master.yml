@@ -1,3 +1,30 @@
+- name: Dépose la configuration d'initialisation kubeadm
+  template:
+    src: kubeadm_config.yaml
+    dest: /etc/kubeadm/config.yaml
+
+- block:
+  - name: Promets la présence du répertoire pki
+    file:
+      state: directory
+      mode: 0755
+      path: /etc/kubernetes/pki
+
+  - name: Dépose les éléments de l'ac intermédiaire
+    copy:
+      src: "{{item.src}}"
+      dest: "/etc/kubernetes/pki/{{item.dest}}"
+      remote_src: no
+      mode: "{{item.mode}}"
+    with_items:
+      - dest: ca.crt  
+        src: "{{ kubernetes_pki.certificat }}"
+        mode: "0644"
+      - dest: ca.key
+        src: "{{ kubernetes_pki.cle_privee }}"
+        mode: "0600"
+  when: kubernetes_pki is defined
+
 - name: Vérifie si le master existe
   stat:
     path: /etc/kubernetes/admin.conf
@@ -19,7 +46,6 @@
     src: /etc/kubernetes/admin.conf
     dest: "{{k8s_kubeconfig}}"
     flat: yes
-  run_once: yes
 
 - include_tasks: configure_kubectl.yml
 
