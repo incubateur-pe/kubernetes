@@ -21,13 +21,6 @@
     path: /etc/kubeadm
     mode: 0755
 
-- name: Dépose la configuration d'initialisation kubeadm
-  template:
-    src: kubeadm_config.yaml
-    dest: /etc/kubeadm/config.yaml
-  run_once: true
-  when: "inventory_hostname == groups['kubernetes_masters'][0]"
-
 - name: Installe le master
   include_tasks: init_master.yml
   when: 'inventory_hostname == groups["kubernetes_masters"][0]'
