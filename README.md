@@ -51,6 +51,8 @@ Variables
 | kubernetes_proxy_mode_iptables_sync_period | role | Durée maximale entre deux synchros | 30s |
 | kubernetes_proxy_mode_iptables_min_sync_period | role | Délai minimal entre deux synchros | 2s |
 | kubernetes_service_subnet | role | Sous réseau utilisé par les services | voir documentation kubeadm |
+| kubernetes_pki.certificat | role | Fichier .pem a utiliser comme clé publique de la racine de l'authorité de certification du cluster | N/A |
+| kubernetes_pki.cle_privee | role | Fichier .key a utiliser comme clé privée de la racine de l'authorité de certification du cluster | N/A |
 | k8s_kubeconfig | role | nom du fichier local de configuration kubernetes ( récupéré depuis le serveur ) | {{role_path}}/files/admin.conf |
 
 Playbook Exemple
