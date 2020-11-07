@@ -1,5 +1,5 @@
 Host bastion
-  Hostname 10.0.0.40
+  Hostname kvm
   IdentityFile ~/.ssh/id_rsa
   User libvirt-user
 

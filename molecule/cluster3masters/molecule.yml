@@ -15,7 +15,7 @@ platforms:
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
-      - 'host="10.0.0.40"'
+      - 'host="kvm"'
       - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
@@ -30,7 +30,7 @@ platforms:
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
-      - 'host="10.0.0.40"'
+      - 'host="kvm"'
       - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
@@ -46,7 +46,7 @@ platforms:
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
-      - 'host="10.0.0.40"'
+      - 'host="kvm"'
       - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
@@ -62,7 +62,7 @@ platforms:
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
-      - 'host="10.0.0.40"'
+      - 'host="kvm"'
       - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
@@ -78,7 +78,7 @@ platforms:
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
-      - 'host="10.0.0.40"'
+      - 'host="kvm"'
       - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
@@ -94,7 +94,7 @@ platforms:
     provider_options:
       connect_via_ssh: true
     provider_raw_config_args:
-      - 'host="10.0.0.40"'
+      - 'host="kvm"'
       - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
@@ -107,7 +107,7 @@ provisioner:
   name: ansible
   config_options:
     ssh_connection:
-      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q 10.0.0.40"
+      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q -l libvirt-user kvm"
   connection_options:
     ansible_ssh_user: vagrant
     ansible_become: true
