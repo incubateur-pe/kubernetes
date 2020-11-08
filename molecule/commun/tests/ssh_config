@@ -1,7 +1,0 @@
-Host bastion
-  Hostname kvm
-  IdentityFile ~/.ssh/id_rsa
-  User libvirt-user
-
-Host 192.168.121.*
-  ProxyJump bastion

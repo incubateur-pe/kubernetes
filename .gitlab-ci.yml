@@ -1,0 +1,7 @@
+test:
+  tags:
+    - kvm
+  stage: test
+  script:
+    - docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest
+  timeout: 3 hours 30 minutes

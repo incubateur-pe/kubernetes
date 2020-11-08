@@ -1,4 +1,17 @@
 ---
+- name: KVM hosts
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Installe les pré-requis python pour k8s
+      pip:
+        executable: /usr/bin/pip3
+        name:
+          - openshift>=0.6
+          - PyYAML>=3.11
+          - jmespath
+
 - name: Prepare k8s hosts
   hosts: kubernetes
   gather_facts: true

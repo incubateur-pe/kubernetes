@@ -12,11 +12,6 @@ platforms:
     box: centos/7
     memory: 1024
     cpus: 1
-    provider_options:
-      connect_via_ssh: true
-    provider_raw_config_args:
-      - 'host="kvm"'
-      - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -27,11 +22,6 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
-    provider_options:
-      connect_via_ssh: true
-    provider_raw_config_args:
-      - 'host="kvm"'
-      - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -43,11 +33,6 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
-    provider_options:
-      connect_via_ssh: true
-    provider_raw_config_args:
-      - 'host="kvm"'
-      - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -59,11 +44,6 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
-    provider_options:
-      connect_via_ssh: true
-    provider_raw_config_args:
-      - 'host="kvm"'
-      - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -75,11 +55,6 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
-    provider_options:
-      connect_via_ssh: true
-    provider_raw_config_args:
-      - 'host="kvm"'
-      - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -91,11 +66,6 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
-    provider_options:
-      connect_via_ssh: true
-    provider_raw_config_args:
-      - 'host="kvm"'
-      - 'username="libvirt-user"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -105,9 +75,6 @@ platforms:
       - kubernetes
 provisioner:
   name: ansible
-  config_options:
-    ssh_connection:
-      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q -l libvirt-user kvm"
   connection_options:
     ansible_ssh_user: vagrant
     ansible_become: true
@@ -128,5 +95,4 @@ verifier:
   lint:
     name: flake8
   options:
-    ssh-config: ../commun/tests/ssh_config
     hosts: master1,master2,master3,worker1,worker2
