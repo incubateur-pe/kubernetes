@@ -1,4 +1,37 @@
 ---
+- name: KVM hosts
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ajoute les entrées dans /etc/hosts de l'hote local
+      lineinfile:
+        line: "{{ansible_host}} {{inventory_hostname}}"
+        path: /etc/hosts
+        regexp: '^.* {{inventory_hostname}}'
+      delegate_to: localhost
+      become: yes
+
+
+- name: VMs networking
+  hosts: all
+  tasks:
+    - name: Supprime la route par défaut utilisant l'interface de management
+      lineinfile:
+        line: DEFROUTE="no"
+        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        regexp: '^DEFROUTE='
+      register: routes
+
+    - name: Ajoute la route statique vers le reseau principal
+      copy:
+        content: 10.0.4.0/24 via 192.168.121.1 dev eth0
+        dest: /etc/sysconfig/network-scripts/route-eth0
+      register: static_route
+
+    - name: Redémarre les serveurs pour prise en compte des routes
+      reboot:
+      when: routes.changed or static_route.changed
+
 - name: Prepare k8s hosts
   hosts: kubernetes
   gather_facts: true

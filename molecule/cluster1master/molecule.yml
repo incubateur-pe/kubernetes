@@ -17,6 +17,7 @@ platforms:
     provider_raw_config_args:
       - 'host="kvm"'
       - 'username="libvirt-user"'
+      - 'management_network_mode="route"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -33,6 +34,7 @@ platforms:
     provider_raw_config_args:
       - 'host="kvm"'
       - 'username="libvirt-user"'
+      - 'management_network_mode="route"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -49,6 +51,7 @@ platforms:
     provider_raw_config_args:
       - 'host="kvm"'
       - 'username="libvirt-user"'
+      - 'management_network_mode="route"'
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -58,9 +61,9 @@ platforms:
       - kubernetes
 provisioner:
   name: ansible
-  config_options:
-    ssh_connection:
-      ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q -l libvirt-user kvm"
+  # config_options:
+  #   ssh_connection:
+  #     ssh_args: -o ControlMaster=auto -o ControlPersist=60s -o ProxyCommand="ssh -W %h:%p -q -l libvirt-user kvm"
   connection_options:
     ansible_ssh_user: vagrant
     ansible_become: true
@@ -81,5 +84,5 @@ verifier:
   lint:
     name: flake8
   options:
-    ssh-config: ../commun/tests/ssh_config
+    # ssh-config: ../commun/tests/ssh_config
     hosts: master,worker1,worker2
