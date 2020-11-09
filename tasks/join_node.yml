@@ -11,7 +11,9 @@
   when: '"kubernetes_masters" in group_names'
 
 - name: Join le noeud au cluster
-  shell: "kubeadm join --config /etc/kubeadm/join_config.yaml"
+  command: "kubeadm join --config /etc/kubeadm/join_config.yaml"
+  register: join
+  changed_when: join.stdout_lines|length > 0
 
 - block:
   - name: Attends le status OK du control plane

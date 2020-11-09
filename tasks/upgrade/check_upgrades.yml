@@ -6,7 +6,7 @@
     state: present
 
 - name: Récupère les changements vus par kubeadm
-  shell: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
+  command: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
   register: upgrade_diff_raw
   changed_when: false
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"

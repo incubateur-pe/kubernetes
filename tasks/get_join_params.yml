@@ -1,5 +1,5 @@
 - name: Récupère un join token
-  shell: 'kubeadm token create'
+  command: 'kubeadm token create'
   register: join_token_raw
   when: join_token is not defined
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"

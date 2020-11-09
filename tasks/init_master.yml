@@ -39,7 +39,7 @@
   run_once: yes
 
 - name: Crée le premier noeud master
-  shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{ node_name }}{% endif %}"
+  command: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{ node_name }}{% endif %}"
   when: not already_initialized
 
 - name: Récupère la configuration kubectl sur localhost

@@ -44,7 +44,9 @@
         name: "geerlingguy.docker"
 
     - name: "Disable swap"
-      shell: swapoff -a
+      command: swapoff -a -v
+      register: swapoff
+      changed_when: swapoff.stdout_lines|length > 0
 
     - name: Disable SWAP in fstab
       replace:

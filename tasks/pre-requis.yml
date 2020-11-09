@@ -55,7 +55,7 @@
     register: policyForward
 
   - name: Sauvegarde les règles iptables
-    shell: service iptables save
+    command: service iptables save
     when: policyForward.changed
   when: 'not "docker.service" in services'
 
