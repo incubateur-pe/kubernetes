@@ -1,6 +1,6 @@
 - name: Dépose la configuration d'initialisation kubeadm
   template:
-    src: kubeadm_config.yaml
+    src: kubeadm_config.yaml.j2
     dest: /etc/kubeadm/config.yaml
     mode: 0755
 

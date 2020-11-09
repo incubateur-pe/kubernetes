@@ -2,7 +2,7 @@
 
 - name: Dépose la configuration join kubeadm
   template:
-    src: kubeadm_join.yaml
+    src: kubeadm_join.yaml.j2
     dest: /etc/kubeadm/join_config.yaml
     mode: 0755
 
