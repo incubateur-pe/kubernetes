@@ -3,12 +3,14 @@ apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 nodeRegistration:
   kubeletExtraArgs:
-{% if kubernetes_cloud_provider is defined %}
+# {% if kubernetes_cloud_provider is defined %}
     cloud-provider: "{{ kubernetes_cloud_provider }}"
-{% endif %}
-{% if node_name is defined %}
+# {% endif %}
+# {% if node_name is defined %}
+
   name: {{ node_name }}
-{% endif %}
+# {% endif %}
+
 localAPIEndpoint:
   advertiseAddress: "{{ kubernetes_api_server_advertise_address | default(ansible_default_ipv4.address) }}"
   bindPort: {{ kubernetes_api_server_port }}
@@ -19,10 +21,12 @@ clusterName: {{ kubernetes_cluster_name }}
 kubernetesVersion: {{ kubernetes_version }}
 networking:
   podSubnet: "{{ kubernetes_pod_subnet | default(kubernetes_default_pod_cidr) }}"
-{% if kubernetes_service_subnet is defined %}
+# {% if kubernetes_service_subnet is defined %}
+
   serviceSubnet: {{ kubernetes_service_subnet }}
-{% endif %}
-controlPlaneEndpoint: {{ api_endpoint }}:{{ kubernetes_control_plane_port }}
+# {% endif %}
+
+controlPlaneEndpoint: "{{ api_endpoint }}:{{ kubernetes_control_plane_port }}"
 # etcd:
 #   local:
 #     dataDir: /var/lib/etcd
@@ -38,14 +42,16 @@ kind: KubeletConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: {{ kubernetes_proxy_mode }}
-{% if kubernetes_proxy_mode == "ipvs" %}
+# {% if kubernetes_proxy_mode == "ipvs" %}
+
 ipvs:
   syncPeriod: {{ kubernetes_proxy_mode_ipvs_sync_period | default('30s') }}
   minSyncPeriod: {{ kubernetes_proxy_mode_ipvs_min_sync_period | default('2s') }}
   scheduler: {{ kubernetes_proxy_mode_ipvs_scheduler | default('rr') }}
-{% endif %}
-{% if kubernetes_proxy_mode == "iptables" %}
+# {% endif %}
+# {% if kubernetes_proxy_mode == "iptables" %}
+
 iptables:
   syncPeriod: {{ kubernetes_proxy_mode_iptables_sync_period | default('30s') }}
   minSyncPeriod: {{ kubernetes_proxy_mode_iptables_min_sync_period | default('2s') }}
-{% endif %}
+# {% endif %}
