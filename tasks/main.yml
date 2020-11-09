@@ -46,9 +46,13 @@
     enabled: yes
 
 - name: Attends le status OK des nodes
-  shell: 'kubectl get nodes | grep "{{item}}  *Ready "'
+  shell: |
+    set -o pipefail;
+    kubectl get nodes | grep "{{ item }}  *Ready "
+  args:
+    executable: /bin/bash
   register: result
-  until: 'result.stdout != ""'
+  until: result.rc == 0
   retries: 10
   delay: 30
   changed_when: false

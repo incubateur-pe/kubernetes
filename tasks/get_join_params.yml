@@ -14,7 +14,11 @@
   run_once: yes
 
 - name: Récupère le hash du CA
-  shell: "openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'"
+  shell: |
+    set -o pipefail;
+    openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+  args:
+    executable: /bin/bash
   register: ca_hash_raw
   when: ca_hash is not defined
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
