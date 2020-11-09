@@ -3,12 +3,12 @@ kind: JoinConfiguration
 discovery:
   bootstrapToken:
     apiServerEndpoint: {{ api_endpoint }}:{{ kubernetes_control_plane_port }}
-    token: {{join_token}}
-    caCertHashes: ["sha256:{{ca_hash}}"]
+    token: {{ join_token }}
+    caCertHashes: ["sha256:{{ ca_hash }}"]
 nodeRegistration:
   kubeletExtraArgs:
 {% if kubernetes_cloud_provider is defined %}
-    cloud-provider: "{{kubernetes_cloud_provider}}"
+    cloud-provider: "{{ kubernetes_cloud_provider }}"
 {% endif %}
 {% if node_name is defined %}
   name: {{ node_name }}
@@ -16,6 +16,6 @@ nodeRegistration:
 {% if "kubernetes_masters" in group_names %}
 controlPlane:
   localAPIEndpoint:
-    advertiseAddress: "{{ kubernetes_api_server_advertise_address | default(ansible_default_ipv4.address )}}"
+    advertiseAddress: "{{ kubernetes_api_server_advertise_address | default(ansible_default_ipv4.address) }}"
     bindPort: {{ kubernetes_api_server_port }}
 {% endif %}

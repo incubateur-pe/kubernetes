@@ -12,10 +12,10 @@
 
   - name: Dépose les éléments de l'ac intermédiaire
     copy:
-      src: "{{item.src}}"
-      dest: "/etc/kubernetes/pki/{{item.dest}}"
+      src: "{{ item.src }}"
+      dest: "/etc/kubernetes/pki/{{ item.dest }}"
       remote_src: no
-      mode: "{{item.mode}}"
+      mode: "{{ item.mode }}"
     with_items:
       - dest: ca.crt  
         src: "{{ kubernetes_pki.certificat }}"
@@ -32,19 +32,19 @@
 
 - name: Définis le fact already_initialized sur les hosts
   set_fact:
-    already_initialized: "{{first_master.stat.exists}}"
+    already_initialized: "{{ first_master.stat.exists }}"
   with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   run_once: yes
 
 - name: Crée le premier noeud master
-  shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{node_name}}{% endif %}"
+  shell: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{ node_name }}{% endif %}"
   when: not already_initialized
 
 - name: Récupère la configuration kubectl sur localhost
   fetch:
     src: /etc/kubernetes/admin.conf
-    dest: "{{k8s_kubeconfig}}"
+    dest: "{{ k8s_kubeconfig }}"
     flat: yes
 
 - include_tasks: configure_kubectl.yml
@@ -53,9 +53,9 @@
 - name: Attends le status OK du control plane
   k8s_info:
     kind: Pod
-    name: "{{item}}-{{node_name | default(ansible_nodename)}}"
+    name: "{{ item }}-{{ node_name | default(ansible_nodename) }}"
     namespace: kube-system
-    kubeconfig: "{{k8s_kubeconfig}}"
+    kubeconfig: "{{ k8s_kubeconfig }}"
   register: result
   until: 'result.resources|length > 0 and "containerStatuses" in result.resources[0].status and result.resources[0].status.containerStatuses|length > 0 and result.resources[0].status.containerStatuses[0].ready'
   retries: 10

@@ -1,8 +1,8 @@
 - name: Mets a jour kubelet et kubectl
   yum:
     name:
-      - kubelet-{{kubernetes_version}}
-      - kubectl-{{kubernetes_version}}
+      - kubelet-{{ kubernetes_version }}
+      - kubectl-{{ kubernetes_version }}
     enablerepo: kubernetes
     state: present
 

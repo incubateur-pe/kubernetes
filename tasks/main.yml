@@ -4,8 +4,8 @@
 
 - name: Définis l'api_endpoint
   set_fact:
-    api_endpoint_tmp: "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn)}}"
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+    api_endpoint_tmp: "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn) }}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
 
 - name: Mets a disposition l'api_endpoint'
@@ -53,7 +53,7 @@
   delay: 30
   changed_when: false
   with_items: "{{ nodes }}"
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
 
 - block:

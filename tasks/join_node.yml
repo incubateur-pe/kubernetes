@@ -16,9 +16,9 @@
   - name: Attends le status OK du control plane
     k8s_info:
       kind: Pod
-      name: "{{item}}-{{node_name | default(ansible_nodename)}}"
+      name: "{{ item }}-{{ node_name | default(ansible_nodename) }}"
       namespace: kube-system
-      kubeconfig: "{{k8s_kubeconfig}}"
+      kubeconfig: "{{ k8s_kubeconfig }}"
     register: result
     until: 'result.resources|length > 0 and "containerStatuses" in result.resources[0].status and result.resources[0].status.containerStatuses|length > 0 and result.resources[0].status.containerStatuses[0].ready'
     retries: 10

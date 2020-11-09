@@ -1,6 +1,6 @@
 - name: Drain le node kubernetes
   shell: "kubectl drain {{ node_name|default(ansible_nodename) }} --ignore-daemonsets"
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
 
 - name: Execute l'upgrade du premier master
   shell: "kubeadm upgrade apply --yes --config /etc/kubeadm/config.yaml"
@@ -16,4 +16,4 @@
 
 - name: Uncordon le node
   shell: "kubectl uncordon {{ node_name|default(ansible_nodename) }}"
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"

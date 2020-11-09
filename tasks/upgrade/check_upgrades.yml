@@ -1,7 +1,7 @@
 - name: Installation de kubeadm
   yum:
     name:
-      - kubeadm-{{kubernetes_version}}
+      - kubeadm-{{ kubernetes_version }}
     enablerepo: kubernetes
     state: present
 
@@ -9,18 +9,18 @@
   shell: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
   register: upgrade_diff_raw
   changed_when: false
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
 
 - name: Récupère les informations des nodes
   k8s_info:
     kind: Node
-    kubeconfig: "{{k8s_kubeconfig}}"
+    kubeconfig: "{{ k8s_kubeconfig }}"
   register: node_list_version
   delegate_to: localhost
 
 - name: Liste les versions de nodes en cours d'execution
   set_fact:
-    nodes_versions: "{{node_list_version|json_query('resources[*].status.nodeInfo.kubeletVersion')|unique|sort}}"
+    nodes_versions: "{{ node_list_version|json_query('resources[*].status.nodeInfo.kubeletVersion')|unique|sort }}"
 
 - name: Vérifie la cohérence des versions du cluster
   assert:
@@ -36,19 +36,19 @@
 
 - name: Définis le besoin d'upgrade du cluster
   set_fact:
-    need_upgrade: "{% if cluster_version != kubernetes_version  or upgrade_diff_raw.stdout_lines|length > 0 or (nodes_versions|length > 1 and not kubernetes_upgrade_consistency_check)%}{{true}}{% else %}{{false}}{% endif %}"
+    need_upgrade: "{% if cluster_version != kubernetes_version  or upgrade_diff_raw.stdout_lines|length > 0 or (nodes_versions|length > 1 and not kubernetes_upgrade_consistency_check)%}{{ true }}{% else %}{{ false }}{% endif %}"
 
 - name: Récupère le plan d'upgrade
-  shell: "kubeadm upgrade plan"
+  command: "kubeadm upgrade plan"
   changed_when: false
   register: kubeadm_upgrade_plan
-  delegate_to: "{{groups['kubernetes_masters'][0]}}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
 
 - name: Définis le fact sur le reste des hosts du play
   set_fact:
     need_upgrade: "{{ need_upgrade }}"
-    upgrade_plan: "{{kubeadm_upgrade_plan.stdout}}"
-    upgrade_diff: "{{upgrade_diff_raw.stdout}}"
+    upgrade_plan: "{{ kubeadm_upgrade_plan.stdout }}"
+    upgrade_diff: "{{ upgrade_diff_raw.stdout }}"
   delegate_to: "{{ item }}"
   with_items: "{{ play_hosts }}"
   run_once: yes

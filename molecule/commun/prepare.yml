@@ -72,8 +72,8 @@
 
     - name: List load balanced items
       set_fact:
-        apiServers: "{{apiServers | default([]) + [{'name': item, 'address': item + ':6443'}]}}"
-      with_items: "{{groups['kubernetes_masters']}}"
+        apiServers: "{{ apiServers | default([]) + [{'name': item, 'address': item + ':6443'}] }}"
+      with_items: "{{ groups['kubernetes_masters'] }}"
 
     - name: "Print apiServers loadbalanced"
       debug: var=apiServers
@@ -88,4 +88,4 @@
         haproxy_backend_name: 'apiServerBackend'
         haproxy_backend_mode: 'tcp'
         haproxy_backend_httpchk: ''
-        haproxy_backend_servers: "{{apiServers}}"
+        haproxy_backend_servers: "{{ apiServers }}"

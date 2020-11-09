@@ -1,13 +1,13 @@
 - name: Récupère la liste des nodes connus du master
   k8s_info:
     kind: Node
-    kubeconfig: "{{k8s_kubeconfig}}"
+    kubeconfig: "{{ k8s_kubeconfig }}"
   register: NodeList
   delegate_to: localhost
 
 - name: Définis le fact nodes sur les hosts
   set_fact:
-    nodes: "{{NodeList|json_query('resources[*].metadata.name')}}"
+    nodes: "{{ NodeList|json_query('resources[*].metadata.name') }}"
   with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   run_once: yes

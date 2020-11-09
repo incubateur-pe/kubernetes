@@ -1,5 +1,5 @@
 - name: Affiche le plan d'upgrade
-  debug: msg="{{upgrade_plan.split('\n')}}"
+  debug: msg="{{ upgrade_plan.split('\n') }}"
   delegate_to: localhost
   run_once: yes
 
@@ -36,6 +36,6 @@
 - name: Récupère la configuration kubectl mise a jour sur localhost
   fetch:
     src: /etc/kubernetes/admin.conf
-    dest: "{{k8s_kubeconfig}}"
+    dest: "{{ k8s_kubeconfig }}"
     flat: yes
   run_once: yes
