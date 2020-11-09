@@ -3,3 +3,5 @@ testinfra
 libvirt-python
 molecule
 molecule-vagrant
+ansible-lint
+flake8

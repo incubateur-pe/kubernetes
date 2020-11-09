@@ -19,6 +19,11 @@ platforms:
     groups:
       - kubernetes_masters
       - kubernetes
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
 provisioner:
   name: ansible
   connection_options:
