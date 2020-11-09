@@ -37,6 +37,7 @@
             ]
           }
         dest: /etc/docker/daemon.json
+        mode: 0755
 
     - name: "Install docker"
       include_role:

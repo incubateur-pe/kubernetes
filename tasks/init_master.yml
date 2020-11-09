@@ -2,6 +2,7 @@
   template:
     src: kubeadm_config.yaml
     dest: /etc/kubeadm/config.yaml
+    mode: 0755
 
 - block:
   - name: Promets la présence du répertoire pki
