@@ -18,7 +18,7 @@
       remote_src: no
       mode: "{{ item.mode }}"
     with_items:
-      - dest: ca.crt  
+      - dest: ca.crt
         src: "{{ kubernetes_pki.certificat }}"
         mode: "0644"
       - dest: ca.key
