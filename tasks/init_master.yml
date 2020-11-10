@@ -26,6 +26,14 @@
         mode: "0600"
   when: kubernetes_pki is defined
 
+- name: Dépose le bundle d'ac client
+  copy:
+    src: "{{ kubernetes_client_ca_file }}"
+    dest: "/etc/kubernetes/pki/client_ca.pem"
+    remote_src: no
+    mode: "0644"
+  when: kubernetes_client_ca_file is defined
+
 - name: Vérifie si le master existe
   stat:
     path: /etc/kubernetes/admin.conf

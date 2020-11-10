@@ -28,6 +28,10 @@ controlPlaneEndpoint: "{{ api_endpoint }}:{{ kubernetes_control_plane_port }}"
 #     dataDir: /var/lib/etcd
 imageRepository: {{ kubernetes_image_repository | default("k8s.gcr.io") }}
 apiServer:
+  extraArgs:
+{% if kubernetes_client_ca_file is defined %}
+    client-ca-file: /etc/kubernetes/pki/client_ca.pem
+{% endif %}
   certSANs:
   - "{{ api_endpoint }}"
 ---

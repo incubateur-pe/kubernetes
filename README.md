@@ -53,6 +53,7 @@ Variables
 | kubernetes_service_subnet | role | Services subnet | voir documentation kubeadm |
 | kubernetes_pki.certificat | role | Pem file to upload and use for the cluster certificate authority | N/A |
 | kubernetes_pki.cle_privee | role | Key file to upload and use for the cluster certificate authority | N/A |
+| kubernetes_client_ca_file | role | Pem file to upload and use for the cluster client certificate chain | N/A |
 | k8s_kubeconfig | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
 
 Playbook Example
