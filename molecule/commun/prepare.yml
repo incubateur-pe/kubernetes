@@ -41,9 +41,22 @@
         dest: /etc/docker/daemon.json
         mode: 0755
 
+    - name: Configure le repo yum
+      copy:
+        content: |
+          [docker-ce-stable]
+          name=Docker CE Stable - $basearch
+          baseurl=http://10.0.4.40:8081/repository/docker-yum/$releasever/$basearch/stable
+          enabled=1
+          gpgcheck=0
+        dest: /etc/yum.repos.d/docker.repo
+
     - name: "Install docker"
-      include_role:
-        name: "geerlingguy.docker"
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
 
     - name: "Disable swap"
       command: swapoff -a -v
