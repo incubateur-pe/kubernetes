@@ -29,7 +29,7 @@ Variables
 | centos.kubernetes.repo | role | Kubernetes rpm repository address for centos | https://packages.cloud.google.com/yum/repos/ |
 | kubernetes_version | role | Kubernetes version to install or upgrade to | 1.19.2 |
 | node_name | host | Kubernetes node name, must be unique | see kubeadm documentation |
-| kubernetes_cni_driver | role | Defines the cni driver to use | flannel |i
+| kubernetes_cni_driver | role | Defines the cni driver to use | flannel |
 | flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
 | flannel_version | role | Flannel image version to use | v0.13.0 |
 | flannel_backend_type | role | Flannel backend to use | vxlan |

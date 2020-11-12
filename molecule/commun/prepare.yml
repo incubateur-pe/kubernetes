@@ -27,6 +27,8 @@
         content: |
           {
             "exec-opts": ["native.cgroupdriver=systemd"],
+              "insecure-registries" : ["10.0.4.40:5000", "10.0.4.40:5001", "10.0.4.40:5002"],
+              "registry-mirrors": ["https://10.0.4.40:5000"],
             "log-driver": "json-file",
             "log-opts": {
               "max-size": "100m"
