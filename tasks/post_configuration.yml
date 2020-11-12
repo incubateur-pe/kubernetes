@@ -1,0 +1,17 @@
+- block:
+  - name: Configure metrics-server (rbac/service/etc...)
+    k8s:
+      state: present
+      src: "{{ role_path }}/files/metrics-server-config.yaml.src"
+      kubeconfig: "{{ k8s_kubeconfig }}"
+
+  - name: Déploie metrics-server
+    k8s:
+      state: present
+      definition: "{{ lookup('template', role_path + '/templates/metrics-server-deployment.yaml.j2') }}"
+      kubeconfig: "{{ k8s_kubeconfig }}"
+      wait_timeout: 600
+      wait: yes
+  delegate_to: localhost
+  run_once: yes
+  when: '"kubernetes_workers" in groups and groups["kubernetes_workers"]|length > 0'

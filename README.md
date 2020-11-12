@@ -33,6 +33,8 @@ Variables
 | flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
 | flannel_version | role | Flannel image version to use | v0.13.0 |
 | flannel_backend_type | role | Flannel backend to use | vxlan |
+| metrics_server_image | role | Repository/image to use for metrics_server | k8s.gcr.io/metrics-server/metrics-server |
+| metrics_server_image_version | role | Version of metrics server image to use | v0.4.0 |
 | kubernetes_cluster_name | role | Kubernetes cluster name | kubernetes |
 | kubernetes_pod_subnet | role | Subnet to configure as the podCIDR for the cni | 10.244.0.0/16 |
 | kubernetes_control_plane_endpoint | role | Load balancer (or apiServer if only one master) address serving the master nodes (dns name or ip) | first master's ansible_fqdn |

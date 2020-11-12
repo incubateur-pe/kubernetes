@@ -60,6 +60,9 @@
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
 
+- name: Post-configuration
+  include_tasks: post_configuration.yml
+
 - block:
   - name: Check for upgrades
     include_tasks: upgrade/check_upgrades.yml
