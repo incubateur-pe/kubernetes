@@ -16,6 +16,27 @@
   hosts: kubernetes
   gather_facts: true
   tasks:
+    - name: Dépose la configuration yum
+      copy:
+        content: |
+          [base]
+          name=CentOS-$releasever - Base
+          baseurl=http://10.0.4.40:8081/repository/centos-base/centos/$releasever/os/$basearch/
+          gpgcheck=0
+
+          [updates]
+          name=CentOS-$releasever - Updates
+          baseurl=http://10.0.4.40:8081/repository/centos-base/centos/$releasever/updates/$basearch/
+          gpgcheck=0
+
+          [extras]
+          name=CentOS-$releasever - Extras
+          baseurl=http://10.0.4.40:8081/repository/centos-base/centos/$releasever/extras/$basearch/
+          gpgcheck=0
+        dest: /etc/yum.repos.d/CentOS-Base.repo
+        mode: 0755
+
+
     - name: Crée le répetoire de configuration docker
       file:
         state: directory
@@ -50,6 +71,7 @@
           enabled=1
           gpgcheck=0
         dest: /etc/yum.repos.d/docker.repo
+        mode: 0755
 
     - name: "Install docker"
       yum:
