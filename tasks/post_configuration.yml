@@ -11,7 +11,6 @@
       definition: "{{ lookup('template', role_path + '/templates/metrics-server-deployment.yaml.j2') }}"
       kubeconfig: "{{ k8s_kubeconfig }}"
       wait_timeout: 600
-      wait: yes
+      wait: "{{ metrics_server_wait_deploy }}"
   delegate_to: localhost
   run_once: yes
-  when: '"kubernetes_workers" in groups and groups["kubernetes_workers"]|length > 0'

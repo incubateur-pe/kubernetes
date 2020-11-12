@@ -35,6 +35,7 @@ Variables
 | flannel_backend_type | role | Flannel backend to use | vxlan |
 | metrics_server_image | role | Repository/image to use for metrics_server | k8s.gcr.io/metrics-server/metrics-server |
 | metrics_server_image_version | role | Version of metrics server image to use | v0.4.0 |
+| metrics_server_wait_deploy | role | Wait the deployment of metrics-server, useful if you deploy the masters in a separate play | true |
 | kubernetes_cluster_name | role | Kubernetes cluster name | kubernetes |
 | kubernetes_pod_subnet | role | Subnet to configure as the podCIDR for the cni | 10.244.0.0/16 |
 | kubernetes_control_plane_endpoint | role | Load balancer (or apiServer if only one master) address serving the master nodes (dns name or ip) | first master's ansible_fqdn |
@@ -83,6 +84,7 @@ It remains possible to dissociate masters and workers installation, although the
     kubernetes_control_plane_endpoint: master.k8s.loc
     kubernetes_cluster_name: dev
     k8s_version: 1.19.2
+    metrics_server_wait_deploy: false # Metrics-server will be waited in the worker play
 
 - hosts: kubernetes_workers
   remote_user: root

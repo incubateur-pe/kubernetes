@@ -10,3 +10,4 @@ kubernetes_upgrades_allowed: true
 kubernetes_confirm_upgrade: false
 kubernetes_proxy_mode: ipvs
 kubernetes_cni_driver: flannel
+metrics_server_wait_deploy: true

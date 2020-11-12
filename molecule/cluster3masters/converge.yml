@@ -11,6 +11,7 @@
         kubernetes_image_repository: 10.0.4.40:5001
         flannel_image: 10.0.4.40:5002/coreos/flannel
         metrics_server_image: 10.0.4.40:5001/metrics-server/metrics-server
+        metrics_server_wait_deploy: false
         centos:
           kubernetes:
             repo: http://10.0.4.40:8081/repository/kube-yum/
