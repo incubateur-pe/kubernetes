@@ -1,3 +1,18 @@
+- name: Récupère les CSRs en attente d'approbation de kubelet
+  k8s_info:
+    api_version: certificates.k8s.io/v1
+    kind: CertificateSigningRequest
+    kubeconfig: "{{ k8s_kubeconfig }}"
+  register: csrList
+  delegate_to: localhost
+  run_once: yes
+
+- name: Approuve les CSRs de kubelet
+  command: "kubectl certificate approve {{ item.metadata.name }}"
+  when: '"conditions" not in item.status and "system:nodes" in item.spec.groups'
+  with_items: "{{ csrList.resources }}"
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+
 - block:
   - name: Configure metrics-server (rbac/service/etc...)
     k8s:

@@ -23,7 +23,7 @@ spec:
         - --secure-port=4443
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-use-node-status-port
-        - --kubelet-insecure-tls
+        #- --kubelet-insecure-tls
         image: {{ metrics_server_image | default("k8s.gcr.io/metrics-server/metrics-server") }}:{{ metrics_server_image_version | default("v0.4.0") }}
         imagePullPolicy: IfNotPresent
         livenessProbe:
