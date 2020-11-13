@@ -1,50 +1,50 @@
-- name: Installation de kubeadm
+- name: Ensure kubeadm-{{ kubernetes_version }} is installed
   yum:
     name:
       - kubeadm-{{ kubernetes_version }}
     enablerepo: kubernetes
     state: present
 
-- name: Récupère les changements vus par kubeadm
+- name: Get the changes seen by kubeadm
   command: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
   register: upgrade_diff_raw
   changed_when: false
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
 
-- name: Récupère les informations des nodes
+- name: Get nodes informations
   k8s_info:
     kind: Node
     kubeconfig: "{{ k8s_kubeconfig }}"
   register: node_list_version
   delegate_to: localhost
 
-- name: Liste les versions de nodes en cours d'execution
+- name: Get nodes versions
   set_fact:
     nodes_versions: "{{ node_list_version|json_query('resources[*].status.nodeInfo.kubeletVersion')|unique|sort }}"
 
-- name: Vérifie la cohérence des versions du cluster
+- name: Check nodes version consistency across the cluster
   assert:
     that:
       - nodes_versions|length == 1
-    fail_msg: "Cluster incohérent! plusieurs versions trouvées sur les nodes"
-    success_msg: "Cluster cohérent"
+    fail_msg: "Inconsistent cluster! {{ nodes_versions|length }} versions of node found"
+    success_msg: "Version consistency verified"
   when: kubernetes_upgrade_consistency_check
 
-- name: Définis la version courante globale du cluster
+- name: Set the current version of the cluster
   set_fact:
     cluster_version: "{{ nodes_versions[0] | regex_replace('^v') }}"
 
-- name: Définis le besoin d'upgrade du cluster
+- name: Check if the cluster needs an upgrade
   set_fact:
     need_upgrade: "{% if cluster_version != kubernetes_version  or upgrade_diff_raw.stdout_lines|length > 0 or (nodes_versions|length > 1 and not kubernetes_upgrade_consistency_check)%}{{ true }}{% else %}{{ false }}{% endif %}"
 
-- name: Récupère le plan d'upgrade
+- name: Get the upgrade plan
   command: "kubeadm upgrade plan"
   changed_when: false
   register: kubeadm_upgrade_plan
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
 
-- name: Définis le fact sur le reste des hosts du play
+- name: Set the fact for all play hosts
   set_fact:
     need_upgrade: "{{ need_upgrade }}"
     upgrade_plan: "{{ kubeadm_upgrade_plan.stdout }}"
@@ -53,5 +53,5 @@
   with_items: "{{ play_hosts }}"
   run_once: yes
 
-- name: Affiche le résultat
+- name: Check upgrade result
   debug: var=need_upgrade

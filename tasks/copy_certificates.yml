@@ -1,4 +1,4 @@
-- name: Récupère les certificats pour les noeuds master
+- name: Get pki certificates and keys
   fetch:
     src: "{{ item }}"
     dest: "{{ role_path }}/files/pki/"
@@ -12,9 +12,9 @@
     - /etc/kubernetes/pki/front-proxy-ca.key
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
-  changed_when: false # Pas de notification de changement pour le "buffer" local de certificats, la modification éventuelle sera notifiée lors du dépot
+  changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
 
-- name: Récupère l'AC etcd
+- name: Get etcd certificates
   fetch:
     src: "{{ item }}"
     dest: "{{ role_path }}/files/pki/etcd/"
@@ -24,9 +24,9 @@
     - /etc/kubernetes/pki/etcd/ca.key
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
-  changed_when: false # Pas de notification de changement pour le "buffer" local de certificats, la modification éventuelle sera notifiée lors du dépot
+  changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
 
-- name: Promets la présence des répertoires pki du master
+- name: Ensure pki directory exists
   file:
     state: directory
     path: "{{ item }}"
@@ -35,7 +35,7 @@
     - /etc/kubernetes/pki
     - /etc/kubernetes/pki/etcd
 
-- name: Copie les certificats de la pki
+- name: Copy pki certificates and keys
   copy:
     src: "{{ role_path }}/files/pki/{{ item.src }}"
     dest: "/etc/kubernetes/pki/{{ item.src }}"
@@ -50,10 +50,10 @@
     - {src: "etcd/ca.crt", mode: "0644"}
     - {src: "etcd/ca.key", mode: "0600"}
 
-- name: Purge la copie locale des certificats
+- name: Clean up local buffer
   file:
     state: absent
     path: "{{ role_path }}/files/pki"
   delegate_to: localhost
   run_once: yes
-  changed_when: false  # Pas de notification de changement sur la purge du "buffer" local de certificats
+  changed_when: false

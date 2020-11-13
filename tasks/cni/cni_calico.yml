@@ -5,13 +5,13 @@
       src: "{{ role_path }}/templates/calico_config.yaml.j2"
       kubeconfig: "{{ k8s_kubeconfig }}"
 
-  - name: Déploie calico (deployment)
+  - name: Deploy calico (deployment)
     k8s:
       state: present
       definition: "{{ lookup('file', role_path + '/templates/calico_deployment.yaml.j2') }}"
       kubeconfig: "{{ k8s_kubeconfig }}"
 
-  - name: Déploie calico (daemonset)
+  - name: Deploy calico (daemonset)
     k8s:
       state: present
       definition: "{{ lookup('file', role_path + '/templates/calico_daemonset.yaml.j2') }}"

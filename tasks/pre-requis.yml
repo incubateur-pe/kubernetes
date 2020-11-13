@@ -1,4 +1,4 @@
-- name: Dépose la configuration yum
+- name: Configure yum
   template:
     src: "{{ item }}"
     dest: "/etc/yum.repos.d/"
@@ -6,11 +6,11 @@
   with_fileglob:
     - "../templates/*.repo"
 
-- name: Vérifie la présence de kubeadm
+- name: Check kubeadm package status
   yum: list=kubeadm
   register: kubeadm_package
 
-- name: Installation des paquets kubernetes
+- name: Install kubernetes packages
   yum:
     name:
       - kubelet-{{ kubernetes_version }}
@@ -22,10 +22,10 @@
   when: 'kubeadm_package.results|length == 0 or kubeadm_package.results[0].yumstate != "installed"'
 
 ## Hack de contournement de la policy FORWARD a DROP de docker...
-- name: Récupère les services du host
+- name: Get host services
   service_facts:
 
-- name: Configure les règles iptables pour docker
+- name: Configure iptables rules for docker
   copy:
     remote_src: no
     src: "{{ role_path }}/files/iptables"
@@ -34,13 +34,13 @@
   register: iptablesRules
   when: "'docker.service' in services"
 
-- name: Active et démarre le service iptables
+- name: Enable and start iptables service
   systemd:
     name: iptables
     state: started
     enabled: yes
 
-- name: Redémarre le service docker pour prise en compte des regles iptables
+- name: Restart docker service to take new iptables rules into account
   systemd:
     name: docker
     state: restarted
@@ -48,18 +48,18 @@
 # fin du hack
 
 - block:
-  - name: Configure la policy FORWARD a ACCEPT
+  - name: Configure iptables FORWARD policy to ACCEPT
     iptables:
       chain: FORWARD
       policy: ACCEPT
     register: policyForward
 
-  - name: Sauvegarde les règles iptables
+  - name: Save iptables rules
     command: service iptables save
     when: policyForward.changed
   when: 'not "docker.service" in services'
 
-- name: Applique les paramètres sysctl
+- name: Set sysctl parameters required by kubernetes
   sysctl:
     name: "{{ item }}"
     value: '1'
@@ -69,7 +69,7 @@
     - net.bridge.bridge-nf-call-ip6tables
     - net.bridge.bridge-nf-call-iptables
 
-- name: Charge les modules ipvs
+- name: Ensure ipvs kernel modules are loadable
   modprobe:
     name: "{{ item }}"
   with_items:
@@ -79,7 +79,7 @@
     - ip_vs_sh
   when: kubernetes_proxy_mode == "ipvs"
 
-- name: Installe le paquet IPSet
+- name: Install IPSet package
   yum:
     name: ipset
     state: present

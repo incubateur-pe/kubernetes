@@ -1,11 +1,11 @@
-- name: Récupère un join token
+- name: Get a join token
   command: 'kubeadm token create'
   register: join_token_raw
   when: join_token is not defined
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
 
-- name: Mets a disposition le join token
+- name: Set the join_token fact for all play hosts
   set_fact:
     join_token: "{{ join_token_raw.stdout }}"
   delegate_to: "{{ item }}"
@@ -13,7 +13,7 @@
   when: join_token is not defined
   run_once: yes
 
-- name: Récupère le hash du CA
+- name: Get the CA hash
   shell: |
     set -o pipefail;
     openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
@@ -24,7 +24,7 @@
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
 
-- name: Mets a disposition le hash du ca
+- name: Set the ca_hash fact for all play hosts
   set_fact:
     ca_hash: "{{ ca_hash_raw.stdout }}"
   delegate_to: "{{ item }}"

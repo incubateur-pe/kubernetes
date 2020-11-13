@@ -1,39 +1,38 @@
-- name: Affiche le plan d'upgrade
+- name: Prints the upgrade plan
   debug: msg="{{ upgrade_plan.split('\n') }}"
   delegate_to: localhost
   run_once: yes
 
-- name: Confirmation manuelle de l'upgrade
-  pause:
-    prompt: "Vérifier dans le plan si des upgrades manuels sont nécessaires, annuler le cas échéant et traiter les updates avant de relancer le playbook"
+- pause:
+    prompt: "Please check in the plan above if manual upgrades are required, cancel if need be and execute the required update before restarting the play"
   when: kubernetes_confirm_upgrade
 
-- name: Upgrade le premier master
+- name: Upgrade the first master
   include_tasks: upgrade_node.yml
   when: 'inventory_hostname == groups["kubernetes_masters"][0]'
 
-- name: Upgrade les autres masters
+- name: Upgrade other masters
   include_tasks: upgrade_node.yml
   with_items: "{{ groups['kubernetes_masters'] }}"
   when: 'hostvars[host_item].inventory_hostname == inventory_hostname and inventory_hostname != groups["kubernetes_masters"][0]'
   loop_control:
     loop_var: host_item
 
-- name: Mets a jour kubectl et kubelet des masters
+- name: Update kubectl and kubelet on masters
   include_tasks: upgrade_kubelet_kubectl.yml
   with_items: "{{ groups['kubernetes_masters'] }}"
   when: 'hostvars[host_item].inventory_hostname == inventory_hostname'
   loop_control:
       loop_var: host_item
 
-- name: Upgrade les workers
+- name: Upgrade workers
   include_tasks: upgrade_node.yml
   with_items: "{{ groups['kubernetes_workers'] }}"
   when: 'hostvars[host_item].inventory_hostname == inventory_hostname'
   loop_control:
     loop_var: host_item
 
-- name: Récupère la configuration kubectl mise a jour sur localhost
+- name: Get new kubectl configuration on localhost
   fetch:
     src: /etc/kubernetes/admin.conf
     dest: "{{ k8s_kubeconfig }}"

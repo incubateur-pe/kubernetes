@@ -1,22 +1,22 @@
 - include_tasks: get_join_params.yml
 
-- name: Dépose la configuration join kubeadm
+- name: Copy kubeadm join configuration
   template:
     src: kubeadm_join.yaml.j2
     dest: /etc/kubeadm/join_config.yaml
     mode: 0755
 
-- name: Copie les certificats du control plane
+- name: Copy control plane certificates
   include_tasks: copy_certificates.yml
   when: '"kubernetes_masters" in group_names'
 
-- name: Join le noeud au cluster
+- name: Join the node
   command: "kubeadm join --config /etc/kubeadm/join_config.yaml"
   register: join
   changed_when: join.stdout_lines|length > 0
 
 - block:
-  - name: Attends le status OK du control plane
+  - name: Wait for control plane to be fully up
     k8s_info:
       kind: Pod
       name: "{{ item }}-{{ node_name | default(ansible_nodename) }}"

@@ -1,10 +1,10 @@
-- name: Répertoire de configuration kubectl
+- name: Ensure kubectl configuration directory exists
   file:
     state: directory
     mode: 0700
     path: /root/.kube
 
-- name: Configure kubectl sur le serveur
+- name: Configure kubectl on the host
   copy:
     src: "{{ k8s_kubeconfig }}"
     dest: /root/.kube/config

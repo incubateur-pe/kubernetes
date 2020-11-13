@@ -1,23 +1,22 @@
-- name: Drain le node kubernetes
+- name: Drain node
   command: "kubectl drain {{ node_name|default(ansible_nodename) }} --ignore-daemonsets"
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   changed_when: true
 
-- name: Execute l'upgrade du premier master
+- name: Upgrade first master
   command: "kubeadm upgrade apply --yes --config /etc/kubeadm/config.yaml"
   when: 'inventory_hostname == groups["kubernetes_masters"][0]'
   changed_when: true
 
-- name: Execute l'upgrade du node
+- name: Upgrade node
   command: "kubeadm upgrade node"
   when: 'inventory_hostname != groups["kubernetes_masters"][0]'
   changed_when: true
 
-- name: Mets a jour kubectl et kubelet
-  include_tasks: upgrade_kubelet_kubectl.yml
+- include_tasks: upgrade_kubelet_kubectl.yml
   when: '"kubernetes_masters" not in group_names'
 
-- name: Uncordon le node
+- name: Uncordon node
   command: "kubectl uncordon {{ node_name|default(ansible_nodename) }}"
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   changed_when: true

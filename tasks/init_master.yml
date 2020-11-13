@@ -1,17 +1,17 @@
-- name: Dépose la configuration d'initialisation kubeadm
+- name: Copy the kubeadm init config
   template:
     src: kubeadm_config.yaml.j2
     dest: /etc/kubeadm/config.yaml
     mode: 0755
 
 - block:
-  - name: Promets la présence du répertoire pki
+  - name: Ensure pki directory exists
     file:
       state: directory
       mode: 0755
       path: /etc/kubernetes/pki
 
-  - name: Dépose les éléments de l'ac intermédiaire
+  - name: Copy the AC certificates
     copy:
       src: "{{ item.src }}"
       dest: "/etc/kubernetes/pki/{{ item.dest }}"
@@ -26,7 +26,7 @@
         mode: "0600"
   when: kubernetes_pki is defined
 
-- name: Dépose le bundle d'ac client
+- name: Copy a client AC bundle
   copy:
     src: "{{ kubernetes_client_ca_file }}"
     dest: "/etc/kubernetes/pki/client_ca.pem"
@@ -34,23 +34,23 @@
     mode: "0644"
   when: kubernetes_client_ca_file is defined
 
-- name: Vérifie si le master existe
+- name: Checks if the master exists
   stat:
     path: /etc/kubernetes/admin.conf
   register: first_master
 
-- name: Définis le fact already_initialized sur les hosts
+- name: Set the fact already_initialized for all play hosts
   set_fact:
     already_initialized: "{{ first_master.stat.exists }}"
   with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   run_once: yes
 
-- name: Crée le premier noeud master
+- name: Create the first master node
   command: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{ node_name }}{% endif %}"
   when: not already_initialized
 
-- name: Récupère la configuration kubectl sur localhost
+- name: Fetch the kubectl configuration on localhost
   fetch:
     src: /etc/kubernetes/admin.conf
     dest: "{{ k8s_kubeconfig }}"
@@ -58,8 +58,8 @@
 
 - include_tasks: configure_kubectl.yml
 
-# Hack : le wait de k8s_info skippe si la ressource n'existe pas...
-- name: Attends le status OK du control plane
+# Hack : k8s_info wait parameter skips if resource doesn't exists
+- name: Waits for the control plane to be fully up
   k8s_info:
     kind: Pod
     name: "{{ item }}-{{ node_name | default(ansible_nodename) }}"

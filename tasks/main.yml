@@ -1,51 +1,49 @@
 ---
-- name: Pré-requis
+- name: Prerequisites
   include_tasks: pre-requis.yml
 
-- name: Définis l'api_endpoint
+- name: Construct the api_endpoint url
   set_fact:
     api_endpoint_tmp: "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn) }}"
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
 
-- name: Mets a disposition l'api_endpoint'
+- name: Set the fact api_endpoint for all play hosts
   set_fact:
     api_endpoint: "{{ api_endpoint_tmp }}"
   delegate_to: "{{ item }}"
   with_items: "{{ play_hosts }}"
   run_once: yes
 
-- name: Promets la présence du répertoire de configuration kubeadm
+- name: Ensure kubeadm configuration directory exists
   file:
     state: directory
     path: /etc/kubeadm
     mode: 0755
 
-- name: Installe le master
+- name: Install first master node
   include_tasks: init_master.yml
   when: 'inventory_hostname == groups["kubernetes_masters"][0]'
 
-- name: Installe le cni
+- name: Install cni
   include_tasks: "cni/cni_{{ kubernetes_cni_driver }}.yml"
 
-- name: Récupère les nodes
-  include_tasks: get_nodes.yml
+- include_tasks: get_nodes.yml
   run_once: yes
 
-- name: Join les nodes supplémentaires
+- name: Join other nodes
   include_tasks: join_node.yml
   when: 'inventory_hostname != groups["kubernetes_masters"][0] and node_name|default(ansible_nodename) not in nodes'
 
-- name: Récupère les nodes
-  include_tasks: get_nodes.yml
+- include_tasks: get_nodes.yml
   run_once: yes
 
-- name: Activation du service kubelet au boot
+- name: Activate kubectl service on boot
   systemd:
     name: kubelet
     enabled: yes
 
-- name: Attends le status OK des nodes
+- name: Wait for nodes to be in Ready state
   shell: |
     set -o pipefail;
     kubectl get nodes | grep "{{ item }}  *Ready "
@@ -68,7 +66,7 @@
     include_tasks: upgrade/check_upgrades.yml
     run_once: yes
 
-  - name: Upgrade le cluster kubernetes
+  - name: Upgrade cluster
     include_tasks: upgrade/upgrade_cluster.yml
     when: need_upgrade
 

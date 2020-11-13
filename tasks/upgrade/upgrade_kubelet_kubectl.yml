@@ -1,4 +1,4 @@
-- name: Mets a jour kubelet et kubectl
+- name: Update kubelet and kubectl
   yum:
     name:
       - kubelet-{{ kubernetes_version }}
@@ -6,7 +6,7 @@
     enablerepo: kubernetes
     state: present
 
-- name: Re-démarre le service kubelet
+- name: Restart kubelet service
   systemd:
     name: kubelet
     daemon_reload: yes

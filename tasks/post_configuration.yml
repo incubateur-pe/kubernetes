@@ -1,4 +1,4 @@
-- name: Récupère les CSRs en attente d'approbation de kubelet
+- name: Fetch the CSRs in kubernetes
   k8s_info:
     api_version: certificates.k8s.io/v1
     kind: CertificateSigningRequest
@@ -7,7 +7,7 @@
   delegate_to: localhost
   run_once: yes
 
-- name: Approuve les CSRs de kubelet
+- name: Approve kubelet CSRs
   command: "kubectl certificate approve {{ item.metadata.name }}"
   when: '"conditions" not in item.status and "system:nodes" in item.spec.groups'
   with_items: "{{ csrList.resources }}"
@@ -20,7 +20,7 @@
       src: "{{ role_path }}/files/metrics-server-config.yaml.src"
       kubeconfig: "{{ k8s_kubeconfig }}"
 
-  - name: Déploie metrics-server
+  - name: Deploy metrics-server
     k8s:
       state: present
       definition: "{{ lookup('template', role_path + '/templates/metrics-server-deployment.yaml.j2') }}"

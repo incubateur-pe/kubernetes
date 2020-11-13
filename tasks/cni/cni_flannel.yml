@@ -11,7 +11,7 @@
       definition: "{{ lookup('template', role_path + '/templates/kube-flannel-config.yml.j2') }}"
       kubeconfig: "{{ k8s_kubeconfig }}"
 
-  - name: Déploie flannel
+  - name: Deploy flannel
     k8s:
       state: present
       definition: "{{ lookup('template', role_path + '/templates/kube-flannel-daemonset.yml.j2') }}"
