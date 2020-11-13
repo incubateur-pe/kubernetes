@@ -27,6 +27,9 @@ test-only-master:
   tags:
     - kvm
   stage: test
+  except:
+    refs:
+      - schedules
   only:
     <<: *only_changes
   script:
@@ -37,6 +40,9 @@ test-one-master-2-nodes:
   tags:
     - kvm
   stage: test
+  except:
+    refs:
+      - schedules
   only:
     <<: *only_changes
   script:
@@ -47,6 +53,9 @@ test-3-masters-2-nodes:
   tags:
     - kvm
   stage: test
+  except:
+    refs:
+      - schedules
   only:
     <<: *only_changes
   script:
@@ -88,9 +97,24 @@ new-tag:
   except:
     refs:
       - tags
+      - schedules
   script:
     - git config user.email "${GITLAB_USER_EMAIL}"
     - git config user.name "${GITLAB_USER_NAME}"
     - git remote add api-origin https://oauth2:${GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
     - if [ -z "$(git tag --points-at HEAD)" ] ; then git tag $(semver -c -i patch $(git describe --tags --abbrev=0)); fi
     - git push api-origin --tags
+
+publish:
+  stage: release
+  image:
+    name: ansible/ansible-runner
+    entrypoint: [""]
+  tags:
+    - docker
+  only:
+    refs:
+      - tags
+  script:
+    - ansible-galaxy login --api-key "${GALAXY_TOKEN}" --github-token "${GITHUB_TOKEN}"
+    - ansible-galaxy import ugiraud kubernetes-bare-metal
