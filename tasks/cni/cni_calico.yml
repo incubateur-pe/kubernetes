@@ -3,19 +3,19 @@
     k8s:
       state: present
       src: "{{ role_path }}/templates/calico_config.yaml.j2"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
 
   - name: Deploy calico (deployment)
     k8s:
       state: present
       definition: "{{ lookup('file', role_path + '/templates/calico_deployment.yaml.j2') }}"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
 
   - name: Deploy calico (daemonset)
     k8s:
       state: present
       definition: "{{ lookup('file', role_path + '/templates/calico_daemonset.yaml.j2') }}"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
       wait_timeout: 600
       wait: yes
 

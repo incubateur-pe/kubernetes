@@ -1,7 +1,7 @@
 - name: Get the node list
   k8s_info:
     kind: Node
-    kubeconfig: "{{ k8s_kubeconfig }}"
+    kubeconfig: "{{ kubernetes_kubeconfig_file }}"
   register: NodeList
   delegate_to: localhost
 

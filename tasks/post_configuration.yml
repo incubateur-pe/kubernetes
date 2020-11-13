@@ -2,7 +2,7 @@
   k8s_info:
     api_version: certificates.k8s.io/v1
     kind: CertificateSigningRequest
-    kubeconfig: "{{ k8s_kubeconfig }}"
+    kubeconfig: "{{ kubernetes_kubeconfig_file }}"
   register: csrList
   delegate_to: localhost
   run_once: yes
@@ -18,13 +18,13 @@
     k8s:
       state: present
       src: "{{ role_path }}/files/metrics-server-config.yaml.src"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
 
   - name: Deploy metrics-server
     k8s:
       state: present
       definition: "{{ lookup('template', role_path + '/templates/metrics-server-deployment.yaml.j2') }}"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
       wait_timeout: 600
       wait: "{{ metrics_server_wait_deploy }}"
   delegate_to: localhost

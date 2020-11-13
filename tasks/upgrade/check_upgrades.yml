@@ -14,7 +14,7 @@
 - name: Get nodes informations
   k8s_info:
     kind: Node
-    kubeconfig: "{{ k8s_kubeconfig }}"
+    kubeconfig: "{{ kubernetes_kubeconfig_file }}"
   register: node_list_version
   delegate_to: localhost
 

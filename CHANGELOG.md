@@ -9,3 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Supports kubernetes version 1.19.2
 - Supports kubernetes version 1.19.3
 
+### Changes
+- BREAKING: rename k8s_kubeconfig var to kubernetes_kubeconfig_file
+
+### Fixed

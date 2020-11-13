@@ -21,7 +21,7 @@
       kind: Pod
       name: "{{ item }}-{{ node_name | default(ansible_nodename) }}"
       namespace: kube-system
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
     register: result
     until: >-
       result.resources|length > 0

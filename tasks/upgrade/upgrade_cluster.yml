@@ -35,6 +35,6 @@
 - name: Get new kubectl configuration on localhost
   fetch:
     src: /etc/kubernetes/admin.conf
-    dest: "{{ k8s_kubeconfig }}"
+    dest: "{{ kubernetes_kubeconfig_file }}"
     flat: yes
   run_once: yes

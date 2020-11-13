@@ -3,19 +3,19 @@
     k8s:
       state: present
       src: "{{ role_path }}/templates/kube-flannel.yml.j2"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
 
   - name: Configure flannel (configMap)
     k8s:
       state: present
       definition: "{{ lookup('template', role_path + '/templates/kube-flannel-config.yml.j2') }}"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
 
   - name: Deploy flannel
     k8s:
       state: present
       definition: "{{ lookup('template', role_path + '/templates/kube-flannel-daemonset.yml.j2') }}"
-      kubeconfig: "{{ k8s_kubeconfig }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
       wait_timeout: 600
       wait: yes
   delegate_to: localhost

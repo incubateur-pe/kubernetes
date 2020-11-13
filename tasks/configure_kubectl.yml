@@ -6,7 +6,7 @@
 
 - name: Configure kubectl on the host
   copy:
-    src: "{{ k8s_kubeconfig }}"
+    src: "{{ kubernetes_kubeconfig_file }}"
     dest: /root/.kube/config
     remote_src: no
     mode: 0600

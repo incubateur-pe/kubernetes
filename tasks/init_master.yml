@@ -53,7 +53,7 @@
 - name: Fetch the kubectl configuration on localhost
   fetch:
     src: /etc/kubernetes/admin.conf
-    dest: "{{ k8s_kubeconfig }}"
+    dest: "{{ kubernetes_kubeconfig_file }}"
     flat: yes
 
 - include_tasks: configure_kubectl.yml
@@ -64,7 +64,7 @@
     kind: Pod
     name: "{{ item }}-{{ node_name | default(ansible_nodename) }}"
     namespace: kube-system
-    kubeconfig: "{{ k8s_kubeconfig }}"
+    kubeconfig: "{{ kubernetes_kubeconfig_file }}"
   register: result
   until: >-
     result.resources|length > 0
