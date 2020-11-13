@@ -1,5 +1,5 @@
 ---
-kubernetes_version: 1.19.2
+kubernetes_version: 1.19.3
 kubernetes_default_pod_cidr: 10.244.0.0/16
 kubernetes_cluster_name: kubernetes
 kubernetes_api_server_port: 6443
