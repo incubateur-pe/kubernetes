@@ -1,6 +1,20 @@
 stages:
   - lint
   - test
+  - merge
+  - release
+
+.onlys_changes: &only_changes
+  changes:
+    - "molecule/**/*"
+    - "defaults/**/*"
+    - "handlers/**/*"
+    - "meta/**/*"
+    - "tasks/**/*"
+    - "templates/**/*"
+    - "vars/**/*"
+    - "*.yaml"
+    - "*.yml"
 
 lint:
   tags:
@@ -13,6 +27,8 @@ test-only-master:
   tags:
     - kvm
   stage: test
+  only:
+    <<: *only_changes
   script:
     - docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest
   timeout: 3 hours 30 minutes
@@ -21,6 +37,8 @@ test-one-master-2-nodes:
   tags:
     - kvm
   stage: test
+  only:
+    <<: *only_changes
   script:
     - docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster1master
   timeout: 3 hours 30 minutes
@@ -29,6 +47,50 @@ test-3-masters-2-nodes:
   tags:
     - kvm
   stage: test
+  only:
+    <<: *only_changes
   script:
     - docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster3masters
   timeout: 3 hours 30 minutes
+
+merge-dev-to-master:
+  stage: merge
+  image:
+    name: alpine/git
+    entrypoint: [""]
+  tags:
+    - docker
+  only:
+    - schedules
+    - master
+  script:
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git remote add api-origin https://oauth2:${GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
+    - git checkout master
+    - git checkout dev
+    - git rebase master
+    - git checkout master
+    - git merge dev --ff-only
+    - git push api-origin master
+
+new-tag:
+  stage: release
+  image:
+    name: marcelocorreia/semver
+    entrypoint: [""]
+  tags:
+    - docker
+  only:
+    <<: *only_changes
+    refs:
+      - master
+  except:
+    refs:
+      - tags
+  script:
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git remote add api-origin https://oauth2:${GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
+    - if [ -z "$(git tag --points-at HEAD)" ] ; then git tag $(semver -c -i patch $(git describe --tags --abbrev=0)); fi
+    - git push api-origin --tags
