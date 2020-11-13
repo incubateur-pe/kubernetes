@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Supports kubernetes version 1.19.2
 - Supports kubernetes version 1.19.3
+- Calico cni deployment
+- Flannel cni deployment
+- metrics-server deployment
+- kubelet tls bootstrap
+- ipvs configuration for kube-proxy
+- Client x509 authentification configuration
+- Custom cluster AC configuration
 
 ### Changes
 - BREAKING: rename k8s_kubeconfig var to kubernetes_kubeconfig_file
