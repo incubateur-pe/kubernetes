@@ -128,7 +128,9 @@
       debug: var=apiServers
 
     - name: Ensure HAProxy is installed.
-      package: name=haproxy state=present
+      yum:
+        name:
+          - haproxy
 
     - name: Copy HAProxy configuration in place.
       copy:
