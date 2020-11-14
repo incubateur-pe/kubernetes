@@ -62,27 +62,6 @@ test-3-masters-2-nodes:
     - docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster3masters
   timeout: 3 hours 30 minutes
 
-merge-dev-to-master:
-  stage: merge
-  image:
-    name: alpine/git
-    entrypoint: [""]
-  tags:
-    - docker
-  only:
-    - schedules
-    - master
-  script:
-    - git config user.email "${GITLAB_USER_EMAIL}"
-    - git config user.name "${GITLAB_USER_NAME}"
-    - git remote add api-origin https://oauth2:${GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
-    - git checkout master
-    - git checkout dev
-    - git rebase master
-    - git checkout master
-    - git merge dev --ff-only
-    - git push api-origin master
-
 new-tag:
   stage: release
   image:
