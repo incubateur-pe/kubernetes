@@ -7,9 +7,9 @@
         name: "kubernetes-bare-metal"
       vars:
         metrics_server_wait_deploy: false
-        kubernetes_image_repository: docker-k8s-gcr-proxy.repository.pole-emploi.intra
-        flannel_image: docker-quay-proxy.repository.pole-emploi.intra/coreos/flannel
-        metrics_server_image: docker-k8s-gcr-proxy.repository.pole-emploi.intra/metrics-server/metrics-server
+        kubernetes_image_repository: "{{ lookup('env', 'K8S_REGISTRY_MIRROR') }}"
+        flannel_image: "{{ lookup('env', 'QUAY_REGISTRY_MIRROR') }}/coreos/flannel"
+        metrics_server_image: "{{ lookup('env', 'K8S_REGISTRY_MIRROR') }}/metrics-server/metrics-server"
         centos:
           kubernetes:
-            repo: https://repository.pole-emploi.intra/artifactory/rpm-kubernetes-proxy/
+            repo: "{{ lookup('env', 'K8S_YUM_MIRROR') }}"

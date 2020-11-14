@@ -25,17 +25,17 @@
         content: |
           [base]
           name=CentOS-$releasever - Base
-          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy/$releasever/os/$basearch/
+          baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/os/$basearch/
           gpgcheck=0
 
           [updates]
           name=CentOS-$releasever - Updates
-          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy/$releasever/updates/$basearch/
+          baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/updates/$basearch/
           gpgcheck=0
 
           [extras]
           name=CentOS-$releasever - Extras
-          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy/$releasever/extras/$basearch/
+          baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/extras/$basearch/
           gpgcheck=0
         dest: /etc/yum.repos.d/CentOS-Base.repo
         mode: 0755
@@ -55,8 +55,8 @@
         content: |
           {
             "exec-opts": ["native.cgroupdriver=systemd"],
-              "insecure-registries" : ["docker-dev-virtual.repository.pole-emploi.intra", "docker-quay-proxy.repository.pole-emploi.intra", "docker-k8s-gcr-proxy.repository.pole-emploi.intra"],
-              "registry-mirrors": ["https://docker-dev-virtual.repository.pole-emploi.intra"],
+              "insecure-registries" : {{ lookup('env', 'INSECURE_REGISTRIES') }},
+              "registry-mirrors": ["{{ lookup('env', 'DOCKER_REGISTRY_MIRROR') }}"],
             "log-driver": "json-file",
             "log-opts": {
               "max-size": "100m"
@@ -74,7 +74,7 @@
         content: |
           [docker-ce-stable]
           name=Docker CE Stable - $basearch
-          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-docker-centos-proxy/$releasever/$basearch/stable
+          baseurl={{ lookup('env', 'DOCKER_YUM_MIRROR') }}/$releasever/$basearch/stable
           enabled=1
           gpgcheck=0
         dest: /etc/yum.repos.d/docker.repo

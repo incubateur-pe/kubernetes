@@ -21,7 +21,7 @@ lint:
     - kvm
   stage: lint
   script:
-    - docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal --rm ulrichg/molecule-vagrant-libvirt:latest lint
+    - docker run --env-file molecule/commun/env_ci_${ENV_KIND}.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal --rm ulrichg/molecule-vagrant-libvirt:latest lint
 
 test-only-master:
   tags:
@@ -33,7 +33,7 @@ test-only-master:
   only:
     <<: *only_changes
   script:
-    - docker run -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest
+    - docker run --env-file molecule/commun/env_ci_${ENV_KIND}.sh -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest
   timeout: 3 hours 30 minutes
 
 test-one-master-2-nodes:
@@ -46,7 +46,7 @@ test-one-master-2-nodes:
   only:
     <<: *only_changes
   script:
-    - docker run -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster1master
+    - docker run --env-file molecule/commun/env_ci_${ENV_KIND}.sh -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster1master
   timeout: 3 hours 30 minutes
 
 test-3-masters-2-nodes:
@@ -59,7 +59,7 @@ test-3-masters-2-nodes:
   only:
     <<: *only_changes
   script:
-    - docker run -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster3masters
+    - docker run --env-file molecule/commun/env_ci_${ENV_KIND}.sh -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster3masters
   timeout: 3 hours 30 minutes
 
 new-tag:
