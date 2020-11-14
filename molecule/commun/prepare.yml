@@ -40,7 +40,7 @@
 
           [extras]
           name=CentOS-$releasever - Extras
-          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy//$releasever/extras/$basearch/
+          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy/$releasever/extras/$basearch/
           gpgcheck=0
         dest: /etc/yum.repos.d/CentOS-Base.repo
         mode: 0755
