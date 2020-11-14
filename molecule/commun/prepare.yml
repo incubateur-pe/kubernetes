@@ -20,11 +20,6 @@
         line: sslverify=false
         path: /etc/yum.conf
         regexp: '^sslverify=.*'
-
-- name: Prepare k8s hosts
-  hosts: kubernetes
-  gather_facts: true
-  tasks:
     - name: Dépose la configuration yum
       copy:
         content: |
@@ -45,7 +40,10 @@
         dest: /etc/yum.repos.d/CentOS-Base.repo
         mode: 0755
 
-
+- name: Prepare k8s hosts
+  hosts: kubernetes
+  gather_facts: true
+  tasks:
     - name: Crée le répertoire de configuration docker
       file:
         state: directory
