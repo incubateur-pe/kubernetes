@@ -12,6 +12,15 @@
           - PyYAML>=3.11
           - jmespath
 
+- name: Configure all hosts
+  hosts: all
+  tasks:
+    - name: Configure yum to trust all repositories
+      lineinfile:
+        line: sslverify=false
+        path: /etc/yum.conf
+        regexp: '^sslverify=.*'
+
 - name: Prepare k8s hosts
   hosts: kubernetes
   gather_facts: true
@@ -21,23 +30,23 @@
         content: |
           [base]
           name=CentOS-$releasever - Base
-          baseurl=http://10.0.4.40:8081/repository/centos-base/centos/$releasever/os/$basearch/
+          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy/$releasever/os/$basearch/
           gpgcheck=0
 
           [updates]
           name=CentOS-$releasever - Updates
-          baseurl=http://10.0.4.40:8081/repository/centos-base/centos/$releasever/updates/$basearch/
+          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy/$releasever/updates/$basearch/
           gpgcheck=0
 
           [extras]
           name=CentOS-$releasever - Extras
-          baseurl=http://10.0.4.40:8081/repository/centos-base/centos/$releasever/extras/$basearch/
+          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy//$releasever/extras/$basearch/
           gpgcheck=0
         dest: /etc/yum.repos.d/CentOS-Base.repo
         mode: 0755
 
 
-    - name: Crée le répetoire de configuration docker
+    - name: Crée le répertoire de configuration docker
       file:
         state: directory
         path: /etc/docker
@@ -48,8 +57,8 @@
         content: |
           {
             "exec-opts": ["native.cgroupdriver=systemd"],
-              "insecure-registries" : ["10.0.4.40:5000", "10.0.4.40:5001", "10.0.4.40:5002"],
-              "registry-mirrors": ["https://10.0.4.40:5000"],
+              "insecure-registries" : ["docker-dev-virtual.repository.pole-emploi.intra", "docker-quay-proxy.repository.pole-emploi.intra", "docker-k8s-gcr-proxy.repository.pole-emploi.intra"],
+              "registry-mirrors": ["https://docker-dev-virtual.repository.pole-emploi.intra"],
             "log-driver": "json-file",
             "log-opts": {
               "max-size": "100m"
@@ -67,7 +76,7 @@
         content: |
           [docker-ce-stable]
           name=Docker CE Stable - $basearch
-          baseurl=http://10.0.4.40:8081/repository/docker-yum/$releasever/$basearch/stable
+          baseurl=https://repository.pole-emploi.intra/artifactory/rpm-docker-centos-proxy/$releasever/$basearch/stable
           enabled=1
           gpgcheck=0
         dest: /etc/yum.repos.d/docker.repo
