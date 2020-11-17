@@ -21,43 +21,9 @@
     state: present
   when: 'kubeadm_package.results|length == 0 or kubeadm_package.results[0].yumstate != "installed"'
 
-## Hack de contournement de la policy FORWARD a DROP de docker...
-- name: Get host services
-  service_facts:
 
-- name: Configure iptables rules for docker
-  copy:
-    remote_src: no
-    src: "{{ role_path }}/files/iptables"
-    dest: /etc/sysconfig/iptables
-    mode: 0600
-  register: iptablesRules
-  when: "'docker.service' in services"
 
-- name: Enable and start iptables service
-  systemd:
-    name: iptables
-    state: started
-    enabled: yes
 
-- name: Restart docker service to take new iptables rules into account
-  systemd:
-    name: docker
-    state: restarted
-  when: "'docker.service' in services and iptablesRules.changed"
-# fin du hack
-
-- block:
-  - name: Configure iptables FORWARD policy to ACCEPT
-    iptables:
-      chain: FORWARD
-      policy: ACCEPT
-    register: policyForward
-
-  - name: Save iptables rules
-    command: service iptables save
-    when: policyForward.changed
-  when: 'not "docker.service" in services'
 
 - name: Set sysctl parameters required by kubernetes
   sysctl:
