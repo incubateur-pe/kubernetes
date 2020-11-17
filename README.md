@@ -130,16 +130,16 @@ Host 192.168.121.*
 __Tests execution with docker:__
 ```
 # interactive :
-docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host   -it --entrypoint bash ulrichg/molecule-vagrant-libvirt:latest
+docker run --env-file molecule/commun/env_local_tests.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host   -it --entrypoint bash ulrichg/molecule-vagrant-libvirt:latest
 
 # lint:
-docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock ulrichg/molecule-vagrant-libvirt:latest lint
+docker run --env-file molecule/commun/env_local_tests.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock ulrichg/molecule-vagrant-libvirt:latest lint
 
 # default scenario:
-docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host  ulrichg/molecule-vagrant-libvirt:latest
+docker run --env-file molecule/commun/env_local_tests.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host  ulrichg/molecule-vagrant-libvirt:latest
 
 # other scenario:
-docker run -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host  ulrichg/molecule-vagrant-libvirt:latest test -s cluster1master
+docker run --env-file molecule/commun/env_local_tests.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal   -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host  ulrichg/molecule-vagrant-libvirt:latest test -s cluster1master
 ```
 License
 -------
