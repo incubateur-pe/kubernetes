@@ -1,5 +1,5 @@
 - name: Drain node
-  command: "kubectl drain {{ node_name|default(ansible_nodename) }} --ignore-daemonsets"
+  command: "kubectl drain {{ node_name|default(ansible_nodename) }} --ignore-daemonsets --delete-local-data"
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   changed_when: true
 
