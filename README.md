@@ -29,7 +29,7 @@ Variables
 | centos.kubernetes.repo | role | Kubernetes rpm repository address for centos | https://packages.cloud.google.com/yum/repos/ |
 | kubernetes_version | role | Kubernetes version to install or upgrade to | 1.19.2 |
 | node_name | host | Kubernetes node name, must be unique | see kubeadm documentation |
-| kubernetes_cni_driver | role | Defines the cni driver to use | flannel |
+| kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico) | flannel |
 | flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
 | flannel_version | role | Flannel image version to use | v0.13.0 |
 | flannel_backend_type | role | Flannel backend to use | vxlan |
@@ -37,7 +37,6 @@ Variables
 | metrics_server_image_version | role | Version of metrics server image to use | v0.4.0 |
 | metrics_server_wait_deploy | role | Wait the deployment of metrics-server, useful if you deploy the masters in a separate play | true |
 | kubernetes_cluster_name | role | Kubernetes cluster name | kubernetes |
-| kubernetes_pod_subnet | role | Subnet to configure as the podCIDR for the cni | 10.244.0.0/16 |
 | kubernetes_control_plane_endpoint | role | Load balancer (or apiServer if only one master) address serving the master nodes (dns name or ip) | first master's ansible_fqdn |
 | kubernetes_control_plane_port | role | Load balancer port (or apiServer if only one master) of the apiServer | 6443 |
 | kubernetes_image_repository | role | kubernetes images repository | k8s.gcr.io |
@@ -53,6 +52,7 @@ Variables
 | kubernetes_proxy_mode_ipvs_scheduler | role | Ipvs scheduler to use ( rr,lc,dh,sh,sed,nq ) | rr |
 | kubernetes_proxy_mode_iptables_sync_period | role | Max duration between 2 iptables syncs | 30s |
 | kubernetes_proxy_mode_iptables_min_sync_period | role | Min duration betwwen 2 iptables syncs | 2s |
+| kubernetes_pod_subnet | role | Subnet to configure as the podCIDR for the cni | 10.244.0.0/16 |
 | kubernetes_service_subnet | role | Services subnet | voir documentation kubeadm |
 | kubernetes_pki.certificat | role | Pem file to upload and use for the cluster certificate authority | N/A |
 | kubernetes_pki.cle_privee | role | Key file to upload and use for the cluster certificate authority | N/A |
