@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.0.02
+### Added
+- Ability to use a custom CA chain
+
+### Fixed
+- Cordon doesn't fail anymore when pods use local storage
+
+
 ## 0.0.1
 ### Added
 - Supports kubernetes version 1.19.2
