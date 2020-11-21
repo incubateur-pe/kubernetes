@@ -3,7 +3,8 @@
 
 def test_iptables_service_package(host):
     iptablesService = host.package("iptables-services")
-    assert iptablesService.is_installed
+    iptablesPersistent = host.package("iptables-persistent")
+    assert iptablesService.is_installed or iptablesPersistent.is_installed
 
 
 def test_iptables_rules(host):
