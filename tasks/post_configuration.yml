@@ -8,10 +8,11 @@
   run_once: yes
 
 - name: Approve kubelet CSRs
-  command: "kubectl certificate approve {{ item.metadata.name }}"
-  when: '"conditions" not in item.status and "system:nodes" in item.spec.groups'
-  with_items: "{{ csrList.resources }}"
+  command: "kubectl certificate approve {{ item.name }}"
+  when: 'item.conditions is none and "system:nodes" in item.groups'
+  with_items: "{{ csrList | json_query('resources[].{name: metadata.name, groups: spec.groups, conditions: status.conditions[].type}') }}"
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  run_once: yes
 
 - block:
   - name: Configure metrics-server (rbac/service/etc...)
