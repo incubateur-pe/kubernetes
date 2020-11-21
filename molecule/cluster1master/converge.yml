@@ -12,3 +12,10 @@
         kubernetes_yum_repo: "{{ lookup('env', 'K8S_YUM_MIRROR') }}"
         kubernetes_apt_repository: "{{ lookup('env', 'K8S_APT_MIRROR') }}"
         kubernetes_yum_enable_gpg: false
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
