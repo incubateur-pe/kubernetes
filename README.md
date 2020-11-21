@@ -58,9 +58,9 @@ Variables
 | kubernetes_proxy_mode_iptables_min_sync_period | role | Min duration betwwen 2 iptables syncs | 2s |
 | kubernetes_pod_subnet | role | Subnet to configure as the podCIDR for the cni | 10.244.0.0/16 |
 | kubernetes_service_subnet | role | Services subnet | voir documentation kubeadm |
-| kubernetes_pki.certificat | role | Pem file to upload and use for the cluster certificate authority | N/A |
-| kubernetes_pki.cle_privee | role | Key file to upload and use for the cluster certificate authority | N/A |
-| kubernetes_pki.chaine_complete | role | Full CA chain for kube-controller-manager and pods | N/A |
+| kubernetes_pki.certificate | role | Pem file to upload and use for the cluster certificate authority | N/A |
+| kubernetes_pki.private_key | role | Key file to upload and use for the cluster certificate authority | N/A |
+| kubernetes_pki.ca_chain | role | Full CA chain for kube-controller-manager and pods | N/A |
 | kubernetes_client_ca_file | role | Pem file to upload and use for the cluster client certificate chain | N/A |
 | kubernetes_kubeconfig_file | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
 

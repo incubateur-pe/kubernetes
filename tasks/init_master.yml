@@ -19,19 +19,19 @@
       mode: "{{ item.mode }}"
     with_items:
       - dest: ca.crt
-        src: "{{ kubernetes_pki.certificat }}"
+        src: "{{ kubernetes_pki.certificate }}"
         mode: "0644"
       - dest: ca.key
-        src: "{{ kubernetes_pki.cle_privee }}"
+        src: "{{ kubernetes_pki.private_key }}"
         mode: "0600"
 
   - name: Copy the AC bundle
     copy:
-      src: "{{ kubernetes_pki.chaine_complete }}"
+      src: "{{ kubernetes_pki.ca_chain }}"
       dest: "/etc/kubernetes/pki/ac_full_chain.crt"
       remote_src: no
       mode: "0644"
-    when: '"chaine_complete" in kubernetes_pki'
+    when: '"ca_chain" in kubernetes_pki'
   when: kubernetes_pki is defined
 
 - name: Copy a client AC bundle

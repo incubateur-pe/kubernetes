@@ -36,7 +36,7 @@ apiServer:
   - "{{ api_endpoint }}"
 controllerManager:
   extraArgs:
-{% if kubernetes_pki is defined and "chaine_complete" in kubernetes_pki %}
+{% if kubernetes_pki is defined and "ca_chain" in kubernetes_pki %}
     root-ca-file: /etc/kubernetes/pki/ac_full_chain.crt
 {% endif %}
 ---
