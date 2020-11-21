@@ -44,48 +44,13 @@
   hosts: kubernetes
   gather_facts: true
   tasks:
-    - name: Crée le répertoire de configuration docker
-      file:
-        state: directory
-        path: /etc/docker
-        mode: 0755
-
-    - name: Configure docker
-      copy:
-        content: |
-          {
-            "exec-opts": ["native.cgroupdriver=systemd"],
-              "insecure-registries" : {{ lookup('env', 'INSECURE_REGISTRIES') }},
-              "registry-mirrors": ["{{ lookup('env', 'DOCKER_REGISTRY_MIRROR') }}"],
-            "log-driver": "json-file",
-            "log-opts": {
-              "max-size": "100m"
-            },
-            "storage-driver": "overlay2",
-            "storage-opts": [
-              "overlay2.override_kernel_check=true"
-            ]
-          }
-        dest: /etc/docker/daemon.json
-        mode: 0755
-
-    - name: Configure le repo yum
-      copy:
-        content: |
-          [docker-ce-stable]
-          name=Docker CE Stable - $basearch
-          baseurl={{ lookup('env', 'DOCKER_YUM_MIRROR') }}/$releasever/$basearch/stable
-          enabled=1
-          gpgcheck=0
-        dest: /etc/yum.repos.d/docker.repo
-        mode: 0755
-
     - name: "Install docker"
-      yum:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
+      include_role:
+        name: "ugiraud.docker"
+      vars:
+        docker_insecure_registries: "{{ lookup('env', 'INSECURE_REGISTRIES') }}"
+        docker_registry_mirrors: ["{{ lookup('env', 'DOCKER_REGISTRY_MIRROR') }}"]
+        docker_allow_forward: true
 
     - name: "Disable swap"
       command: swapoff -a -v

@@ -5,3 +5,4 @@ INSECURE_REGISTRIES=["10.0.4.40:5000","10.0.4.40:5001","10.0.4.40:5002"]
 CENTOS_BASE_MIRROR=http://10.0.4.40:8081/repository/centos-base/centos
 DOCKER_YUM_MIRROR=http://10.0.4.40:8081/repository/docker-yum
 K8S_YUM_MIRROR=http://10.0.4.40:8081/repository/kube-yum/
+ENV_KIND=local

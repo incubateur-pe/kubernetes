@@ -1,6 +1,8 @@
 ---
 dependency:
   name: galaxy
+  options:
+    role-file: molecule/commun/requirements.yml
 driver:
   name: vagrant
   provider:
@@ -89,12 +91,21 @@ provisioner:
     name: ansible-lint
   inventory:
     host_vars:
-      master:
+      master1:
         node_name: master1
+        docker_repo: ${DOCKER_YUM_MIRROR}
+      master2:
+        node_name: master2
+        docker_repo: ${DOCKER_YUM_MIRROR}
+      master3:
+        node_name: master3
+        docker_repo: ${DOCKER_YUM_MIRROR}
       worker1:
         node_name: worker1
+        docker_repo: ${DOCKER_YUM_MIRROR}
       worker2:
         node_name: worker2
+        docker_repo: ${DOCKER_YUM_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/
