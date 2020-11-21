@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changes
+
+### Fixed
+
+## 0.0.3
+### Added
 - Verify yum gpg key by default
 - Ability to disable yum gpg keys in case a corporate proxy prevents getting them
 - Debian distributions are now supported and tested on debian buster
@@ -16,10 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BREAKING : Flattened structure centos.kubernetes.repo to kubernetes_yum_repo variable
 - BREAKING : Renamed kubernetes_pki vars for translation
 
-### Fixed
 
-
-## 0.0.02
+## 0.0.2
 ### Added
 - Ability to use a custom CA chain
 
