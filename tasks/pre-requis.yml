@@ -36,6 +36,7 @@
 
   - name: Install kubernetes packages (deb)
     apt:
+      update_cache: true
       name:
         - kubelet={{ kubernetes_version }}-00
         - kubeadm={{ kubernetes_version }}-00
