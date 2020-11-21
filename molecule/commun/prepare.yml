@@ -52,6 +52,13 @@
 
 - name: Prepare k8s hosts
   hosts: kubernetes
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
   gather_facts: true
   tasks:
     - name: "Install docker"
@@ -76,6 +83,13 @@
 - name: Prepare haProxy nodes
   hosts: loadbalancer
   gather_facts: true
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
   tasks:
     - name: Put SELinux in permissive mode, logging actions that would be blocked.
       selinux:
