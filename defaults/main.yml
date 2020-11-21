@@ -1,4 +1,5 @@
 ---
+kubernetes_yum_repo: https://packages.cloud.google.com/yum/repos/
 kubernetes_version: 1.19.3
 kubernetes_default_pod_cidr: 10.244.0.0/16
 kubernetes_cluster_name: kubernetes

@@ -26,7 +26,7 @@ Variables
 
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
-| centos.kubernetes.repo | role | Kubernetes rpm repository address for centos | https://packages.cloud.google.com/yum/repos/ |
+| kubernetes_yum_repo | role | Kubernetes rpm repository address for RHEL | https://packages.cloud.google.com/yum/repos/ |
 | kubernetes_version | role | Kubernetes version to install or upgrade to | 1.19.2 |
 | node_name | host | Kubernetes node name, must be unique | see kubeadm documentation |
 | kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico) | flannel |

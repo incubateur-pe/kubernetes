@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes
 - Iptables rules aren't managed anymore by this role
 - Lowered csr appoval for kubelet verbosity
+- BREAKING : Flattened structure centos.kubernetes.repo to kubernetes_yum_repo variable
+
 
 ### Fixed
 

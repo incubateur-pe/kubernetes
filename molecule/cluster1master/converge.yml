@@ -9,6 +9,4 @@
         kubernetes_image_repository: "{{ lookup('env', 'K8S_REGISTRY_MIRROR') }}"
         flannel_image: "{{ lookup('env', 'QUAY_REGISTRY_MIRROR') }}/coreos/flannel"
         metrics_server_image: "{{ lookup('env', 'K8S_REGISTRY_MIRROR') }}/metrics-server/metrics-server"
-        centos:
-          kubernetes:
-            repo: "{{ lookup('env', 'K8S_YUM_MIRROR') }}"
+        kubernetes_yum_repo: "{{ lookup('env', 'K8S_YUM_MIRROR') }}"

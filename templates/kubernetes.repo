@@ -1,6 +1,6 @@
 [kubernetes]
 name=kubernetes
-baseurl={{ centos.kubernetes.repo | default("https://packages.cloud.google.com/yum/repos/") }}/kubernetes-el7-x86_64
+baseurl={{ kubernetes_yum_repo | regex_replace("/$", "") }}/kubernetes-el7-x86_64
 enabled=0
 gpgcheck=0
 repo_gpgcheck=0
