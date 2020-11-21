@@ -21,7 +21,7 @@ lint:
     - kvm
   stage: lint
   script:
-    - docker run --env-file molecule/commun/env_ci_${ENV_KIND}.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal --rm ulrichg/molecule-vagrant-libvirt:latest lint
+    - docker run --env-file molecule/commun/env_ci_${ENV_KIND}.sh  -e http_proxy="$http_proxy" -e https_proxy="$https_proxy" -e HTTP_PROXY="$HTTP_PROXY" -e HTTPS_PROXY="$HTTPS_PROXY" -e no_proxy="$no_proxy" -e NO_PROXY="$NO_PROXY" -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal --rm ulrichg/molecule-vagrant-libvirt:latest lint
 
 test-only-master:
   tags:
