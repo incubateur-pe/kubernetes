@@ -41,7 +41,7 @@ platforms:
       - kubernetes_masters
       - kubernetes
   - name: master3
-    box: centos/7
+    box: debian/buster64
     memory: 2048
     cpus: 2
     interfaces:
@@ -63,7 +63,7 @@ platforms:
       - kubernetes_workers
       - kubernetes
   - name: worker2
-    box: centos/7
+    box: debian/buster64
     memory: 2048
     cpus: 2
     interfaces:
@@ -83,6 +83,7 @@ provisioner:
     CENTOS_BASE_MIRROR: ${CENTOS_BASE_MIRROR}
     DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
     K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
+    K8S_APT_MIRROR: ${K8S_APT_MIRROR}
   connection_options:
     ansible_ssh_user: vagrant
     ansible_become: true
@@ -99,13 +100,13 @@ provisioner:
         docker_repo: ${DOCKER_YUM_MIRROR}
       master3:
         node_name: master3
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        docker_repo: ${DOCKER_APT_MIRROR}
       worker1:
         node_name: worker1
         docker_repo: ${DOCKER_YUM_MIRROR}
       worker2:
         node_name: worker2
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        docker_repo: ${DOCKER_APT_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/

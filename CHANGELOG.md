@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Verify yum gpg key by default
 - Ability to disable yum gpg keys in case a corporate proxy prevents getting them
+- Debian distributions are now supported and tested on debian buster
 
 ### Changes
 - Iptables rules aren't managed anymore by this role

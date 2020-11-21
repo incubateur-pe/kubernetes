@@ -1,10 +1,19 @@
-- name: Update kubelet and kubectl
+- name: Update kubelet and kubectl (RHEL)
   yum:
     name:
       - kubelet-{{ kubernetes_version }}
       - kubectl-{{ kubernetes_version }}
     enablerepo: kubernetes
     state: present
+  when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "RedHat"'
+
+- name: Update kubelet and kubectl (deb)
+  apt:
+    name:
+      - kubelet={{ kubernetes_version }}-00
+      - kubectl={{ kubernetes_version }}-00
+    state: present
+  when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "Debian"'
 
 - name: Restart kubelet service
   systemd:

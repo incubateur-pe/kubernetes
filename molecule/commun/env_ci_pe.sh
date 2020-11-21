@@ -5,3 +5,5 @@ INSECURE_REGISTRIES=["docker-dev-virtual.repository.pole-emploi.intra", "docker-
 CENTOS_BASE_MIRROR=https://repository.pole-emploi.intra/artifactory/rpm-base-centos-proxy
 DOCKER_YUM_MIRROR=https://repository.pole-emploi.intra/artifactory/rpm-docker-centos-proxy
 K8S_YUM_MIRROR=https://repository.pole-emploi.intra/artifactory/rpm-kubernetes-proxy/
+K8S_APT_MIRROR=https://apt.kubernetes.io
+DOCKER_APT_MIRROR=https://download.docker.com/linux

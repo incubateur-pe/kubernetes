@@ -26,6 +26,7 @@ Variables
 
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
+| kubernetes_apt_repository | role | Kubernetes apt repository address | https://apt.kubernetes.io |
 | kubernetes_yum_repo | role | Kubernetes rpm repository address for RHEL | https://packages.cloud.google.com/yum/repos/ |
 | kubernetes_yum_enable_gpg | role | Set to false to disable gpg check on yum repo | true |
 | kubernetes_yum_repo_key | role | yum repository gpg key (repository) | https://packages.cloud.google.com/yum/doc/yum-key.gpg |

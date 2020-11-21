@@ -1,29 +1,47 @@
-- name: Configure yum
-  template:
-    src: "{{ item }}"
-    dest: "/etc/yum.repos.d/"
-    mode: 0644
-  with_fileglob:
-    - "../templates/*.repo"
+- name: Gather the package facts
+  package_facts:
 
-- name: Check kubeadm package status
-  yum: list=kubeadm
-  register: kubeadm_package
+- name: Package manager configuration for RHEL
+  block:
+  - name: Configure yum
+    template:
+      src: "{{ item }}"
+      dest: "/etc/yum.repos.d/"
+      mode: 0644
+    with_fileglob:
+      - "../templates/*.repo"
 
-- name: Install kubernetes packages
-  yum:
-    name:
-      - kubelet-{{ kubernetes_version }}
-      - kubeadm-{{ kubernetes_version }}
-      - kubectl-{{ kubernetes_version }}
-      - iptables-services
-    enablerepo: kubernetes
-    state: present
-  when: 'kubeadm_package.results|length == 0 or kubeadm_package.results[0].yumstate != "installed"'
+  - name: Install kubernetes packages (RHEL)
+    yum:
+      name:
+        - kubelet-{{ kubernetes_version }}
+        - kubeadm-{{ kubernetes_version }}
+        - kubectl-{{ kubernetes_version }}
+      enablerepo: kubernetes
+      state: present
+  when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "RedHat"'
 
+- name: Package manager configuration for Debian
+  block:
+  - name: Add kubernetes apt key
+    apt_key:
+      url: "{{ kubernetes_apt_repository }}/doc/apt-key.gpg"
+      id: 54A647F9048D5688D7DA2ABE6A030B21BA07F4FB
+      state: present
 
+  - name: Configure apt
+    apt_repository:
+      repo: "deb {{ kubernetes_apt_repository }} kubernetes-xenial main"
+      state: present
 
-
+  - name: Install kubernetes packages (deb)
+    apt:
+      name:
+        - kubelet={{ kubernetes_version }}-00
+        - kubeadm={{ kubernetes_version }}-00
+        - kubectl={{ kubernetes_version }}-00
+      state: present
+  when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "Debian"'
 
 - name: Set sysctl parameters required by kubernetes
   sysctl:
@@ -46,7 +64,7 @@
   when: kubernetes_proxy_mode == "ipvs"
 
 - name: Install IPSet package
-  yum:
+  package:
     name: ipset
     state: present
   when: kubernetes_proxy_mode == "ipvs"

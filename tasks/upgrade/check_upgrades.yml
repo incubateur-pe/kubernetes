@@ -1,9 +1,17 @@
-- name: Ensure kubeadm-{{ kubernetes_version }} is installed
+- name: Ensure kubeadm-{{ kubernetes_version }} is installed (RHEL)
   yum:
     name:
       - kubeadm-{{ kubernetes_version }}
     enablerepo: kubernetes
     state: present
+  when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "RedHat"'
+
+- name: Ensure kubeadm-{{ kubernetes_version }} is installed (deb)
+  apt:
+    name:
+      - kubeadm={{ kubernetes_version }}-00
+    state: present
+  when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "Debian"'
 
 - name: Get the changes seen by kubeadm
   command: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"

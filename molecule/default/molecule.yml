@@ -34,6 +34,7 @@ provisioner:
     CENTOS_BASE_MIRROR: ${CENTOS_BASE_MIRROR}
     DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
     K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
+    K8S_APT_MIRROR: ${K8S_APT_MIRROR}
 
   connection_options:
     ansible_ssh_user: vagrant

@@ -20,7 +20,9 @@
         line: sslverify=false
         path: /etc/yum.conf
         regexp: '^sslverify=.*'
-    - name: Dépose la configuration yum
+      when: ansible_distribution == "CentOS"
+
+    - name: Dépose la configuration yum (centos)
       copy:
         content: |
           [base]
@@ -39,6 +41,7 @@
           gpgcheck=0
         dest: /etc/yum.repos.d/CentOS-Base.repo
         mode: 0755
+      when: ansible_distribution == "CentOS"
 
 - name: Prepare k8s hosts
   hosts: kubernetes
@@ -91,7 +94,7 @@
       debug: var=apiServers
 
     - name: Ensure HAProxy is installed.
-      yum:
+      package:
         name:
           - haproxy
 
