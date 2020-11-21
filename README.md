@@ -27,6 +27,9 @@ Variables
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
 | kubernetes_yum_repo | role | Kubernetes rpm repository address for RHEL | https://packages.cloud.google.com/yum/repos/ |
+| kubernetes_yum_enable_gpg | role | Set to false to disable gpg check on yum repo | true |
+| kubernetes_yum_repo_key | role | yum repository gpg key (repository) | https://packages.cloud.google.com/yum/doc/yum-key.gpg |
+| kubernetes_yum_package_key | role | yum repository gpg key (packages) | https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg |
 | kubernetes_version | role | Kubernetes version to install or upgrade to | 1.19.2 |
 | node_name | host | Kubernetes node name, must be unique | see kubeadm documentation |
 | kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico) | flannel |

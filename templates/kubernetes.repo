@@ -2,5 +2,8 @@
 name=kubernetes
 baseurl={{ kubernetes_yum_repo | regex_replace("/$", "") }}/kubernetes-el7-x86_64
 enabled=0
-gpgcheck=0
-repo_gpgcheck=0
+gpgcheck={{ kubernetes_yum_enable_gpg | ternary('1', '0') }}
+repo_gpgcheck={{ kubernetes_yum_enable_gpg | ternary('1', '0') }}
+{% if kubernetes_yum_enable_gpg %}
+gpgkey={{ kubernetes_yum_repo_key | default('https://packages.cloud.google.com/yum/doc/yum-key.gpg') }} {{ kubernetes_yum_package_key | default('https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg') }}
+{% endif %}
