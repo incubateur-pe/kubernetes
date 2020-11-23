@@ -46,7 +46,7 @@ provisioner:
     host_vars:
       master:
         node_name: master1
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/

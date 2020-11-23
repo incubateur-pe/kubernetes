@@ -94,19 +94,19 @@ provisioner:
     host_vars:
       master1:
         node_name: master1
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
       master2:
         node_name: master2
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
       master3:
         node_name: master3
-        docker_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_APT_MIRROR}
       worker1:
         node_name: worker1
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
       worker2:
         node_name: worker2
-        docker_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_APT_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/
