@@ -53,6 +53,7 @@
   with_items:
     - net.bridge.bridge-nf-call-ip6tables
     - net.bridge.bridge-nf-call-iptables
+    - net.ipv4.ip_forward
 
 - name: Ensure ipvs kernel modules are loadable
   modprobe:
