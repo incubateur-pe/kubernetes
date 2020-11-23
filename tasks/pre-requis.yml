@@ -65,6 +65,10 @@
     - ip_vs_sh
   when: kubernetes_proxy_mode == "ipvs"
 
+- name: Ensure br_netfilter module is loaded
+  modprobe:
+    name: br_netfilter
+
 - name: Install IPSet package
   package:
     name: ipset
