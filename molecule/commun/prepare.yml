@@ -52,6 +52,21 @@
 
 - name: Prepare k8s hosts
   hosts: kubernetes
+  gather_facts: true
+  tasks:
+    - name: "Disable swap"
+      command: swapoff -a -v
+      register: swapoff
+      changed_when: swapoff.stdout_lines|length > 0
+
+    - name: Disable SWAP in fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*?\sswap\s+.*)$'
+        replace: '# \1'
+
+- name: Prepare docker hosts
+  hosts: docker
   environment:
     http_proxy: "{{ lookup('env', 'http_proxy') }}"
     https_proxy: "{{ lookup('env', 'http_proxy') }}"
@@ -69,16 +84,22 @@
         docker_registry_mirrors: ["{{ lookup('env', 'DOCKER_REGISTRY_MIRROR') }}"]
         docker_allow_forward: true
 
-    - name: "Disable swap"
-      command: swapoff -a -v
-      register: swapoff
-      changed_when: swapoff.stdout_lines|length > 0
-
-    - name: Disable SWAP in fstab
-      replace:
-        path: /etc/fstab
-        regexp: '^([^#].*?\sswap\s+.*)$'
-        replace: '# \1'
+- name: Prepare containerd hosts
+  hosts: containerd
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
+  gather_facts: true
+  tasks:
+    - name: "Install docker"
+      include_role:
+        name: "ugiraud.containerd"
+      vars:
+        containerd_registry_mirrors: "{{ lookup('env', 'CONTAINERD_REGISTRY_MIRRORS') | from_json }}"
 
 - name: Prepare haProxy nodes
   hosts: loadbalancer

@@ -1,2 +1,5 @@
 - name: ugiraud.docker
   version: 0.0.3
+
+- name: ugiraud.containerd
+  version: 0.0.3

@@ -96,4 +96,4 @@ publish:
       - tags
   script:
     - ansible-galaxy login --api-key "${GALAXY_TOKEN}" --github-token "${GITHUB_TOKEN}"
-    - ansible-galaxy import ugiraud kubernetes-bare-metal
+    - ansible-galaxy import incubateur-pe kubernetes

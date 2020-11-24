@@ -34,13 +34,15 @@ galaxy_info:
     - name: Fedora
       versions:
       - 32
-  # - name: SomePlatform
-  #   versions:
-  #   - all
-  #   - 1.0
-  #   - 7
-  #   - 99.99
-
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+        - focal
   galaxy_tags:
     - kubernetes
     - docker

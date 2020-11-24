@@ -7,3 +7,4 @@ DOCKER_YUM_MIRROR=https://download.docker.com/linux/
 DOCKER_APT_MIRROR=https://download.docker.com/linux/
 K8S_YUM_MIRROR=https://repository.pole-emploi.intra/artifactory/rpm-kubernetes-proxy/
 K8S_APT_MIRROR=http://artefact-repo.pole-emploi.intra/artifactory/DebianKubernetes-Proxy
+CONTAINERD_REGISTRY_MIRRORS='[{"name":docker-dev-virtual.repository.pole-emploi.intra","endpoint":["https://docker-dev-virtual.repository.pole-emploi.intra"]},{"name":"docker-quay-proxy.repository.pole-emploi.intra","endpoint":["https://docker-quay-proxy.repository.pole-emploi.intra"]},{"name":"docker-k8s-gcr-proxy.repository.pole-emploi.intra","endpoint":["docker-k8s-gcr-proxy.repository.pole-emploi.intra"]}]'

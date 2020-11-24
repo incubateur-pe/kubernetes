@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## 0.0.5
+### Changes
+- Tests with containerd on debian
+
+## 0.0.4
+### Added
+- containerd compatibility
+
 ## 0.0.3
 ### Added
 - Verify yum gpg key by default

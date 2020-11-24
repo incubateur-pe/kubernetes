@@ -19,28 +19,6 @@ platforms:
     groups:
       - loadbalancer
   - name: master1
-    box: centos/7
-    memory: 2048
-    cpus: 2
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
-    groups:
-      - kubernetes_masters
-      - kubernetes
-  - name: master2
-    box: centos/7
-    memory: 2048
-    cpus: 2
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
-    groups:
-      - kubernetes_masters
-      - kubernetes
-  - name: master3
     box: debian/buster64
     memory: 2048
     cpus: 2
@@ -51,6 +29,31 @@ platforms:
     groups:
       - kubernetes_masters
       - kubernetes
+      - docker
+  - name: master2
+    box: debian/buster64
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
+  - name: master3
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
   - name: worker1
     box: centos/7
     memory: 2048
@@ -62,6 +65,7 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
+      - containerd
   - name: worker2
     box: debian/buster64
     memory: 2048
@@ -73,9 +77,11 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
+      - docker
 provisioner:
   name: ansible
   env:
+    CONTAINERD_REGISTRY_MIRRORS: ${CONTAINERD_REGISTRY_MIRRORS}
     DOCKER_REGISTRY_MIRROR: ${DOCKER_REGISTRY_MIRROR}
     QUAY_REGISTRY_MIRROR: ${QUAY_REGISTRY_MIRROR}
     K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}

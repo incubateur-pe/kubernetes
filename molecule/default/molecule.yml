@@ -19,6 +19,7 @@ platforms:
     groups:
       - kubernetes_masters
       - kubernetes
+      - containerd
 lint: |
   set -e
   yamllint .
@@ -27,6 +28,7 @@ lint: |
 provisioner:
   name: ansible
   env:
+    CONTAINERD_REGISTRY_MIRRORS: ${CONTAINERD_REGISTRY_MIRRORS}
     DOCKER_REGISTRY_MIRROR: ${DOCKER_REGISTRY_MIRROR}
     QUAY_REGISTRY_MIRROR: ${QUAY_REGISTRY_MIRROR}
     K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}
@@ -35,7 +37,6 @@ provisioner:
     DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
     K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
     K8S_APT_MIRROR: ${K8S_APT_MIRROR}
-
   connection_options:
     ansible_ssh_user: vagrant
     ansible_become: true

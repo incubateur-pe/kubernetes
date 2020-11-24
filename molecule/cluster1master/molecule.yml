@@ -19,6 +19,7 @@ platforms:
     groups:
       - kubernetes_masters
       - kubernetes
+      - docker
   - name: worker1
     box: centos/7
     memory: 2048
@@ -30,6 +31,7 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
+      - containerd
   - name: worker2
     box: debian/buster64
     memory: 2048
@@ -41,9 +43,11 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
+      - containerd
 provisioner:
   name: ansible
   env:
+    CONTAINERD_REGISTRY_MIRRORS: ${CONTAINERD_REGISTRY_MIRRORS}
     DOCKER_REGISTRY_MIRROR: ${DOCKER_REGISTRY_MIRROR}
     QUAY_REGISTRY_MIRROR: ${QUAY_REGISTRY_MIRROR}
     K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}

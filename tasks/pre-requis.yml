@@ -44,17 +44,6 @@
       state: present
   when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "Debian"'
 
-- name: Set sysctl parameters required by kubernetes
-  sysctl:
-    name: "{{ item }}"
-    value: '1'
-    state: present
-    sysctl_file: "/etc/sysctl.d/k8s.conf"
-  with_items:
-    - net.bridge.bridge-nf-call-ip6tables
-    - net.bridge.bridge-nf-call-iptables
-    - net.ipv4.ip_forward
-
 - name: Ensure ipvs kernel modules are loadable
   modprobe:
     name: "{{ item }}"
@@ -74,3 +63,18 @@
     name: ipset
     state: present
   when: kubernetes_proxy_mode == "ipvs"
+
+- name: Ensure other modules are loaded
+  modprobe:
+    name: br_netfilter
+
+- name: Set sysctl parameters required by kubernetes
+  sysctl:
+    name: "{{ item }}"
+    value: '1'
+    state: present
+    sysctl_file: "/etc/sysctl.d/k8s.conf"
+  with_items:
+    - net.bridge.bridge-nf-call-ip6tables
+    - net.bridge.bridge-nf-call-iptables
+    - net.ipv4.ip_forward
