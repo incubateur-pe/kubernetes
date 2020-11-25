@@ -2,6 +2,8 @@ kubernetes-bare-metal
 =========
 
 Install a kubernetes cluster with kubeadm
+The goal of this role is to provide a way to install a full featured, production ready cluster, in a single role.
+This role is usable behind a corporate proxy, and/or through mirrors for accessing packages and images resources, you can use it in a totally cloisoned environment, without any direct access to the internet.
 
 Prerequisites
 ------------
