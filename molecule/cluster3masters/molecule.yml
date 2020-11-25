@@ -103,6 +103,7 @@ provisioner:
       master1:
         node_name: master1
         containerd_repo: ${DOCKER_APT_MIRROR}
+        kubernetes_api_server_advertise_address: "{{ansible_host}}"
       master2:
         node_name: master2
         containerd_repo: ${DOCKER_APT_MIRROR}
