@@ -97,7 +97,7 @@
   tasks:
     - name: "Install docker"
       include_role:
-        name: "ugiraud.docker"
+        name: "incubateurpe.docker"
       vars:
         docker_insecure_registries: "{{ lookup('env', 'INSECURE_REGISTRIES') }}"
         docker_registry_mirrors: ["{{ lookup('env', 'DOCKER_REGISTRY_MIRROR') }}"]
@@ -116,7 +116,7 @@
   tasks:
     - name: "Install docker"
       include_role:
-        name: "ugiraud.containerd"
+        name: "incubateurpe.containerd"
       vars:
         containerd_registry_mirrors: "{{ lookup('env', 'CONTAINERD_REGISTRY_MIRRORS') | from_json }}"
 
