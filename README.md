@@ -26,6 +26,8 @@ __Inventory__:
 Variables
 --------------
 
+__repositories :__
+
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
 | kubernetes_apt_repository | role | Kubernetes apt repository address | https://apt.kubernetes.io |
@@ -33,25 +35,29 @@ Variables
 | kubernetes_yum_enable_gpg | role | Set to false to disable gpg check on yum repo | true |
 | kubernetes_yum_repo_key | role | yum repository gpg key (repository) | https://packages.cloud.google.com/yum/doc/yum-key.gpg |
 | kubernetes_yum_package_key | role | yum repository gpg key (packages) | https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg |
+
+__kubernetes cluster:__:
+
+| variable | scope | description | defaut |
+| --- | --- | --- | --- |
 | kubernetes_version | role | Kubernetes version to install or upgrade to | 1.19.2 |
 | node_name | host | Kubernetes node name, must be unique | see kubeadm documentation |
-| kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico) | flannel |
-| flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
-| flannel_version | role | Flannel image version to use | v0.13.0 |
-| flannel_backend_type | role | Flannel backend to use | vxlan |
-| metrics_server_image | role | Repository/image to use for metrics_server | k8s.gcr.io/metrics-server/metrics-server |
-| metrics_server_image_version | role | Version of metrics server image to use | v0.4.0 |
-| metrics_server_wait_deploy | role | Wait the deployment of metrics-server, useful if you deploy the masters in a separate play | true |
 | kubernetes_cluster_name | role | Kubernetes cluster name | kubernetes |
 | kubernetes_control_plane_endpoint | role | Load balancer (or apiServer if only one master) address serving the master nodes (dns name or ip) | first master's ansible_fqdn |
 | kubernetes_control_plane_port | role | Load balancer port (or apiServer if only one master) of the apiServer | 6443 |
 | kubernetes_image_repository | role | kubernetes images repository | k8s.gcr.io |
 | kubernetes_api_server_advertise_address | host | Advertise address of the api server (example: 172.16.10.10 ) | ansible_default_ipv4.address |
 | kubernetes_api_server_port | role | Api server listen port | 6443 |
-| kubernetes_cloud_provider | role | Cloud provider to use | N/A |
-| kubernetes_upgrade_consistency_check | role | Check for cluster nodes versions consistency ( set to false if upgrade is done with 2 plays) | true |
-| kubernetes_upgrades_allowed | role | Should the role handle upgrades | true |
-| kubernetes_confirm_upgrade | role | If an upgrade is needed, ask for user input before execution | false |
+| kubernetes_kubeconfig_file | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
+
+__kubernetes networking:__:
+
+| variable | scope | description | defaut |
+| --- | --- | --- | --- |
+| kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico) | flannel |
+| flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
+| flannel_version | role | Flannel image version to use | v0.13.0 |
+| flannel_backend_type | role | Flannel backend to use | vxlan |
 | kubernetes_proxy_mode | role | Kube-proxy mode (example: iptables, ipvs...) | ipvs |
 | kubernetes_proxy_mode_ipvs_sync_period | role | Max duration between 2 ipvs syncs | 30s |
 | kubernetes_proxy_mode_ipvs_min_sync_period | role | Min duration betwwen 2 ipvs syncs | 2s |
@@ -60,11 +66,27 @@ Variables
 | kubernetes_proxy_mode_iptables_min_sync_period | role | Min duration betwwen 2 iptables syncs | 2s |
 | kubernetes_pod_subnet | role | Subnet to configure as the podCIDR for the cni | 10.244.0.0/16 |
 | kubernetes_service_subnet | role | Services subnet | voir documentation kubeadm |
+
+__certificates :__
+
+| variable | scope | description | defaut |
+| --- | --- | --- | --- |
 | kubernetes_pki.certificate | role | Pem file to upload and use for the cluster certificate authority | N/A |
 | kubernetes_pki.private_key | role | Key file to upload and use for the cluster certificate authority | N/A |
 | kubernetes_pki.ca_chain | role | Full CA chain for kube-controller-manager and pods | N/A |
 | kubernetes_client_ca_file | role | Pem file to upload and use for the cluster client certificate chain | N/A |
-| kubernetes_kubeconfig_file | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
+
+__miscellaneous :__
+
+| variable | scope | description | defaut |
+| --- | --- | --- | --- |
+| metrics_server_image | role | Repository/image to use for metrics_server | k8s.gcr.io/metrics-server/metrics-server |
+| metrics_server_image_version | role | Version of metrics server image to use | v0.4.0 |
+| metrics_server_wait_deploy | role | Wait the deployment of metrics-server, useful if you deploy the masters in a separate play | true |
+| kubernetes_cloud_provider | role | Cloud provider to use | N/A |
+| kubernetes_upgrade_consistency_check | role | Check for cluster nodes versions consistency ( set to false if upgrade is done with 2 plays) | true |
+| kubernetes_upgrades_allowed | role | Should the role handle upgrades | true |
+| kubernetes_confirm_upgrade | role | If an upgrade is needed, ask for user input before execution | false |
 
 Playbook Example
 ----------------
