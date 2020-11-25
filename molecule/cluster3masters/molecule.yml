@@ -29,7 +29,7 @@ platforms:
     groups:
       - kubernetes_masters
       - kubernetes
-      - docker
+      - containerd
   - name: master2
     box: debian/buster64
     memory: 2048
@@ -65,7 +65,7 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
-      - containerd
+      - docker
   - name: worker2
     box: debian/buster64
     memory: 2048
@@ -87,7 +87,9 @@ provisioner:
     K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}
     INSECURE_REGISTRIES: ${INSECURE_REGISTRIES}
     CENTOS_BASE_MIRROR: ${CENTOS_BASE_MIRROR}
+    DEBIAN_BASE_MIRROR: ${DEBIAN_BASE_MIRROR}
     DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
+    DOCKER_APT_MIRROR: ${DOCKER_APT_MIRROR}
     K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
     K8S_APT_MIRROR: ${K8S_APT_MIRROR}
   connection_options:
@@ -100,19 +102,19 @@ provisioner:
     host_vars:
       master1:
         node_name: master1
-        containerd_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_APT_MIRROR}
       master2:
         node_name: master2
-        containerd_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_APT_MIRROR}
       master3:
         node_name: master3
-        containerd_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
       worker1:
         node_name: worker1
-        containerd_repo: ${DOCKER_YUM_MIRROR}
+        docker_repo: ${DOCKER_YUM_MIRROR}
       worker2:
         node_name: worker2
-        containerd_repo: ${DOCKER_APT_MIRROR}
+        docker_repo: ${DOCKER_APT_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/

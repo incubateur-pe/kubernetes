@@ -22,33 +22,52 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
     NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
   tasks:
-    - name: Configure yum to trust all repositories
-      lineinfile:
-        line: sslverify=false
-        path: /etc/yum.conf
-        regexp: '^sslverify=.*'
+    - block:
+      - name: Configure yum to trust all repositories
+        lineinfile:
+          line: sslverify=false
+          path: /etc/yum.conf
+          regexp: '^sslverify=.*'
+
+      - name: Dépose la configuration yum (centos)
+        copy:
+          content: |
+            [base]
+            name=CentOS-$releasever - Base
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/os/$basearch/
+            gpgcheck=0
+
+            [updates]
+            name=CentOS-$releasever - Updates
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/updates/$basearch/
+            gpgcheck=0
+
+            [extras]
+            name=CentOS-$releasever - Extras
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/extras/$basearch/
+            gpgcheck=0
+          dest: /etc/yum.repos.d/CentOS-Base.repo
+          mode: 0755
+
+      - name: Ensure systemd-resolved is installed
+        yum:
+          name: systemd-resolved
+          state: present
+
+      - name: Ensure systemd-resolved is enabled and started
+        systemd:
+          name: systemd-resolved
+          state: started
+          enabled: true
       when: ansible_distribution == "CentOS"
 
-    - name: Dépose la configuration yum (centos)
-      copy:
-        content: |
-          [base]
-          name=CentOS-$releasever - Base
-          baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/os/$basearch/
-          gpgcheck=0
-
-          [updates]
-          name=CentOS-$releasever - Updates
-          baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/updates/$basearch/
-          gpgcheck=0
-
-          [extras]
-          name=CentOS-$releasever - Extras
-          baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/extras/$basearch/
-          gpgcheck=0
-        dest: /etc/yum.repos.d/CentOS-Base.repo
-        mode: 0755
-      when: ansible_distribution == "CentOS"
+    - block:
+      - name: Configure apt mirror
+        lineinfile:
+          line: "deb {{ lookup('env', 'DEBIAN_BASE_MIRROR') }} buster main"
+          regexp: "^deb "
+          path: /etc/apt/sources.list
+      when: ansible_distribution == "Debian"
 
 - name: Prepare k8s hosts
   hosts: kubernetes

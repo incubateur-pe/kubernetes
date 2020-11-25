@@ -53,7 +53,9 @@ provisioner:
     K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}
     INSECURE_REGISTRIES: ${INSECURE_REGISTRIES}
     CENTOS_BASE_MIRROR: ${CENTOS_BASE_MIRROR}
+    DEBIAN_BASE_MIRROR: ${DEBIAN_BASE_MIRROR}
     DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
+    DOCKER_APT_MIRROR: ${DOCKER_APT_MIRROR}
     K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
     K8S_APT_MIRROR: ${K8S_APT_MIRROR}
   connection_options:
@@ -66,7 +68,7 @@ provisioner:
     host_vars:
       master:
         node_name: master1
-        containerd_repo: ${DOCKER_YUM_MIRROR}
+        docker_repo: ${DOCKER_YUM_MIRROR}
       worker1:
         node_name: worker1
         containerd_repo: ${DOCKER_YUM_MIRROR}
