@@ -107,9 +107,11 @@ provisioner:
       master2:
         node_name: master2
         containerd_repo: ${DOCKER_APT_MIRROR}
+        kubernetes_api_server_advertise_address: "{{ansible_host}}"
       master3:
         node_name: master3
         containerd_repo: ${DOCKER_YUM_MIRROR}
+        kubernetes_api_server_advertise_address: "{{ansible_host}}"
       worker1:
         node_name: worker1
         docker_repo: ${DOCKER_YUM_MIRROR}
