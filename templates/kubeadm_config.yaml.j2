@@ -39,6 +39,9 @@ controllerManager:
 {% if kubernetes_pki is defined and "ca_chain" in kubernetes_pki %}
     root-ca-file: /etc/kubernetes/pki/ac_full_chain.crt
 {% endif %}
+{% if kubernetes_kube_controller_manager_bind_address is defined %}
+    bind-address: {{ kubernetes_kube_controller_manager_bind_address }}
+{% endif %}
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration

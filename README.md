@@ -50,6 +50,7 @@ __kubernetes cluster:__:
 | kubernetes_api_server_port | role | Api server listen port | 6443 |
 | kubernetes_kubeconfig_file | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
 | kubernetes_kube_proxy_bind_address | role | kube-proxy bind address, necessary to expose metrics for example | see kubeadm documentation |
+| kubernetes_kube_controller_manager_bind_address | role | kube-controller-manager bind address, necessary to expose metrics for example | see kubeadm documentation |
 
 __kubernetes networking:__:
 
