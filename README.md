@@ -49,9 +49,12 @@ __kubernetes cluster:__:
 | kubernetes_api_server_advertise_address | host | Advertise address of the api server (example: 172.16.10.10 ) | ansible_default_ipv4.address |
 | kubernetes_api_server_port | role | Api server listen port | 6443 |
 | kubernetes_kubeconfig_file | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
-| kubernetes_kube_proxy_bind_address | role | kube-proxy bind address, necessary to expose metrics for example | see kubeadm documentation |
+| kubernetes_kube_proxy_metrics_bind_address | role | kube-proxy bind address, necessary to expose metrics for example | see kubeadm documentation |
 | kubernetes_kube_controller_manager_bind_address | role | kube-controller-manager bind address, necessary to expose metrics for example | see kubeadm documentation |
+| kubernetes_kube_controller_manager_port | role | kube-controller-manager insecure port, necessary to expose metrics for example | 10252 |
 | kubernetes_kube_scheduler_bind_address | role | kube-scheduler bind address, necessary to expose metrics for example | see kubeadm documentation |
+| kubernetes_kube_scheduler_port | role | kube-scheduler insecure port, necessary to expose metrics for example | 10251 |
+
 
 __kubernetes networking:__:
 
