@@ -42,6 +42,11 @@ controllerManager:
 {% if kubernetes_kube_controller_manager_bind_address is defined %}
     bind-address: {{ kubernetes_kube_controller_manager_bind_address }}
 {% endif %}
+scheduler:
+  extraArgs:
+{% if kubernetes_kube_scheduler_bind_address is defined %}
+    bind-address: {{ kubernetes_kube_scheduler_bind_address }}
+{% endif %}
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration

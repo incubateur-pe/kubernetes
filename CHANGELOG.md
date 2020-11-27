@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Ability to define a bind address for kube-proxy
 - Ability to define a bind address for kube-controller-manager
+- Ability to define a bind address for kube-scheduler
 
 ### Changes
 
