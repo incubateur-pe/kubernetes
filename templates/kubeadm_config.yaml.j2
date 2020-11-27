@@ -66,6 +66,6 @@ iptables:
   syncPeriod: {{ kubernetes_proxy_mode_iptables_sync_period | default('30s') }}
   minSyncPeriod: {{ kubernetes_proxy_mode_iptables_min_sync_period | default('2s') }}
 {% endif %}
-{% if kubernetes_kube_proxy_bind_address is defined %}
-bindAddress: {{ kubernetes_kube_proxy_bind_address }}
+{% if kubernetes_kube_proxy_metrics_bind_address is defined %}
+metricsBindAddress: {{ kubernetes_kube_proxy_metrics_bind_address }}
 {% endif %}
