@@ -12,6 +12,9 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -24,6 +27,9 @@ platforms:
     box: centos/7
     memory: 2048
     cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -36,6 +42,9 @@ platforms:
     box: debian/buster64
     memory: 2048
     cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -46,6 +55,9 @@ platforms:
       - containerd
 provisioner:
   name: ansible
+  config_options:
+      ssh_connection:
+        ssh_args: ${SSH_ARGS:-""}
   env:
     CONTAINERD_REGISTRY_MIRRORS: ${CONTAINERD_REGISTRY_MIRRORS}
     DOCKER_REGISTRY_MIRROR: ${DOCKER_REGISTRY_MIRROR}
@@ -78,7 +90,8 @@ provisioner:
 verifier:
   name: testinfra
   directory: ../commun/tests/
+  options:
+    ssh-config: ../commun/tests/${SSH_CONFIG}
+    hosts: master,worker1,worker2
   lint:
     name: flake8
-  options:
-    hosts: master,worker1,worker2

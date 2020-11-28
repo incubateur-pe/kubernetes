@@ -9,3 +9,13 @@ DOCKER_APT_MIRROR=http://artefact-repo.pole-emploi.intra/artifactory/DebianDocke
 K8S_YUM_MIRROR=https://repository.pole-emploi.intra/artifactory/rpm-kubernetes-proxy/
 K8S_APT_MIRROR=http://artefact-repo.pole-emploi.intra/artifactory/DebianKubernetes-Proxy
 CONTAINERD_REGISTRY_MIRRORS='[{"name":"docker-dev-virtual.repository.pole-emploi.intra","endpoint":["https://docker-dev-virtual.repository.pole-emploi.intra"],"skip_ssl_verify":true},{"name":"docker-quay-proxy.repository.pole-emploi.intra","endpoint":["https://docker-quay-proxy.repository.pole-emploi.intra"],"skip_ssl_verify":true},{"name":"docker-k8s-gcr-proxy.repository.pole-emploi.intra","endpoint":["https://docker-k8s-gcr-proxy.repository.pole-emploi.intra"],"skip_ssl_verify":true},{"name":"k8s.gcr.io","endpoint":["https://docker-k8s-gcr-proxy.repository.pole-emploi.intra"],"skip_ssl_verify":true},{"name":"docker.io","endpoint":["https://docker-dev-virtual.repository.pole-emploi.intra"]}]'
+REMOTE_HOST=true
+PROVIDER_ARGS=['host="iugi3000-HP-ProDesk-400-G4-MT.dgasi.pole-emploi.intra"', 'username="libvirt-user"']
+SSH_CONFIG=ssh_config_pe
+SSH_ARGS=-o ProxyCommand="ssh -W %h:%p -q -l libvirt-user iugi3000-HP-ProDesk-400-G4-MT.dgasi.pole-emploi.intra"
+http_proxy
+https_proxy
+HTTP_PROXY
+HTTPS_PROXY
+no_proxy
+NO_PROXY
