@@ -1,0 +1,159 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: molecule/commun/requirements.yml
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+scenario:
+  name: upgradeBigCluster
+  test_sequence:  # Disable idempotence test as we check the upgrade
+    - dependency
+    - lint
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+platforms:
+  - name: lb
+    box: centos/7
+    memory: 1024
+    cpus: 1
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - loadbalancer
+  - name: master1
+    box: debian/buster64
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
+  - name: master2
+    box: debian/buster64
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
+  - name: master3
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
+  - name: worker1
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_workers
+      - kubernetes
+      - docker
+  - name: worker2
+    box: debian/buster64
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    groups:
+      - kubernetes_workers
+      - kubernetes
+      - docker
+provisioner:
+  name: ansible
+  config_options:
+      ssh_connection:
+        ssh_args: ${SSH_ARGS:-""}
+  env:
+    CONTAINERD_REGISTRY_MIRRORS: ${CONTAINERD_REGISTRY_MIRRORS}
+    DOCKER_REGISTRY_MIRROR: ${DOCKER_REGISTRY_MIRROR}
+    QUAY_REGISTRY_MIRROR: ${QUAY_REGISTRY_MIRROR}
+    K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}
+    INSECURE_REGISTRIES: ${INSECURE_REGISTRIES}
+    CENTOS_BASE_MIRROR: ${CENTOS_BASE_MIRROR}
+    DEBIAN_BASE_MIRROR: ${DEBIAN_BASE_MIRROR}
+    DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
+    DOCKER_APT_MIRROR: ${DOCKER_APT_MIRROR}
+    K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
+    K8S_APT_MIRROR: ${K8S_APT_MIRROR}
+  connection_options:
+    ansible_ssh_user: vagrant
+    ansible_become: true
+  log: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      master1:
+        node_name: master1
+        containerd_repo: ${DOCKER_APT_MIRROR}
+        kubernetes_api_server_advertise_address: "{{ansible_host}}"
+      master2:
+        node_name: master2
+        containerd_repo: ${DOCKER_APT_MIRROR}
+        kubernetes_api_server_advertise_address: "{{ansible_host}}"
+      master3:
+        node_name: master3
+        containerd_repo: ${DOCKER_YUM_MIRROR}
+        kubernetes_api_server_advertise_address: "{{ansible_host}}"
+      worker1:
+        node_name: worker1
+        docker_repo: ${DOCKER_YUM_MIRROR}
+      worker2:
+        node_name: worker2
+        docker_repo: ${DOCKER_APT_MIRROR}
+verifier:
+  name: testinfra
+  directory: ../commun/tests/
+  options:
+    ssh-config: ../commun/tests/${SSH_CONFIG}
+    hosts: master1,master2,master3,worker1,worker2
+  lint:
+    name: flake8
