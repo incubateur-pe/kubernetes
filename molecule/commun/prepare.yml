@@ -119,6 +119,7 @@
         name: "incubateurpe.containerd"
       vars:
         containerd_registry_mirrors: "{{ lookup('env', 'CONTAINERD_REGISTRY_MIRRORS') | from_json }}"
+        containerd_registry_configs: "{{ lookup('env', 'CONTAINERD_REGISTRY_CONFIGS') | from_json }}"
 
 - name: Prepare haProxy nodes
   hosts: loadbalancer
