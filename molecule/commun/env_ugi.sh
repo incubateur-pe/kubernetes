@@ -8,4 +8,4 @@ DOCKER_YUM_MIRROR=http://10.0.4.40:8081/repository/docker-yum
 DOCKER_APT_MIRROR=http://10.0.4.40:8081/repository/docker-debian
 K8S_YUM_MIRROR=http://10.0.4.40:8081/repository/kube-yum/
 K8S_APT_MIRROR=http://10.0.4.40:8081/repository/kubernetes-deb
-CONTAINERD_REGISTRY_MIRRORS='[{"name":"10.0.4.40:5000","endpoint":["http://10.0.4.40:5000"]},{"name":"10.0.4.40:5001","endpoint":["http://10.0.4.40:5001"]},{"name":"10.0.4.40:5002","endpoint":["http://10.0.4.40:5002"]},{"name":"docker.io","endpoint":["http://10.0.4.40:5000"]}]'
+CONTAINERD_REGISTRY_MIRRORS='[{"name":"10.0.4.40:5000","endpoint":["http://10.0.4.40:5000"]},{"name":"10.0.4.40:5001","endpoint":["http://10.0.4.40:5001"]},{"name":"10.0.4.40:5002","endpoint":["http://10.0.4.40:5002"]},{"name":"k8s.gcr.io","endpoint":["http://10.0.4.40:5001"]},{"name":"quay.io","endpoint":["http://10.0.4.40:5002"]},{"name":"docker.io","endpoint":["http://10.0.4.40:5000"]}]'
