@@ -51,9 +51,9 @@ __kubernetes cluster:__:
 | kubernetes_kubeconfig_file | role | Kubernetes local configuration file (fetched from the master) | {{ role_path }}/files/admin.conf |
 | kubernetes_kube_proxy_metrics_bind_address | role | kube-proxy bind address, necessary to expose metrics for example | see kubeadm documentation |
 | kubernetes_kube_controller_manager_bind_address | role | kube-controller-manager bind address | see kubeadm documentation |
-| kubernetes_kube_controller_manager_port | role | kube-controller-manager insecure port (deprecated), necessary to expose metrics for example | 10252 |
+| kubernetes_kube_controller_manager_port | role | kube-controller-manager insecure port (deprecated), necessary to expose metrics for example | N/A |
 | kubernetes_kube_scheduler_bind_address | role | kube-scheduler bind address | see kubeadm documentation |
-| kubernetes_kube_scheduler_port | role | kube-scheduler insecure port (deprecated), to expose metrics for example | 10251 |
+| kubernetes_kube_scheduler_port | role | kube-scheduler insecure port (deprecated), to expose metrics for example | N/A |
 
 
 __kubernetes networking:__:

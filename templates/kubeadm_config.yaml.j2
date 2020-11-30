@@ -41,13 +41,17 @@ controllerManager:
 {% endif %}
 {% if kubernetes_kube_controller_manager_bind_address is defined %}
     bind-address: {{ kubernetes_kube_controller_manager_bind_address }}
-    port: "{{ kubernetes_kube_controller_manager_port | default('10252') }}"
+{% endif %}
+{% if kubernetes_kube_controller_manager_port is defined %}
+    port: "{{ kubernetes_kube_controller_manager_port }}"
 {% endif %}
 scheduler:
   extraArgs:
 {% if kubernetes_kube_scheduler_bind_address is defined %}
     bind-address: {{ kubernetes_kube_scheduler_bind_address }}
-    port: "{{ kubernetes_kube_scheduler_port | default('10251') }}"
+{% endif %}
+{% if kubernetes_kube_scheduler_port is defined %}
+    port: "{{ kubernetes_kube_scheduler_port }}"
 {% endif %}
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
