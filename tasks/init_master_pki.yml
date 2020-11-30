@@ -45,7 +45,7 @@
       state: directory
       mode: 0700
       path: "{{ role_path }}/files/tmp/"
-      
+
   - name: Generate control plane components private keys
     openssl_privatekey:
       path:  "{{ role_path }}/files/tmp/{{ item }}.key"
@@ -54,12 +54,12 @@
       - kube-scheduler
 
   - name: List control plane sans - initialisation
-    set_fact: 
-      control_plane_sans: 
+    set_fact:
+      control_plane_sans:
         - "IP:127.0.0.1"
 
   - name: List control plane sans
-    set_fact: 
+    set_fact:
       control_plane_sans: "{{ control_plane_sans + ['IP:'+hostvars[item]['ansible_default_ipv4']['address']] + ['DNS:'+hostvars[item]['ansible_fqdn']] }}"
     with_items: "{{ groups['kubernetes_masters'] }}"
 
