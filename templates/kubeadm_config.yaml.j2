@@ -36,8 +36,12 @@ apiServer:
   - "{{ api_endpoint }}"
 controllerManager:
   extraArgs:
-{% if kubernetes_pki is defined and "ca_chain" in kubernetes_pki %}
+{% if kubernetes_pki is defined %}
+    tls-cert-file: /etc/kubernetes/pki/kube-controller-manager.crt
+    tls-private-key-file: /etc/kubernetes/pki/kube-controller-manager.key
+{% if "ca_chain" in kubernetes_pki %}
     root-ca-file: /etc/kubernetes/pki/ac_full_chain.crt
+{% endif %}
 {% endif %}
 {% if kubernetes_kube_controller_manager_bind_address is defined %}
     bind-address: {{ kubernetes_kube_controller_manager_bind_address }}
@@ -47,11 +51,28 @@ controllerManager:
 {% endif %}
 scheduler:
   extraArgs:
+{% if kubernetes_pki is defined %}
+    tls-cert-file: /etc/kubernetes/pki/kube-scheduler.crt
+    tls-private-key-file: /etc/kubernetes/pki/kube-scheduler.key
+{% endif %}
 {% if kubernetes_kube_scheduler_bind_address is defined %}
     bind-address: {{ kubernetes_kube_scheduler_bind_address }}
 {% endif %}
 {% if kubernetes_kube_scheduler_port is defined %}
     port: "{{ kubernetes_kube_scheduler_port }}"
+{% endif %}
+{% if kubernetes_pki is defined %}
+  extraVolumes:
+  - name: "k8s-certs-key"
+    hostPath: "/etc/kubernetes/pki/kube-scheduler.key"
+    mountPath: "/etc/kubernetes/pki/kube-scheduler.key"
+    readOnly: true
+    pathType: File
+  - name: "k8s-certs-crt"
+    hostPath: "/etc/kubernetes/pki/kube-scheduler.crt"
+    mountPath: "/etc/kubernetes/pki/kube-scheduler.crt"
+    readOnly: true
+    pathType: File
 {% endif %}
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1

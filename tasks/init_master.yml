@@ -4,34 +4,8 @@
     dest: /etc/kubeadm/config.yaml
     mode: 0755
 
-- block:
-  - name: Ensure pki directory exists
-    file:
-      state: directory
-      mode: 0755
-      path: /etc/kubernetes/pki
-
-  - name: Copy the AC certificates
-    copy:
-      src: "{{ item.src }}"
-      dest: "/etc/kubernetes/pki/{{ item.dest }}"
-      remote_src: no
-      mode: "{{ item.mode }}"
-    with_items:
-      - dest: ca.crt
-        src: "{{ kubernetes_pki.certificate }}"
-        mode: "0644"
-      - dest: ca.key
-        src: "{{ kubernetes_pki.private_key }}"
-        mode: "0600"
-
-  - name: Copy the AC bundle
-    copy:
-      src: "{{ kubernetes_pki.ca_chain }}"
-      dest: "/etc/kubernetes/pki/ac_full_chain.crt"
-      remote_src: no
-      mode: "0644"
-    when: '"ca_chain" in kubernetes_pki'
+- name: Initialise custom certificates
+  include_tasks: init_master_pki.yml
   when: kubernetes_pki is defined
 
 - name: Copy a client AC bundle

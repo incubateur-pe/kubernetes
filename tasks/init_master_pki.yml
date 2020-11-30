@@ -1,0 +1,107 @@
+- name: Ensure pki directory exists
+  file:
+    state: directory
+    mode: 0755
+    path: /etc/kubernetes/pki
+
+- name: Copy the AC certificates
+  copy:
+    src: "{{ item.src }}"
+    dest: "/etc/kubernetes/pki/{{ item.dest }}"
+    remote_src: no
+    mode: "{{ item.mode }}"
+  with_items:
+    - dest: ca.crt
+      src: "{{ kubernetes_pki.certificate }}"
+      mode: "0644"
+    - dest: ca.key
+      src: "{{ kubernetes_pki.private_key }}"
+      mode: "0600"
+
+- name: Copy the AC bundle
+  copy:
+    src: "{{ kubernetes_pki.ca_chain }}"
+    dest: "/etc/kubernetes/pki/ac_full_chain.crt"
+    remote_src: no
+    mode: "0644"
+  when: '"ca_chain" in kubernetes_pki'
+
+- name: Copy the AC bundle
+  copy:
+    src: "{{ kubernetes_pki.ca_chain }}"
+    dest: "/etc/kubernetes/pki/ac_full_chain.crt"
+    remote_src: no
+    mode: "0644"
+  when: '"ca_chain" in kubernetes_pki'
+
+- name: Check if control-plane certificates exists
+  stat:
+    path: /etc/kubernetes/pki/kube-controller-manager.crt
+  register: certificates
+
+- block:
+  - name: Ensure local path for certificate generation exists
+    file:
+      state: directory
+      mode: 0700
+      path: "{{ role_path }}/files/tmp/"
+      
+  - name: Generate control plane components private keys
+    openssl_privatekey:
+      path:  "{{ role_path }}/files/tmp/{{ item }}.key"
+    with_items:
+      - kube-controller-manager
+      - kube-scheduler
+
+  - name: List control plane sans - initialisation
+    set_fact: 
+      control_plane_sans: 
+        - "IP:127.0.0.1"
+
+  - name: List control plane sans
+    set_fact: 
+      control_plane_sans: "{{ control_plane_sans + ['IP:'+hostvars[item]['ansible_default_ipv4']['address']] + ['DNS:'+hostvars[item]['ansible_fqdn']] }}"
+    with_items: "{{ groups['kubernetes_masters'] }}"
+
+  - name: Generate control plane components csr
+    openssl_csr:
+      path: "{{ role_path }}/files/tmp/{{ item.name }}.csr"
+      privatekey_path:  "{{ role_path }}/files/tmp/{{ item.name }}.key"
+      common_name: "{{ item.name }}"
+      subject_alt_name: "{{ item.sans }}"
+    with_items:
+      - name: kube-controller-manager
+        sans: "{{ control_plane_sans }}"
+      - name: kube-scheduler
+        sans: "{{ control_plane_sans }}"
+
+  - name: Generate control plane components certificate
+    community.crypto.x509_certificate:
+      path: "{{ role_path }}/files/tmp/{{ item }}.crt"
+      csr_path: "{{ role_path }}/files/tmp/{{ item }}.csr"
+      ownca_path: "{{ kubernetes_pki.certificate }}"
+      ownca_privatekey_path: "{{ kubernetes_pki.private_key }}"
+      provider: ownca
+    with_items:
+        - kube-controller-manager
+        - kube-scheduler
+  when: not certificates.stat.exists
+  delegate_to: localhost
+
+- name: Copy custom control plane certificates to first master
+  copy:
+    src: "{{ role_path }}/files/tmp/{{ item.src }}"
+    dest: "/etc/kubernetes/pki/{{ item.src }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - {src: "kube-controller-manager.crt", mode: "0644"}
+    - {src: "kube-controller-manager.key", mode: "0600"}
+    - {src: "kube-scheduler.crt", mode: "0644"}
+    - {src: "kube-scheduler.key", mode: "0600"}
+  when: not certificates.stat.exists
+
+- name: Ensure local path for certificate generation is deleted
+  file:
+    state: absent
+    path: "{{ role_path }}/files/tmp/"
+  delegate_to: localhost

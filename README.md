@@ -94,6 +94,20 @@ __miscellaneous :__
 | kubernetes_upgrades_allowed | role | Should the role handle upgrades | true |
 | kubernetes_confirm_upgrade | role | If an upgrade is needed, ask for user input before execution | false |
 
+Certificates Management
+-----------------------
+
+The variables in the `certificates` section allows configuration of a custom CA for the cluster, for example, an intermediate CA, generated from a corporate internal PKI, which in turn will enable all client workstations to trust the cluster. This impacts the kubeconfig file for example, removing the need for the certificate-authority-data configuration
+
+if you want to enable this behaviour, set `kubernetes_pki.certificate` and `kubernetes_pki.private_key` to the AC files, they will be uploaded to the masters servers and used as the cluster's CA
+
+When a custom CA is provided, non self signed certificates are generated for kube-controller-manager and kube-scheduler
+
+__intermediate ca__:
+
+If the files provided aren't a root CA, you should provide the full ca chain file and set `kubernetes_pki.ca_chain` accordingly. 
+Also pay attention to the pathlen size of your CA if you plan to generate etcd ca from this CA
+
 Playbook Example
 ----------------
 
