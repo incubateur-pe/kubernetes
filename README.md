@@ -1,3 +1,5 @@
+![pipeline](https://gitlab.com/incubateur-pe/kubernetes-bare-metal/badges/dev/pipeline.svg)
+
 kubernetes-bare-metal
 =========
 
