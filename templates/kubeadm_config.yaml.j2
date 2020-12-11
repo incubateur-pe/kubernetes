@@ -3,6 +3,7 @@ apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 nodeRegistration:
   kubeletExtraArgs:
+    cgroup-driver: "{{ (ansible_service_mgr == 'systemd') | ternary('systemd', 'cgroupfs') }}"
 {% if kubernetes_cloud_provider is defined %}
     cloud-provider: "{{ kubernetes_cloud_provider }}"
 {% endif %}
