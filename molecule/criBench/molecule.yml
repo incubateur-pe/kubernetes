@@ -1,0 +1,83 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: molecule/commun/requirements.yml
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+platforms:
+  - name: master
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
+  - name: wdocker
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    groups:
+      - kubernetes_workers
+      - kubernetes
+      - docker
+  - name: wcontainerd
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    groups:
+      - kubernetes_workers
+      - kubernetes
+      - containerd
+  - name: wcrio-runc
+    box: centos/7
+    memory: 2048
+    cpus: 2
+    groups:
+      - kubernetes_workers
+      - kubernetes
+      - crio
+  - name: wcrio-crun
+    box: fedora/32-cloud-base
+    memory: 2048
+    cpus: 2
+    groups:
+      - kubernetes_workers
+      - kubernetes
+      - crio
+provisioner:
+  name: ansible
+  log: true
+  connection_options:
+    ansible_ssh_user: vagrant
+    ansible_become: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      master:
+        node_name: master
+        containerd_repo: http://10.0.4.40:8081/repository/docker-yum
+      wdocker:
+        node_name: docker
+        docker_repo: http://10.0.4.40:8081/repository/docker-yum
+      wcontainerd:
+        node_name: containerd
+        containerd_repo: http://10.0.4.40:8081/repository/docker-yum
+      wcrio-runc:
+        node_name: crio-runc
+        crio_repository_base_url: http://10.0.4.40:8081/repository/download-opensuse/
+      wcrio-crun:
+        node_name: crio-crun
+        crio_repository_base_url: http://10.0.4.40:8081/repository/download-opensuse/
+verifier:
+  name: testinfra
+  directory: ../commun/tests/
+  options:
+    ssh-config: ../commun/tests/${SSH_CONFIG}
+    hosts: master,docker,containerd,crio-runc
+  lint:
+    name: flake8
