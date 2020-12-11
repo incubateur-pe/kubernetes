@@ -2,4 +2,7 @@
   version: 0.0.4
 
 - name: incubateurpe.containerd
-  version: 0.0.7
+  version: 1.0.0
+
+- name: incubateurpe.crio
+  version: 0.0.2
