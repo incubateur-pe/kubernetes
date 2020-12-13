@@ -11,10 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to define a bind address for kube-scheduler
 - When custom AC is defined, use it to generate cert and key for kube-controller-manager
 - When custom AC is defined, use it to generate cert and key for kube-scheduler
+- Supports kubernetes version 1.20.0
+- Tested with cri-o
 
 ### Changes
+- update calico to v3.17.0
+- update metrics-server to v0.4.1
 
 ### Fixed
+- set cgroup according to host implementation
 
 ## 0.0.5
 ### Changes
