@@ -4,7 +4,7 @@
 def test_kubelet_package(host):
     kubelet = host.package("kubelet")
     assert kubelet.is_installed
-    assert kubelet.version.startswith("1.19")
+    assert kubelet.version.startswith("1.20")
 
 
 def test_kubelet_service(host):

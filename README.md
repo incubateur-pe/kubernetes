@@ -42,7 +42,7 @@ __kubernetes cluster:__:
 
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
-| kubernetes_version | role | Kubernetes version to install or upgrade to | 1.19.2 |
+| kubernetes_version | role | Kubernetes version to install or upgrade to | 1.20.0 |
 | node_name | host | Kubernetes node name, must be unique | see kubeadm documentation |
 | kubernetes_cluster_name | role | Kubernetes cluster name | kubernetes |
 | kubernetes_control_plane_endpoint | role | Load balancer (or apiServer if only one master) address serving the master nodes (dns name or ip) | first master's ansible_fqdn |
@@ -121,7 +121,7 @@ Playbook Example
   vars:
     kubernetes_control_plane_endpoint: master.k8s.loc
     kubernetes_cluster_name: dev
-    k8s_version: 1.19.2
+    k8s_version: 1.20.0
 ```
 
 It remains possible to dissociate masters and workers installation, although the masters must be in the same ansible inventory:
@@ -134,7 +134,7 @@ It remains possible to dissociate masters and workers installation, although the
   vars:
     kubernetes_control_plane_endpoint: master.k8s.loc
     kubernetes_cluster_name: dev
-    k8s_version: 1.19.2
+    k8s_version: 1.20.0
     metrics_server_wait_deploy: false # Metrics-server will be waited in the worker play
 
 - hosts: kubernetes_workers
@@ -144,7 +144,7 @@ It remains possible to dissociate masters and workers installation, although the
   vars:
     kubernetes_control_plane_endpoint: master.k8s.loc
     kubernetes_cluster_name: dev
-    k8s_version: 1.19.2
+    k8s_version: 1.20.0
     kubernetes_upgrade_consistency_check: no # Déactivate versions consistency check as part of the cluster may already be up to date
 ```
 

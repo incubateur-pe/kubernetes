@@ -6,8 +6,6 @@
   vars:
     kubernetes_control_plane_endpoint: 172.16.10.1
     kubernetes_cluster_name: dev
-    kubernetes_cloud_provider: external
-    k8s_version: 1.19.2
 
 - hosts: kubernetes_workers
   remote_user: root
@@ -16,5 +14,3 @@
   vars:
     kubernetes_control_plane_endpoint: 172.16.10.1
     kubernetes_cluster_name: dev
-    kubernetes_cloud_provider: external
-    k8s_version: 1.19.2

@@ -5,7 +5,7 @@ import re
 def test_kubectl_package(host):
     kubectl = host.package("kubectl")
     assert kubectl.is_installed
-    assert kubectl.version.startswith("1.19")
+    assert kubectl.version.startswith("1.20")
 
 
 def test_kubectl_config(host):
