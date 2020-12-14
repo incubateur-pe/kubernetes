@@ -20,6 +20,7 @@
       state: present
       src: "{{ role_path }}/files/metrics-server-config.yaml.src"
       kubeconfig: "{{ kubernetes_kubeconfig_file }}"
+    changed_when: false
 
   - name: Deploy metrics-server
     k8s:
