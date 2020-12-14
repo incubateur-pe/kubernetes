@@ -38,7 +38,7 @@
 - include_tasks: get_nodes.yml
   run_once: yes
 
-- name: Activate kubectl service on boot
+- name: Activate kubelet service on boot
   systemd:
     name: kubelet
     enabled: yes
