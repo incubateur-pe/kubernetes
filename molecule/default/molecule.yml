@@ -8,7 +8,7 @@ driver:
   provider:
     name: libvirt
 platforms:
-  - name: master
+  - name: 0-master
     box: centos/7
     memory: 2048
     cpus: 2
@@ -53,7 +53,7 @@ provisioner:
     name: ansible-lint
   inventory:
     host_vars:
-      master:
+      0-master:
         node_name: master1
         containerd_repo: ${DOCKER_YUM_MIRROR}
 verifier:
@@ -61,6 +61,6 @@ verifier:
   directory: ../commun/tests/
   options:
     ssh-config: ../commun/tests/${SSH_CONFIG}
-    hosts: master
+    hosts: 0-master
   lint:
     name: flake8

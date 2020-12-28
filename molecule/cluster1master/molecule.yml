@@ -8,7 +8,7 @@ driver:
   provider:
     name: libvirt
 platforms:
-  - name: master
+  - name: 1-master
     box: centos/7
     memory: 2048
     cpus: 2
@@ -23,7 +23,7 @@ platforms:
       - kubernetes_masters
       - kubernetes
       - docker
-  - name: worker1
+  - name: 1-worker1
     box: centos/7
     memory: 2048
     cpus: 2
@@ -38,7 +38,7 @@ platforms:
       - kubernetes_workers
       - kubernetes
       - containerd
-  - name: worker2
+  - name: 1-worker2
     box: debian/buster64
     memory: 2048
     cpus: 2
@@ -78,13 +78,13 @@ provisioner:
     name: ansible-lint
   inventory:
     host_vars:
-      master:
+      1-master:
         node_name: master1
         docker_repo: ${DOCKER_YUM_MIRROR}
-      worker1:
+      1-worker1:
         node_name: worker1
         containerd_repo: ${DOCKER_YUM_MIRROR}
-      worker2:
+      1-worker2:
         node_name: worker2
         containerd_repo: ${DOCKER_APT_MIRROR}
 verifier:
@@ -92,6 +92,6 @@ verifier:
   directory: ../commun/tests/
   options:
     ssh-config: ../commun/tests/${SSH_CONFIG}
-    hosts: master,worker1,worker2
+    hosts: 1-master,1-worker1,1-worker2
   lint:
     name: flake8

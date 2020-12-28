@@ -21,7 +21,7 @@ platforms:
         type: dhcp
     groups:
       - loadbalancer
-  - name: master1
+  - name: 3-master1
     box: debian/buster64
     memory: 2048
     cpus: 2
@@ -36,7 +36,7 @@ platforms:
       - kubernetes_masters
       - kubernetes
       - containerd
-  - name: master2
+  - name: 3-master2
     box: debian/buster64
     memory: 2048
     cpus: 2
@@ -51,7 +51,7 @@ platforms:
       - kubernetes_masters
       - kubernetes
       - containerd
-  - name: master3
+  - name: 3-master3
     box: centos/7
     memory: 2048
     cpus: 2
@@ -66,7 +66,7 @@ platforms:
       - kubernetes_masters
       - kubernetes
       - containerd
-  - name: worker1
+  - name: 3-worker1
     box: centos/7
     memory: 2048
     cpus: 2
@@ -81,7 +81,7 @@ platforms:
       - kubernetes_workers
       - kubernetes
       - docker
-  - name: worker2
+  - name: 3-worker2
     box: debian/buster64
     memory: 2048
     cpus: 2
@@ -121,22 +121,22 @@ provisioner:
     name: ansible-lint
   inventory:
     host_vars:
-      master1:
+      3-master1:
         node_name: master1
         containerd_repo: ${DOCKER_APT_MIRROR}
         kubernetes_api_server_advertise_address: "{{ansible_host}}"
-      master2:
+      3-master2:
         node_name: master2
         containerd_repo: ${DOCKER_APT_MIRROR}
         kubernetes_api_server_advertise_address: "{{ansible_host}}"
-      master3:
+      3-master3:
         node_name: master3
         containerd_repo: ${DOCKER_YUM_MIRROR}
         kubernetes_api_server_advertise_address: "{{ansible_host}}"
-      worker1:
+      3-worker1:
         node_name: worker1
         docker_repo: ${DOCKER_YUM_MIRROR}
-      worker2:
+      3-worker2:
         node_name: worker2
         docker_repo: ${DOCKER_APT_MIRROR}
 verifier:
@@ -144,6 +144,6 @@ verifier:
   directory: ../commun/tests/
   options:
     ssh-config: ../commun/tests/${SSH_CONFIG}
-    hosts: master1,master2,master3,worker1,worker2
+    hosts: 3-master1,3-master2,3-master3,3-worker1,3-worker2
   lint:
     name: flake8
