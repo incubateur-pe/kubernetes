@@ -8,17 +8,13 @@ driver:
   provider:
     name: libvirt
 platforms:
-  - name: 0-master
+  - name: master
     box: centos/7
-    memory: 2048
+    memory: 4096
     cpus: 2
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - kubernetes_masters
       - kubernetes
@@ -53,14 +49,14 @@ provisioner:
     name: ansible-lint
   inventory:
     host_vars:
-      0-master:
-        node_name: master1
+      master:
+        node_name: master
         containerd_repo: ${DOCKER_YUM_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/
   options:
     ssh-config: ../commun/tests/${SSH_CONFIG}
-    hosts: 0-master
+    hosts: master
   lint:
     name: flake8
