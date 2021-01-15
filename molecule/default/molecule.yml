@@ -10,7 +10,7 @@ driver:
 platforms:
   - name: master
     box: centos/7
-    memory: 4096
+    memory: 2048
     cpus: 2
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
