@@ -22,7 +22,7 @@ platforms:
     groups:
       - loadbalancer
   - name: 3-master1
-    box: debian/buster64
+    box: centos/7
     memory: 2048
     cpus: 2
     provider_options:
@@ -37,7 +37,7 @@ platforms:
       - kubernetes
       - containerd
   - name: 3-master2
-    box: debian/buster64
+    box: centos/7
     memory: 2048
     cpus: 2
     provider_options:
@@ -80,9 +80,9 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
-      - docker
+      - containerd
   - name: 3-worker2
-    box: debian/buster64
+    box: centos/7
     memory: 2048
     cpus: 2
     provider_options:
@@ -95,7 +95,7 @@ platforms:
     groups:
       - kubernetes_workers
       - kubernetes
-      - docker
+      - containerd
 provisioner:
   name: ansible
   config_options:
@@ -123,11 +123,11 @@ provisioner:
     host_vars:
       3-master1:
         node_name: master1
-        containerd_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
         kubernetes_api_server_advertise_address: "{{ansible_host}}"
       3-master2:
         node_name: master2
-        containerd_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
         kubernetes_api_server_advertise_address: "{{ansible_host}}"
       3-master3:
         node_name: master3
@@ -135,10 +135,10 @@ provisioner:
         kubernetes_api_server_advertise_address: "{{ansible_host}}"
       3-worker1:
         node_name: worker1
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
       3-worker2:
         node_name: worker2
-        docker_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/
