@@ -56,6 +56,7 @@ __kubernetes cluster:__:
 | kubernetes_kube_controller_manager_port | role | kube-controller-manager insecure port (deprecated), necessary to expose metrics for example | N/A |
 | kubernetes_kube_scheduler_bind_address | role | kube-scheduler bind address | see kubeadm documentation |
 | kubernetes_kube_scheduler_port | role | kube-scheduler insecure port (deprecated), to expose metrics for example | N/A |
+| kubernetes_cgroup_driver | role | cgroup driver to use for kubelet, default to auto detection by kubeadm | N/A |
 
 
 __kubernetes networking:__:
