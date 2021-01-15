@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to define a metrics bind address for kube-proxy
 - Ability to define a bind address for kube-controller-manager
 - Ability to define a bind address for kube-scheduler
+- Ability to define a cgroup driver
 - When custom AC is defined, use it to generate cert and key for kube-controller-manager
 - When custom AC is defined, use it to generate cert and key for kube-scheduler
 - Supports kubernetes version 1.20.0
