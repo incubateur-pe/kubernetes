@@ -67,6 +67,7 @@ __kubernetes networking:__:
 | flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
 | flannel_version | role | Flannel image version to use | v0.13.0 |
 | flannel_backend_type | role | Flannel backend to use | vxlan |
+| calico_ip_autodetect_method | role | IP_AUTODETECTION_METHOD method value | first-found |
 | kubernetes_proxy_mode | role | Kube-proxy mode (example: iptables, ipvs...) | ipvs |
 | kubernetes_proxy_mode_ipvs_sync_period | role | Max duration between 2 ipvs syncs | 30s |
 | kubernetes_proxy_mode_ipvs_min_sync_period | role | Min duration betwwen 2 ipvs syncs | 2s |

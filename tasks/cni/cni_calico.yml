@@ -14,7 +14,7 @@
   - name: Deploy calico (daemonset)
     k8s:
       state: present
-      definition: "{{ lookup('file', role_path + '/templates/calico_daemonset.yaml.j2') }}"
+      definition: "{{ lookup('template', role_path + '/templates/calico_daemonset.yaml.j2') }}"
       kubeconfig: "{{ kubernetes_kubeconfig_file }}"
       wait_timeout: 600
       wait: yes

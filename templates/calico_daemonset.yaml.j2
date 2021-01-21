@@ -154,6 +154,9 @@ spec:
             # Auto-detect the BGP IP address.
             - name: IP
               value: "autodetect"
+            # Auto-detect method
+            - name: IP_AUTODETECTION_METHOD
+              value: "{{ calico_ip_autodetect_method }}"
             # Enable IPIP
             - name: CALICO_IPV4POOL_IPIP
               value: "Always"
