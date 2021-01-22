@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## 1.0.2
+### Added
+ - ability to change ip autodetect method
+
+## 1.0.1
 ### Added
 - Ability to define a metrics bind address for kube-proxy
 - Ability to define a bind address for kube-controller-manager
