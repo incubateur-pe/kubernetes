@@ -22,12 +22,22 @@
   with_items:
     - /etc/kubernetes/pki/kube-controller-manager.crt
     - /etc/kubernetes/pki/kube-controller-manager.key
-    - /etc/kubernetes/pki/kube-scheduler.pub
+    - /etc/kubernetes/pki/kube-scheduler.crt
     - /etc/kubernetes/pki/kube-scheduler.key
   delegate_to: "{{ groups['kubernetes_masters'][0] }}"
   run_once: yes
   changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
   when: kubernetes_pki is defined
+
+- name: Get custom client_ca file
+  fetch:
+    src: "/etc/kubernetes/pki/client_ca.pem"
+    dest: "{{ role_path }}/files/pki/"
+    flat: yes
+  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  run_once: yes
+  changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
+  when: kubernetes_client_ca_file is defined
 
 - name: Get etcd certificates
   fetch:
@@ -76,6 +86,13 @@
     - {src: "kube-scheduler.crt", mode: "0644"}
     - {src: "kube-scheduler.key", mode: "0600"}
   when: kubernetes_pki is defined
+
+- name: Copy custom client_ca file
+  copy:
+    src: "{{ role_path }}/files/pki/client_ca.pem"
+    dest: "/etc/kubernetes/pki/client_ca.pem"
+    mode: "{{ item.mode }}"
+  when: kubernetes_client_ca_file is defined
 
 - name: Clean up local buffer
   file:
