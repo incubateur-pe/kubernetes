@@ -91,7 +91,7 @@
   copy:
     src: "{{ role_path }}/files/pki/client_ca.pem"
     dest: "/etc/kubernetes/pki/client_ca.pem"
-    mode: "{{ item.mode }}"
+    mode: "0644"
   when: kubernetes_client_ca_file is defined
 
 - name: Clean up local buffer
