@@ -1,6 +1,4 @@
 ---
-# Source: calico/templates/calico-kube-controllers.yaml
-# See https://github.com/projectcalico/kube-controllers
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,7 +33,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: calico-kube-controllers
-          image: docker.io/calico/kube-controllers:v3.17.0
+          image: docker.io/calico/kube-controllers:v3.17.3
           env:
             # Choose which controllers to run.
             - name: ENABLED_CONTROLLERS

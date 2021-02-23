@@ -1,6 +1,4 @@
 ---
-# Source: calico/templates/calico-config.yaml
-# This ConfigMap is used to configure a self-hosted Calico installation.
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -52,12 +50,9 @@ data:
         }
       ]
     }
-
 ---
 # Source: calico/templates/kdd-crds.yaml
 
-
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -187,9 +182,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -228,7 +220,6 @@ spec:
                 format: int32
                 type: integer
               keepOriginalNextHop:
-                default: false
                 description: Option to keep the original nexthop field when routes
                   are sent to a BGP Peer. Setting "true" configures the selected BGP
                   Peers node to use the "next hop keep;" instead of "next hop self;"(default)
@@ -292,9 +283,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -355,9 +343,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -421,9 +406,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -975,9 +957,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1748,9 +1727,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1803,9 +1779,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1913,9 +1886,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -1996,9 +1966,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2054,9 +2021,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2112,9 +2076,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2213,9 +2174,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2438,9 +2396,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -3192,9 +3147,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -3245,8 +3197,6 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-
----
 ---
 # Source: calico/templates/calico-kube-controllers-rbac.yaml
 
@@ -3332,8 +3282,6 @@ subjects:
 - kind: ServiceAccount
   name: calico-kube-controllers
   namespace: kube-system
----
-
 ---
 # Source: calico/templates/calico-node-rbac.yaml
 # Include a clusterrole for the calico-node DaemonSet,
@@ -3474,7 +3422,6 @@ rules:
       - daemonsets
     verbs:
       - get
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -3488,28 +3435,20 @@ subjects:
 - kind: ServiceAccount
   name: calico-node
   namespace: kube-system
-
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: calico-node
   namespace: kube-system
-
-
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: calico-kube-controllers
   namespace: kube-system
-
 ---
-
 # This manifest creates a Pod Disruption Budget for Controller to allow K8s Cluster Autoscaler to evict
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -3522,14 +3461,3 @@ spec:
   selector:
     matchLabels:
       k8s-app: calico-kube-controllers
-
----
-# Source: calico/templates/calico-etcd-secrets.yaml
-
----
-# Source: calico/templates/calico-typha.yaml
-
----
-# Source: calico/templates/configure-canal.yaml
-
-
