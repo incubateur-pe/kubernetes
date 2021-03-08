@@ -1,8 +1,7 @@
 ---
 dependency:
-  name: galaxy
-  options:
-    role-file: molecule/commun/requirements.yml
+  name: shell
+  command: "/bin/bash molecule/commun/dependencies.sh"
 driver:
   name: vagrant
   provider:
