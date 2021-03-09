@@ -7,7 +7,7 @@ driver:
   provider:
     name: libvirt
 platforms:
-  - name: lb
+  - name: loadbalancerhaproxy
     box: centos/7
     memory: 1024
     cpus: 1

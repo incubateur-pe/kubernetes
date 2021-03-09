@@ -6,7 +6,7 @@
       include_role:
         name: "kubernetes-bare-metal"
       vars:
-        kubernetes_control_plane_endpoint: lb
+        kubernetes_control_plane_endpoint: loadbalancerhaproxy
         metrics_server_wait_deploy: false
         kubernetes_image_repository: "{{ lookup('env', 'K8S_REGISTRY_MIRROR') }}"
         flannel_image: "{{ lookup('env', 'QUAY_REGISTRY_MIRROR') }}/coreos/flannel"
