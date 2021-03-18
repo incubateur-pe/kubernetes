@@ -15,10 +15,6 @@ platforms:
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - loadbalancer
   - name: 3-master1
@@ -28,10 +24,6 @@ platforms:
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - kubernetes_masters
       - kubernetes
@@ -43,10 +35,6 @@ platforms:
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - kubernetes_masters
       - kubernetes
@@ -58,10 +46,6 @@ platforms:
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - kubernetes_masters
       - kubernetes
@@ -73,10 +57,6 @@ platforms:
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - kubernetes_workers
       - kubernetes
@@ -88,10 +68,6 @@ platforms:
     provider_options:
       connect_via_ssh: ${REMOTE_HOST:-false}
     provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
-    interfaces:
-      - auto_config: true
-        network_name: private_network
-        type: dhcp
     groups:
       - kubernetes_workers
       - kubernetes
