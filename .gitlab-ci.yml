@@ -52,19 +52,19 @@ test-one-master-2-nodes:
     - docker run --env-file molecule/commun/env_${ENV_KIND}.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster1master
   timeout: 3 hours 30 minutes
 
-test-3-masters-2-nodes:
-  tags:
-    - kvm
-  stage: test
-  except:
-    refs:
-      - schedules
-  only:
-    <<: *only_changes
-  script:
-    - echo "Running on environment ${ENV_KIND}"
-    - docker run --env-file molecule/commun/env_${ENV_KIND}.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster3masters
-  timeout: 3 hours 30 minutes
+#test-3-masters-2-nodes:
+#  tags:
+#    - kvm
+#  stage: test
+#  except:
+#    refs:
+#      - schedules
+#  only:
+#    <<: *only_changes
+#  script:
+#    - echo "Running on environment ${ENV_KIND}"
+#    - docker run --env-file molecule/commun/env_${ENV_KIND}.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal -v ~/.vagrant.d/boxes/:/root/.vagrant.d/boxes/ -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock --dns 192.168.121.1 --dns 10.0.4.1 --network host --rm ulrichg/molecule-vagrant-libvirt:latest test -s cluster3masters
+#  timeout: 3 hours 30 minutes
 
 new-tag:
   stage: release
