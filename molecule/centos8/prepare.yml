@@ -1,0 +1,201 @@
+---
+- name: KVM hosts
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Installe les pré-requis python pour k8s
+      pip:
+        executable: /usr/bin/pip3
+        name:
+          - openshift>=0.6
+          - PyYAML>=3.11
+          - jmespath
+
+- name: Configure all hosts
+  hosts: all
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
+  tasks:
+    - block:
+      - name: Configure yum to trust all repositories
+        lineinfile:
+          line: sslverify=false
+          path: /etc/yum.conf
+          regexp: '^sslverify=.*'
+
+      - name: Dépose la configuration yum (centos)
+        copy:
+          content: |
+            [base]
+            name=CentOS-$releasever - Base
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/os/$basearch/
+            gpgcheck=0
+
+            [updates]
+            name=CentOS-$releasever - Updates
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/updates/$basearch/
+            gpgcheck=0
+
+            [extras]
+            name=CentOS-$releasever - Extras
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/extras/$basearch/
+            gpgcheck=0
+          dest: /etc/yum.repos.d/CentOS-Base.repo
+          mode: 0755
+
+      - name: Ensure systemd-resolved is installed
+        yum:
+          name: systemd-resolved
+          state: present
+
+      - name: Ensure systemd-resolved is enabled and started
+        systemd:
+          name: systemd-resolved
+          state: started
+          enabled: true
+      when: ansible_distribution == "CentOS"
+
+    - block:
+      - name: Configure apt mirror
+        lineinfile:
+          line: "deb {{ lookup('env', 'DEBIAN_BASE_MIRROR') }} buster main"
+          regexp: "^deb "
+          path: /etc/apt/sources.list
+      when: ansible_distribution == "Debian"
+
+- name: Prepare k8s hosts
+  hosts: kubernetes
+  gather_facts: true
+  tasks:
+    - name: "Disable swap"
+      command: swapoff -a -v
+      register: swapoff
+      changed_when: swapoff.stdout_lines|length > 0
+
+    - name: Disable SWAP in fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*?\sswap\s+.*)$'
+        replace: '# \1'
+
+- name: Prepare docker hosts
+  hosts: docker
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
+  gather_facts: true
+  tasks:
+    - name: "Install docker"
+      include_role:
+        name: "incubateurpe.docker"
+      vars:
+        docker_insecure_registries: "{{ lookup('env', 'INSECURE_REGISTRIES') }}"
+        docker_registry_mirrors: ["{{ lookup('env', 'DOCKER_REGISTRY_MIRROR') }}"]
+        docker_allow_forward: true
+
+- name: Prepare containerd hosts
+  hosts: containerd
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
+  gather_facts: true
+  tasks:
+    - name: "Install docker"
+      include_role:
+        name: "incubateurpe.containerd"
+      vars:
+        containerd_registry_mirrors: "{{ lookup('env', 'CONTAINERD_REGISTRY_MIRRORS') | from_json }}"
+        containerd_registry_configs: "{{ lookup('env', 'CONTAINERD_REGISTRY_CONFIGS') | from_json }}"
+
+- name: Prepare haProxy nodes
+  hosts: loadbalancer
+  gather_facts: true
+  environment:
+    http_proxy: "{{ lookup('env', 'http_proxy') }}"
+    https_proxy: "{{ lookup('env', 'http_proxy') }}"
+    HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+    HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+    no_proxy: "{{ lookup('env', 'no_proxy') }}"
+    NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
+  tasks:
+    - name: Put SELinux in permissive mode, logging actions that would be blocked.
+      selinux:
+        policy: targeted
+        state: permissive
+
+    - name: Disable firewalld
+      systemd:
+        name: firewalld
+        enabled: no
+        state: stopped
+
+    - name: Flush existing iptables rules
+      iptables:
+        flush: yes
+
+    - name: List load balanced items
+      set_fact:
+        apiServers: "{{ apiServers | default([]) + [{'name': item, 'address': item + ':6443'}] }}"
+      with_items: "{{ groups['kubernetes_masters'] }}"
+
+    - name: "Print apiServers loadbalanced"
+      debug: var=apiServers
+
+    - name: Ensure HAProxy is installed.
+      package:
+        name:
+          - haproxy
+
+    - name: Copy HAProxy configuration in place.
+      copy:
+        content: |
+          global
+            log /dev/log  local0
+            log /dev/log  local1 notice
+            user haproxy
+            group haproxy
+            daemon
+
+          defaults
+            log global
+            mode  http
+            option  httplog
+            option  dontlognull
+            timeout connect 5000
+            timeout client 50000
+            timeout server 50000
+
+          frontend apiServer
+              bind 0.0.0.0:6443
+                mode tcp
+              option tcplog
+              default_backend apiServerBackend
+
+          backend apiServerBackend
+              mode tcp
+              option tcplog
+              option tcp-check
+              balance roundrobin
+              default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
+              {% for backend in apiServers %}
+              server {{ backend.name }} {{ backend.address }} check
+              {% endfor %}
+        dest: /etc/haproxy/haproxy.cfg
+        mode: 0644
+
+    - name: Ensure HAProxy is started and enabled on boot.
+      service: name=haproxy state=restarted enabled=yes
