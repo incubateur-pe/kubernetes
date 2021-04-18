@@ -1,0 +1,61 @@
+---
+dependency:
+  name: shell
+  command: "/bin/bash molecule/commun/dependencies.sh"
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+platforms:
+  - name: master
+    box: debian/buster64
+    memory: 2048
+    cpus: 2
+    provider_options:
+      connect_via_ssh: ${REMOTE_HOST:-false}
+    provider_raw_config_args: ${PROVIDER_ARGS:-"[]"}
+    groups:
+      - kubernetes_masters
+      - kubernetes
+      - containerd
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+  flake8
+provisioner:
+  name: ansible
+  config_options:
+      ssh_connection:
+        ssh_args: ${SSH_ARGS:-""}
+  env:
+    CONTAINERD_REGISTRY_MIRRORS: ${CONTAINERD_REGISTRY_MIRRORS}
+    DOCKER_REGISTRY_MIRROR: ${DOCKER_REGISTRY_MIRROR}
+    QUAY_REGISTRY_MIRROR: ${QUAY_REGISTRY_MIRROR}
+    K8S_REGISTRY_MIRROR: ${K8S_REGISTRY_MIRROR}
+    INSECURE_REGISTRIES: ${INSECURE_REGISTRIES}
+    CENTOS_BASE_MIRROR: ${CENTOS_BASE_MIRROR}
+    DEBIAN_BASE_MIRROR: ${DEBIAN_BASE_MIRROR}
+    DOCKER_YUM_MIRROR: ${DOCKER_YUM_MIRROR}
+    DOCKER_APT_MIRROR: ${DOCKER_APT_MIRROR}
+    K8S_YUM_MIRROR: ${K8S_YUM_MIRROR}
+    K8S_APT_MIRROR: ${K8S_APT_MIRROR}
+  connection_options:
+    ansible_ssh_user: vagrant
+    ansible_become: true
+  log: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      master:
+        node_name: master
+        containerd_repo: ${DOCKER_APT_MIRROR}
+verifier:
+  name: testinfra
+  directory: ../commun/tests/
+  options:
+    ssh-config: ../commun/tests/${SSH_CONFIG}
+    hosts: master
+  lint:
+    name: flake8

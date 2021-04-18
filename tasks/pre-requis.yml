@@ -23,15 +23,15 @@
 
 - name: Package manager configuration for Debian
   block:
-  - name: Add kubernetes apt key
-    apt_key:
-      url: "{{ kubernetes_apt_repository }}/doc/apt-key.gpg"
-      id: 54A647F9048D5688D7DA2ABE6A030B21BA07F4FB
-      state: present
+  - name: Get Google Cloud public signing key
+    get_url:
+      url: "{{ kubernetes_apt_key_url }}"
+      dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+      mode: '0644'
 
   - name: Configure apt
     apt_repository:
-      repo: "deb {{ kubernetes_apt_repository }} kubernetes-xenial main"
+      repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] {{ kubernetes_apt_repository }} kubernetes-xenial main"
       state: present
 
   - name: Install kubernetes packages (deb)

@@ -33,6 +33,7 @@ __repositories :__
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
 | kubernetes_apt_repository | role | Kubernetes apt repository address | https://apt.kubernetes.io |
+| kubernetes_apt_key_url | role | Url serving the google cloud public signing key | https://packages.cloud.google.com/apt/doc/apt-key.gpg |
 | kubernetes_yum_repo | role | Kubernetes rpm repository address for RHEL | https://packages.cloud.google.com/yum/repos/ |
 | kubernetes_yum_enable_gpg | role | Set to false to disable gpg check on yum repo | true |
 | kubernetes_yum_repo_key | role | yum repository gpg key (repository) | https://packages.cloud.google.com/yum/doc/yum-key.gpg |
@@ -109,7 +110,7 @@ When a custom CA is provided, non self signed certificates are generated for kub
 
 __intermediate ca__:
 
-If the files provided aren't a root CA, you should provide the full ca chain file and set `kubernetes_pki.ca_chain` accordingly. 
+If the files provided aren't a root CA, you should provide the full ca chain file and set `kubernetes_pki.ca_chain` accordingly.
 Also pay attention to the pathlen size of your CA if you plan to generate etcd ca from this CA
 
 Playbook Example
