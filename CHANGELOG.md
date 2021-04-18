@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 1.0.5
+### Changes
+- Set kubernetes default version to 1.21.0
+
+### Fixed
+- Apt key on debian os is now fetched from google cloud
+
+## 1.0.4
+### Changes
+- Update calico to v3.18.1
+
+
+## 1.0.3
+### Changes
+- Update calico to v3.17.3
+
+### Fixed
+- client_ca pem file access rights
+- copy all custom ca certificates when multiple masters
+
 ## 1.0.2
 ### Added
  - ability to change ip autodetect method
