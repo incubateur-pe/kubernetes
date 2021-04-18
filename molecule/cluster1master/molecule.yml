@@ -85,7 +85,7 @@ provisioner:
         containerd_repo: ${DOCKER_YUM_MIRROR}
       1-worker2:
         node_name: worker2
-        containerd_repo: ${DOCKER_APT_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/
