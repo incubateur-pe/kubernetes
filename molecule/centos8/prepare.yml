@@ -29,7 +29,7 @@
           path: /etc/yum.conf
           regexp: '^sslverify=.*'
 
-      - name: Dépose la configuration yum (centos)
+      - name: Dépose la configuration yum (centos7)
         copy:
           content: |
             [base]
@@ -48,11 +48,30 @@
             gpgcheck=0
           dest: /etc/yum.repos.d/CentOS-Base.repo
           mode: 0755
+        when: ansible_distribution_major_version == "7"
+
+      - name: Dépose la configuration yum (centos8)
+        copy:
+          content: |
+            [base]
+            name=CentOS-$releasever - Base
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/BaseOS/$basearch/os/
+            gpgcheck=0
+
+            [appstream]
+            name=CentOS-$releasever - appstream
+            baseurl={{ lookup('env', 'CENTOS_BASE_MIRROR') }}/$releasever/AppStream/$basearch/os/
+            gpgcheck=0
+
+          dest: /etc/yum.repos.d/CentOS-Base.repo
+          mode: 0755
+        when: ansible_distribution_major_version == "8"
 
       - name: Ensure systemd-resolved is installed
         yum:
           name: systemd-resolved
           state: present
+        when: ansible_distribution_major_version == "7"
 
       - name: Ensure systemd-resolved is enabled and started
         systemd:
