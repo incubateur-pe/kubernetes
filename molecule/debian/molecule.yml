@@ -7,7 +7,7 @@ driver:
   provider:
     name: libvirt
 platforms:
-  - name: masterDebian
+  - name: masterdebian
     box: debian/buster64
     memory: 2048
     cpus: 2
@@ -48,14 +48,14 @@ provisioner:
     name: ansible-lint
   inventory:
     host_vars:
-      masterDebian:
-        node_name: masterDebian
+      masterdebian:
+        node_name: masterdebian
         containerd_repo: ${DOCKER_APT_MIRROR}
 verifier:
   name: testinfra
   directory: ../commun/tests/
   options:
     ssh-config: ../commun/tests/${SSH_CONFIG}
-    hosts: masterDebian
+    hosts: masterdebian
   lint:
     name: flake8
