@@ -21,7 +21,7 @@ platforms:
     groups:
       - kubernetes_masters
       - kubernetes
-      - docker
+      - containerd
   - name: 1-worker1
     box: centos/7
     memory: 2048
@@ -79,7 +79,7 @@ provisioner:
     host_vars:
       1-master:
         node_name: master1
-        docker_repo: ${DOCKER_YUM_MIRROR}
+        containerd_repo: ${DOCKER_YUM_MIRROR}
       1-worker1:
         node_name: worker1
         containerd_repo: ${DOCKER_YUM_MIRROR}
