@@ -24,7 +24,7 @@ lint:
     - echo "Running on environment ${ENV_KIND}"
     - docker run --env-file molecule/commun/env_${ENV_KIND}.sh -v $(pwd):/sources/kubernetes-bare-metal -w /sources/kubernetes-bare-metal --rm ulrichg/molecule-vagrant-libvirt:latest lint
 
-test-only-master:
+test-centos7:
   tags:
     - kvm
   stage: test
