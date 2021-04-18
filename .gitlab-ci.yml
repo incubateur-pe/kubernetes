@@ -1,6 +1,7 @@
 stages:
   - lint
   - test
+  - test-cluster
   - merge
   - release
 
@@ -69,7 +70,7 @@ test-debian:
 test-one-master-2-nodes:
   tags:
     - kvm
-  stage: test
+  stage: test-cluster
   except:
     refs:
       - schedules
