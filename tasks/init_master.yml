@@ -49,7 +49,8 @@
     kubeconfig: "{{ kubernetes_kubeconfig_file }}"
   register: result
   until: >-
-    result.resources|length > 0
+    "resources" in result
+    and result.resources|length > 0
     and "containerStatuses" in result.resources[0].status
     and result.resources[0].status.containerStatuses|length > 0
     and result.resources[0].status.containerStatuses[0].ready
