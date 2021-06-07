@@ -69,6 +69,7 @@ __kubernetes networking:__:
 | flannel_version | role | Flannel image version to use | v0.13.0 |
 | flannel_backend_type | role | Flannel backend to use | vxlan |
 | calico_ip_autodetect_method | role | IP_AUTODETECTION_METHOD method value | first-found |
+| calico_network_config | role | calico network configuration | see default/main.yml |
 | kubernetes_proxy_mode | role | Kube-proxy mode (example: iptables, ipvs...) | ipvs |
 | kubernetes_proxy_mode_ipvs_sync_period | role | Max duration between 2 ipvs syncs | 30s |
 | kubernetes_proxy_mode_ipvs_min_sync_period | role | Min duration betwwen 2 ipvs syncs | 2s |
