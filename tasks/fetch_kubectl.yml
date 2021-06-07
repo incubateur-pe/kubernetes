@@ -1,0 +1,13 @@
+- name: Fetch the kubectl configuration on localhost
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ kubernetes_kubeconfig_file }}"
+    flat: yes
+
+- name: Sets correct ac in kubeconfig file
+  ansible.builtin.lineinfile:
+    path: "{{ k8s_kubeconfig }}"
+    regexp: "^    certificate-authority-data:"
+    line: "    certificate-authority-data: {{ (lookup('file', kubernetes_pki.ca_chain) + '\n' + lookup('file', kubernetes_pki.certificate)) | b64encode }}"
+  delegate_to: localhost
+  when: 'kubernetes_pki is defined and "ca_chain" in kubernetes_pki'

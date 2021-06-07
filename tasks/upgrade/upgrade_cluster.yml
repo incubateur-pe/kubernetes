@@ -32,9 +32,4 @@
   loop_control:
     loop_var: host_item
 
-- name: Get new kubectl configuration on localhost
-  fetch:
-    src: /etc/kubernetes/admin.conf
-    dest: "{{ kubernetes_kubeconfig_file }}"
-    flat: yes
-  run_once: yes
+- include_tasks: fetch_kubectl.yml

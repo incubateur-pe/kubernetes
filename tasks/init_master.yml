@@ -32,11 +32,7 @@
   command: "kubeadm init --config=/etc/kubeadm/config.yaml{%if node_name is defined %} --node-name {{ node_name }}{% endif %}"
   when: not already_initialized
 
-- name: Fetch the kubectl configuration on localhost
-  fetch:
-    src: /etc/kubernetes/admin.conf
-    dest: "{{ kubernetes_kubeconfig_file }}"
-    flat: yes
+- include_tasks: fetch_kubectl.yml
 
 - include_tasks: configure_kubectl.yml
 
