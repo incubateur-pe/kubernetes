@@ -64,7 +64,7 @@ __kubernetes networking:__:
 
 | variable | scope | description | defaut |
 | --- | --- | --- | --- |
-| kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico) | flannel |
+| kubernetes_cni_driver | role | Defines the cni driver to use (currently supported : flannel, calico, antrea) | flannel |
 | flannel_image | role | Name of the flannel repository/image | quay.io/coreos/flannel |
 | flannel_version | role | Flannel image version to use | v0.13.0 |
 | flannel_backend_type | role | Flannel backend to use | vxlan |

@@ -68,6 +68,11 @@
   modprobe:
     name: br_netfilter
 
+- name: Ensure openvswitch module is loaded
+  modprobe:
+    name: openvswitch
+  when: kubernetes_cni_driver == "antrea"
+
 - name: Configure kernel module on boot
   template:
     src: kubernetes-modules.load.j2

@@ -1,0 +1,7 @@
+- name: Deploy antrea cni
+  k8s:
+      state: present
+      definition: "{{ lookup('file', role_path + '/templates/antrea.yaml') }}"
+      kubeconfig: "{{ kubernetes_kubeconfig_file }}"
+  delegate_to: localhost
+  run_once: yes
