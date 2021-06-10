@@ -68,6 +68,12 @@
   modprobe:
     name: br_netfilter
 
+- name: Configure kernel module on boot
+  template:
+    src: kubernetes-modules.load.j2
+    dest: /etc/modules-load.d/kubernetes
+    mode: 0644
+
 - name: Set sysctl parameters required by kubernetes
   sysctl:
     name: "{{ item }}"

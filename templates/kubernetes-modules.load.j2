@@ -1,0 +1,10 @@
+br_netfilter
+{% if kubernetes_proxy_mode == "ipvs" %}
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+{% endif %}
+{% if kubernetes_cni_driver == "antrea" %}
+openvswitch
+{% endif %}
