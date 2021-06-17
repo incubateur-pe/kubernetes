@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changes
 - Add antrea CNI deployment
+- define new variable kubernetes_kubeadm_target
 
 ### Fixed
 - kubernetes mandatory modules are now loaded on boot

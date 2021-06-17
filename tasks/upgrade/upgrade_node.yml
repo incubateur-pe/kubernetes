@@ -1,22 +1,22 @@
 - name: Drain node
-  command: "kubectl drain {{ node_name|default(ansible_nodename) }} --ignore-daemonsets --delete-local-data"
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  command: "kubectl --kubeconfig /etc/kubernetes/admin.conf drain {{ node_name|default(ansible_nodename) }} --ignore-daemonsets --delete-local-data"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   changed_when: true
 
 - name: Upgrade first master
   command: "kubeadm upgrade apply --yes --config /etc/kubeadm/config.yaml"
-  when: 'inventory_hostname == groups["kubernetes_masters"][0]'
+  when: 'inventory_hostname == kubernetes_kubeadm_target'
   changed_when: true
 
 - name: Upgrade node
   command: "kubeadm upgrade node"
-  when: 'inventory_hostname != groups["kubernetes_masters"][0]'
+  when: 'inventory_hostname != kubernetes_kubeadm_target'
   changed_when: true
 
 - include_tasks: upgrade_kubelet_kubectl.yml
   when: '"kubernetes_masters" not in group_names'
 
 - name: Uncordon node
-  command: "kubectl uncordon {{ node_name|default(ansible_nodename) }}"
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  command: "kubectl --kubeconfig /etc/kubernetes/admin.conf uncordon {{ node_name|default(ansible_nodename) }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   changed_when: true

@@ -10,7 +10,7 @@
     - /etc/kubernetes/pki/sa.key
     - /etc/kubernetes/pki/front-proxy-ca.crt
     - /etc/kubernetes/pki/front-proxy-ca.key
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
   changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
 
@@ -24,7 +24,7 @@
     - /etc/kubernetes/pki/kube-controller-manager.key
     - /etc/kubernetes/pki/kube-scheduler.crt
     - /etc/kubernetes/pki/kube-scheduler.key
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
   changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
   when: kubernetes_pki is defined
@@ -34,7 +34,7 @@
     src: "/etc/kubernetes/pki/client_ca.pem"
     dest: "{{ role_path }}/files/pki/"
     flat: yes
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
   changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
   when: kubernetes_client_ca_file is defined
@@ -47,7 +47,7 @@
   with_items:
     - /etc/kubernetes/pki/etcd/ca.crt
     - /etc/kubernetes/pki/etcd/ca.key
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
   changed_when: false # Local "buffer" must not notify any change. The changes if any will be notified by the copy
 

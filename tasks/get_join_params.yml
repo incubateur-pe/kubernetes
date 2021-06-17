@@ -2,7 +2,7 @@
   command: 'kubeadm token create'
   register: join_token_raw
   when: join_token is not defined
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
 
 - name: Set the join_token fact for all play hosts
@@ -21,7 +21,7 @@
     executable: /bin/bash
   register: ca_hash_raw
   when: ca_hash is not defined
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
 
 - name: Set the ca_hash fact for all play hosts

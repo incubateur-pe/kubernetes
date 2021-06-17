@@ -11,7 +11,7 @@
   command: "kubectl certificate approve {{ item.name }}"
   when: 'item.conditions is none and "system:nodes" in item.groups'
   with_items: "{{ csrList | json_query('resources[].{name: metadata.name, groups: spec.groups, conditions: status.conditions[].type}') }}"
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
 
 - block:

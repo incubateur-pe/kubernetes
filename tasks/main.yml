@@ -5,7 +5,7 @@
 - name: Construct the api_endpoint url
   set_fact:
     api_endpoint_tmp: "{{ kubernetes_control_plane_endpoint | default(ansible_fqdn) }}"
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
 
 - name: Set the fact api_endpoint for all play hosts
@@ -21,9 +21,16 @@
     path: /etc/kubeadm
     mode: 0755
 
+- name: Copy the kubeadm init config
+  template:
+    src: kubeadm_config.yaml.j2
+    dest: /etc/kubeadm/config.yaml
+    mode: 0755
+  when: '"kubernetes_masters" in group_names'
+
 - name: Install first master node
   include_tasks: init_master.yml
-  when: 'inventory_hostname == groups["kubernetes_masters"][0]'
+  when: 'inventory_hostname == kubernetes_kubeadm_target'
 
 - name: Install cni
   include_tasks: "cni/cni_{{ kubernetes_cni_driver }}.yml"
@@ -33,7 +40,7 @@
 
 - name: Join other nodes
   include_tasks: join_node.yml
-  when: 'inventory_hostname != groups["kubernetes_masters"][0] and node_name|default(ansible_nodename) not in nodes'
+  when: 'inventory_hostname != kubernetes_kubeadm_target and node_name|default(ansible_nodename) not in nodes'
 
 - include_tasks: get_nodes.yml
   run_once: yes
@@ -46,7 +53,7 @@
 - name: Wait for nodes to be in Ready state
   shell: |
     set -o pipefail;
-    kubectl get nodes | grep "{{ item }}  *Ready "
+    kubectl --kubeconfig /etc/kubernetes/admin.conf get nodes | grep "{{ item }}  *Ready "
   args:
     executable: /bin/bash
   register: result
@@ -55,7 +62,7 @@
   delay: 30
   changed_when: false
   with_items: "{{ nodes }}"
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
   run_once: yes
 
 - name: Post-configuration

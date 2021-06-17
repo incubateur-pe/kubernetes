@@ -9,12 +9,12 @@
 
 - name: Upgrade the first master
   include_tasks: upgrade_node.yml
-  when: 'inventory_hostname == groups["kubernetes_masters"][0]'
+  when: 'inventory_hostname == kubernetes_kubeadm_target'
 
 - name: Upgrade other masters
   include_tasks: upgrade_node.yml
   with_items: "{{ groups['kubernetes_masters'] }}"
-  when: 'hostvars[host_item].inventory_hostname == inventory_hostname and inventory_hostname != groups["kubernetes_masters"][0]'
+  when: 'hostvars[host_item].inventory_hostname == inventory_hostname and inventory_hostname != kubernetes_kubeadm_target'
   loop_control:
     loop_var: host_item
 

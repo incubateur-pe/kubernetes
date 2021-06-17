@@ -3,6 +3,8 @@
     src: /etc/kubernetes/admin.conf
     dest: "{{ kubernetes_kubeconfig_file }}"
     flat: yes
+  run_once: yes
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
 
 - name: Sets correct ac in kubeconfig file
   ansible.builtin.lineinfile:
@@ -10,4 +12,5 @@
     regexp: "^    certificate-authority-data:"
     line: "    certificate-authority-data: {{ (lookup('file', kubernetes_pki.ca_chain) + '\n' + lookup('file', kubernetes_pki.certificate)) | b64encode }}"
   delegate_to: localhost
+  run_once: yes
   when: 'kubernetes_pki is defined and "ca_chain" in kubernetes_pki'

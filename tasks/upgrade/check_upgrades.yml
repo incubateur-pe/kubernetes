@@ -19,7 +19,7 @@
   command: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
   register: upgrade_diff_raw
   changed_when: false
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
 
 - name: Get nodes informations
   k8s_info:
@@ -52,7 +52,7 @@
   command: "kubeadm upgrade plan"
   changed_when: false
   register: kubeadm_upgrade_plan
-  delegate_to: "{{ groups['kubernetes_masters'][0] }}"
+  delegate_to: "{{ kubernetes_kubeadm_target }}"
 
 - name: Set the fact for all play hosts
   set_fact:
