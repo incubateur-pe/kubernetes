@@ -26,14 +26,6 @@
     mode: "0644"
   when: '"ca_chain" in kubernetes_pki'
 
-- name: Copy the AC bundle
-  copy:
-    src: "{{ kubernetes_pki.ca_chain }}"
-    dest: "/etc/kubernetes/pki/ac_full_chain.crt"
-    remote_src: no
-    mode: "0644"
-  when: '"ca_chain" in kubernetes_pki'
-
 - name: Check if control-plane certificates exists
   stat:
     path: /etc/kubernetes/pki/kube-controller-manager.crt
