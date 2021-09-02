@@ -101,6 +101,7 @@ __miscellaneous :__
 | kubernetes_upgrades_allowed | role | Should the role handle upgrades | true |
 | kubernetes_confirm_upgrade | role | If an upgrade is needed, ask for user input before execution | false |
 | kubernetes_kubelet_cgroup_slice | role | Cgroup slice to run kubelet  | N/A |
+| kubernetes_kubelet_config | role | kubelet additional configuration ( https://pkg.go.dev/k8s.io/kubernetes/pkg/kubelet/apis/config?utm_source=godoc#KubeletConfiguration ) | N/A |
 
 Certificates Management
 -----------------------

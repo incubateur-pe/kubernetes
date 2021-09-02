@@ -81,6 +81,9 @@ scheduler:
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 serverTLSBootstrap: true
+{% if kubernetes_kubelet_config is defined %}
+{{ kubernetes_kubelet_config | to_nice_yaml }}
+{% endif %}
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
