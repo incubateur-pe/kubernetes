@@ -21,6 +21,34 @@
       state: present
   when: '"kubeadm" not in ansible_facts.packages and ansible_os_family == "RedHat"'
 
+- name: Manage kubelet cgroup
+  block:
+    - name: Set cgroup value in service file
+      community.general.ini_file:
+        path: /usr/lib/systemd/system/kubelet.service
+        section: Service
+        option: Slice
+        value: "{{ kubernetes_kubelet_cgroup_slice }}"
+      register: slice_configuration
+
+    - name: Restart kubelet service
+      systemd:
+        name: kubelet
+        state: restarted
+        daemon-reload: yes
+      when: slice_configuration.changed
+
+    - name: Create cgroup directories if needed
+      file:
+        state: directory
+        path: "/sys/fs/cgroup/{{ item }}/{{ kubernetes_kubelet_cgroup_slice }}"
+      with_items:
+        - cpu
+        - cpuset
+        - hugetlb
+        - pids
+  when: kubernetes_kubelet_cgroup_slice is defined
+
 - name: Package manager configuration for Debian
   block:
   - name: Get Google Cloud public signing key

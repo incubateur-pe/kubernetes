@@ -100,6 +100,7 @@ __miscellaneous :__
 | kubernetes_upgrade_consistency_check | role | Check for cluster nodes versions consistency ( set to false if upgrade is done with 2 plays) | true |
 | kubernetes_upgrades_allowed | role | Should the role handle upgrades | true |
 | kubernetes_confirm_upgrade | role | If an upgrade is needed, ask for user input before execution | false |
+| kubernetes_kubelet_cgroup_slice | role | Cgroup slice to run kubelet  | N/A |
 
 Certificates Management
 -----------------------
