@@ -1,0 +1,10 @@
+[Service]
+Slice={{ kubernetes_kubelet_cgroup_slice }}
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/pids/system.slice
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/cpuset/system.slice
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/hugetlb/system.slice
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/cpu/system.slice
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/pids/{{ kubernetes_kubelet_cgroup_slice }}
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/cpuset/{{ kubernetes_kubelet_cgroup_slice }}
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/hugetlb/{{ kubernetes_kubelet_cgroup_slice }}
+ExecStartPre=/usr/bin/mkdir -p /sys/fs/cgroup/cpu/{{ kubernetes_kubelet_cgroup_slice }}

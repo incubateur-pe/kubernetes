@@ -23,12 +23,11 @@
 
 - name: Manage kubelet cgroup
   block:
-    - name: Set cgroup value in service file
-      community.general.ini_file:
-        path: /usr/lib/systemd/system/kubelet.service
-        section: Service
-        option: Slice
-        value: "{{ kubernetes_kubelet_cgroup_slice }}"
+    - name: Set kubelet cgroup configuration
+      template:
+        src: kubelet_cgroup_configuration.j2
+        dest: /usr/lib/systemd/system/kubelet.service.d/10-cgroups.conf
+        mode: 0644
       register: slice_configuration
 
     - name: Restart kubelet service
@@ -37,16 +36,6 @@
         state: restarted
         daemon-reload: yes
       when: slice_configuration.changed
-
-    - name: Create cgroup directories if needed
-      file:
-        state: directory
-        path: "/sys/fs/cgroup/{{ item }}/{{ kubernetes_kubelet_cgroup_slice }}"
-      with_items:
-        - cpu
-        - cpuset
-        - hugetlb
-        - pids
   when: kubernetes_kubelet_cgroup_slice is defined
 
 - name: Package manager configuration for Debian
