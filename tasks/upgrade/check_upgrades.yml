@@ -1,20 +1,3 @@
-- name: Ensure kubeadm-{{ kubernetes_version }} is installed (RHEL)
-  yum:
-    update_cache: true
-    name:
-      - kubeadm-{{ kubernetes_version }}
-    enablerepo: kubernetes
-    state: present
-  when: 'ansible_os_family == "RedHat"'
-
-- name: Ensure kubeadm-{{ kubernetes_version }} is installed (deb)
-  apt:
-    update_cache: true
-    name:
-      - kubeadm={{ kubernetes_version }}-00
-    state: present
-  when: 'ansible_os_family == "Debian"'
-
 - name: Get the changes seen by kubeadm
   command: "kubeadm upgrade diff --config /etc/kubeadm/config.yaml"
   register: upgrade_diff_raw
