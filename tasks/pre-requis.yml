@@ -93,7 +93,7 @@
 - name: Configure kernel module on boot
   template:
     src: kubernetes-modules.load.j2
-    dest: /etc/modules-load.d/kubernetes
+    dest: /etc/modules-load.d/kubernetes.conf
     mode: 0644
 
 - name: Set sysctl parameters required by kubernetes
